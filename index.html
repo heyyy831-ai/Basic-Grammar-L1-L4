@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瞬間英作4-0〜4-9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for better readability */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f0f4f8; /* Soft blue-gray background matching the design */
+            color: #334155; /* Slate 700 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Styling for select dropdowns to match design */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        
+        /* Custom range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #2563eb; /* Blue 600 */
+            cursor: pointer;
+            margin-top: -6px; /* Centers thumb on the track */
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0; /* Slate 200 */
+            border-radius: 2px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Hide element class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Button hover effects */
+        .btn-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .btn-hover:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="text-center mb-8 w-full max-w-4xl">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">英会話のための基本英文法完全マスター</h1>
+        <h2 class="text-xl md:text-2xl font-semibold text-blue-600 mb-2">瞬間英作練習アプリ</h2>
+    </header>
+
+    <section class="bg-white rounded-2xl shadow-sm p-6 w-full max-w-4xl mb-6 flex flex-col md:flex-row gap-6">
+        
+        <!-- Left Column: Lesson & Mode -->
+        <div class="flex-1 flex flex-col gap-4">
+            <!-- Lesson Selection -->
+            <div>
+                <label for="lesson-select" class="block text-sm font-bold text-gray-700 mb-1">レッスン選択</label>
+                <select id="lesson-select" class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <!-- Playback Mode -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">再生モード</label>
+                <div class="flex bg-gray-200/80 p-1.5 rounded-lg w-full shadow-inner">
+                    <button id="mode-manual-btn" class="flex-1 bg-white shadow-sm text-gray-800 font-semibold py-2.5 px-2 rounded-md flex items-center justify-center gap-1.5 transition-all text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="10" y1="15" x2="10" y2="9"></line><line x1="14" y1="15" x2="14" y2="9"></line></svg>
+                        手動
+                    </button>
+                    <button id="mode-auto-btn" class="flex-1 text-gray-500 hover:text-gray-700 font-semibold py-2.5 px-2 rounded-md flex items-center justify-center gap-1.5 transition-all text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        自動継続
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Delay, Rate, Voice -->
+        <div class="flex-1 flex flex-col gap-4">
+            <!-- Display Delay -->
+            <div>
+                <label for="delay-select" class="block text-sm font-bold text-gray-400 mb-1" id="delay-label">表示待機時間 (自動継続時)</label>
+                <select id="delay-select" class="w-full border border-gray-200 rounded-lg p-3 text-gray-400 bg-gray-50 focus:outline-none cursor-not-allowed" disabled>
+                    <option value="3000">3秒</option>
+                    <option value="4000">4秒</option>
+                    <option value="5000" selected>5秒</option>
+                    <option value="6000">6秒</option>
+                    <option value="7000">7秒</option>
+                    <option value="8000">8秒</option>
+                    <option value="9000">9秒</option>
+                    <option value="10000">10秒</option>
+                </select>
+            </div>
+
+            <!-- Speech Rate -->
+            <div>
+                <div class="flex justify-between items-center mb-1">
+                    <label for="rate-slider" class="block text-sm font-bold text-gray-700">英語読み上げ速度</label>
+                    <span id="rate-display" class="font-bold text-blue-600">1.0x</span>
+                </div>
+                <div class="relative pt-2 pb-2">
+                    <input type="range" id="rate-slider" min="0.5" max="1.0" step="0.1" value="1.0" class="w-full">
+                    <!-- Visual track overlay -->
+                    <div class="absolute top-1/2 left-0 h-1 bg-blue-600 rounded-full pointer-events-none transform -translate-y-1/2 z-[-1]" id="slider-progress" style="width: 100%;"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>0.5倍</span>
+                    <span>等倍(1.0)</span>
+                </div>
+            </div>
+
+            <!-- Voice Selection -->
+            <div>
+                <label for="voice-select" class="block text-sm font-bold text-gray-700 mb-1">音声モデル</label>
+                <select id="voice-select" class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer text-sm">
+                    <option value="">音声を読み込み中...</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls Area (Moved here between sections) -->
+    <div class="flex flex-wrap justify-center items-center w-full max-w-4xl mb-6 gap-2 md:gap-4">
+        <!-- 戻るボタン -->
+        <button id="prev-btn" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 font-bold py-3 px-4 md:px-5 rounded-full flex items-center gap-1 md:gap-2 btn-hover transition-colors opacity-50 cursor-not-allowed shadow-sm text-sm md:text-base" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span class="hidden sm:inline">戻る</span>
+        </button>
+
+        <!-- 再生・停止コントロール -->
+        <div class="flex justify-center items-center gap-2 md:gap-3">
+            <button id="show-play-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 md:px-6 rounded-full flex items-center gap-1 md:gap-2 btn-hover transition-colors shadow-md text-sm md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                英語を表示＆再生
+            </button>
+
+            <button id="replay-btn" class="hidden bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 md:px-6 rounded-full flex items-center gap-1 md:gap-2 btn-hover transition-colors shadow-md text-sm md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+                もう一度
+            </button>
+
+            <button id="stop-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 md:px-6 rounded-full flex items-center gap-1 md:gap-2 btn-hover transition-colors shadow-md text-sm md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12"></rect></svg>
+                停止
+            </button>
+        </div>
+
+        <!-- 次へボタン -->
+        <button id="next-btn" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 md:px-5 rounded-full flex items-center gap-1 md:gap-2 btn-hover transition-colors shadow-md text-sm md:text-base">
+            <span class="hidden sm:inline">次へ</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <main class="bg-white rounded-3xl shadow-sm pt-0 pb-6 px-6 md:pb-10 md:px-10 w-full max-w-4xl relative min-h-[300px] flex flex-col justify-start overflow-hidden">
+        
+        <!-- プログレスバー (白と青の境目) -->
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-200">
+            <div id="progress-bar-fill" class="h-full bg-blue-500" style="width: 0%;"></div>
+        </div>
+
+        <!-- カウンター表示 -->
+        <div class="w-full flex justify-end mt-4 mb-2 pr-2">
+            <div class="text-gray-400 font-bold text-sm tracking-wide">
+                <span id="current-index-display">1</span> / <span id="total-count-display">--</span>
+            </div>
+        </div>
+
+        <div class="flex-col flex justify-center pt-2 pb-4 w-full">
+            <!-- Japanese Section -->
+            <div class="mb-8">
+                <span class="inline-block bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded mb-3 tracking-wider">JAPANESE</span>
+                <p id="japanese-text" class="text-2xl md:text-3xl font-bold leading-relaxed text-gray-800 break-words">
+                    読み込み中...
+                </p>
+            </div>
+
+            <!-- Divider -->
+            <hr class="border-gray-200 mb-8">
+
+            <!-- English Section (Hidden initially) -->
+            <div id="english-section" class="mb-8 hidden">
+                <span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded mb-3 tracking-wider">ENGLISH</span>
+                <p id="english-text" class="text-xl md:text-2xl font-bold leading-relaxed text-gray-800 break-words">
+                    <!-- English text appears here -->
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data parsed from the provided PDF (Lessons 1-1 to 3-6 and 4-0 to 4-9)
+        const lessonData = {
+            "Lesson 1-1": [
+                { jp: "友人があなたに、ケンを最近見かけないけどと言った。ケンはニューヨークにいると答えなさい。", en: "Ken is in New York." },
+                { jp: "友人のジョンに、トムの出身地はアメリカだと伝え、トムが今横浜にいることを付け加えなさい。", en: "Tom is from America. He is in Yokohama now." },
+                { jp: "あなたの知り合いがデパートに行き、時計を買ってきた。それを見てあなたは、その時計は良いですねと感想を述べなさい。", en: "The watch is nice." },
+                { jp: "友人があなたに、赤ちゃんがぐずっているけどどうしてか、と聞いた。その赤ちゃんは今おなかが空いているのよ、と答えなさい。", en: "The baby is hungry now." },
+                { jp: "部屋のドアを開けたら猫がいた。一緒にいる友人に、猫が部屋にいることを伝え、(その猫は)とてもかわいいと付け加えなさい。", en: "There is a cat in the room. The cat is very cute." },
+                { jp: "あなたにホセから電話がかかり、今どこにいるか聞いてきた。家にいることを伝えなさい。", en: "I am at home." },
+                { jp: "あなたは1週間前にスマホを買った。友人があなたに、そのスマホは使ってみてどうなのかと聞いた。(このスマホは)とても良いよと答えなさい。", en: "The smartphone is very good." },
+                { jp: "グループ旅行で京都にいる。メンバーのサリーがレンタルの着物を着てレンタル店から出てきた。隣に立っているミンに、サリーはとてもきれいだねと感想を述べなさい。", en: "Sally is very pretty." },
+                { jp: "友人があなたに、リズは病院に勤めているそうだけど、看護師さんなのかと聞いた。彼に、リズはお医者さんだよと答えなさい。", en: "Liz is a doctor." },
+                { jp: "メイがあなたに、隣に引っ越してきたオランダ人一家について聞いた。彼らはとてもフレンドリーであると伝えなさい。", en: "They are very friendly." },
+                { jp: "友人があなたに、新入生たちは今どこにいるか、と聞いた。その生徒たちは体育館にいると答えなさい。", en: "The students are in the gym." },
+                { jp: "スミスさんがあなたに、あなたとあなたのガールフレンドはどこの野球チームが好きかと聞いた。私たちはエンジェルスのファンであると答えなさい。", en: "We're Angels fans." },
+                { jp: "スミスさんに、あなたはタイガースのファンですよね?(正しい?)と聞きなさい。", en: "You're a Tigers fan, right?" },
+                { jp: "あなたはスミス家を訪ねている。壁にジャイアンツの選手たちが描かれた大きなポスターが貼ってある。あなたたちはジャイアンツのファンですよね? (正しい?)と聞きなさい。", en: "You're Giants fans, right?" },
+                { jp: "メイがあなたに、タナカさん(女性)はよく病気について知っているね、と言った。(彼女は)看護師さんだよと答えなさい。", en: "She is a nurse." },
+                { jp: "新入生があなたに、リサさんですかと聞いた。私はリサではないと答えなさい。", en: "I'm not Lisa." },
+                { jp: "あなたは社会人向け講座に参加するために、数人である学校に来ている。初対面の人が、ここの生徒さんたちですか、とあなたに聞いてきた。私たちはここの生徒ではないと答えなさい。", en: "We aren't students here." },
+                { jp: "友人があなたに、あの子がメグだねと聞いた。(彼女は)メグではないと答えなさい。", en: "She isn't Meg." },
+                { jp: "あなたは、ショウ・ヤマモトさんですかと人に聞かれた。そうだと答えなさい。そうではないと答えなさい。", en: "-Yes, I am. / No, I'm not." },
+                { jp: "知らない人から、あなたたちはここの学校の生徒なのかと聞かれた。そうだと答えなさい!そうではないと答えなさい。", en: "-Yes, we are. / No, we aren't." },
+                { jp: "あなたはメアリーに、パーティーに行こうと誘われた。私は忙しいと伝えなさい。", en: "I'm busy." },
+                { jp: "バスの車内で友人がお年寄りに自分の席を譲った。(君は)親切なんだねとコメントしなさい。", en: "You're kind." },
+                { jp: "あなたの学校の野球のチームが大逆転で優勝した。(彼らは)素晴らしい! と言いなさい。", en: "They're great." },
+                { jp: "ジェーンがあなたに、ヨンを最近見かけないけど忙しいのかな、と聞いた。彼は忙しくないと伝えなさい。", en: "He isn't busy." },
+                { jp: "あなたは友人とボウリング場に行った。自分が最初(にボールを投げる)かを聞きなさい。", en: "Am I first?" },
+                { jp: "初対面の留学生に、あなたの出身県はどこかと聞かれた。私は北海道の出身ですと答えなさい。", en: "I'm from Hokkaido." },
+                { jp: "あなたは旅行者と話していて、その人の英語のアクセントから、オーストラリア人だろうと感じた。あなたのご出身はオーストラリアですよね(?正しい?)と聞きなさい。", en: "You're from Australia, right?" },
+                { jp: "友人があなたに、トムはどのクラブに入っているのか、と聞いた。彼はサッカークラブに入っていると答えなさい。", en: "He is in a soccer club." },
+                { jp: "あなたは初対面の留学生の英語のアクセントから韓国人だと感じた。韓国出身なのかを聞きなさい。", en: "Are you from Korea?" },
+                { jp: "海外からの留学生のグループが近くにいる。あなたの友人があなたに、彼らは台湾出身だよね、と聞いた。そうだと答えなさい。", en: "-Yes, they are." }
+            ],
+            "Lesson 1-2": [
+                { jp: "あなたが日本出身の新入生のショウといるとき、クラスメートのビルが来た。ビルに(こちらは)ショウだと紹介しなさい。", en: "This is Sho." },
+                { jp: "早朝、遠くに雪をかぶったきれいな高い山が見え、知り合いのジョンがその山の名前をあなたに尋ねた。あれは富士山だと答えなさい。", en: "That is Mt. Fuji." },
+                { jp: "新型のスマホが店頭に並んでいる。友人のポールにあれらはとても良いよとコメントしなさい。", en: "Those are very nice." },
+                { jp: "テーブルの上に置いてあるあなたのタブレットをトムが見て、高くないかあなたに聞いた。あれは高くはないよと答えなさい。", en: "That isn't expensive." },
+                { jp: "ルームメートのトムが、新しく買ったタブレットはどこにあるか、あなたに聞いた。それは机の上にあるよと答えなさい。", en: "That is on the desk." },
+                { jp: "トムがあなたに、あなたのために買った本(複数冊)がリビングに置いてある、と言った。しかし、それが見当たらない。それらはリビングにはないよとトムに言いなさい。", en: "Those aren't in the living room." },
+                { jp: "あなたの友人に、一緒にいる男性をこちらはポールだと紹介し、カナダ出身だと付け加えなさい。", en: "This is Paul. He is from Canada." },
+                { jp: "自分の指定席に誤って他人が座っているのを見つけた。すみません、それは私の席ですと言いなさい。", en: "Excuse me. That is my seat." },
+                { jp: "あなたとあなたの友人はバスを待っている。1台のバスが近づいて来た。あれは私たちのバスだねと友人に言いなさい。", en: "That is our buss." },
+                { jp: "あなたの机の上にトムのペンが置いてあった。トムにこれは君のペンだよと言いなさい。", en: "This is your pen." },
+                { jp: "あなたは電車に乗っている。同乗している知り合いが、ある駅に近づいてきたところで降りようとしている。こちらはあなたの(降りる)駅ですか?と聞きなさい。", en: "Is this your station?" },
+                { jp: "メアリーの机の上に学校を背景にしたメアリーと家族の写真がある。これは君の出た学校? と聞きなさい。", en: "Is this your school?" },
+                { jp: "会議であなたは名前を聞かれた。私の名前はヤマダ・イチロウですと答えなさい。", en: "My name is Ichiro Yamada." },
+                { jp: "知り合いが、自分たちの英語のクラスは大きいと言った。私たちのクラスは小さいよと言いなさい。", en: "Our class is small." },
+                { jp: "これ、あなたの消しゴム? とクラスメートが聞いてきた。いや、これは私の消しゴムではないよと答えなさい。", en: "No, this isn't my eraser." },
+                { jp: "会議の参加者があなたに、自分の席はどれかと聞いた。あれがあなたの席ですと答えなさい。", en: "That is your seat." },
+                { jp: "トムがあなたに、これ君の教科書じゃないかと聞いた。いや、それは私の教科書ではないよと答えなさい。", en: "No, that isn't my textbook." },
+                { jp: "夫のトムが仕事から帰って来た。あなたの夕食は冷蔵庫にあるよと言いなさい。", en: "Your dinner is in the fridge." },
+                { jp: "スミスさんに、こちらは私の友人のジェイミーですと紹介しなさい。", en: "This is my friend, Jamie." },
+                { jp: "あなたの友人が自分の傘を探している。向こうに傘が見える。あれはあなたの(探している)傘?と聞きなさい。", en: "Is that your umbrella?" },
+                { jp: "あなたの友人のものらしき自転車がアパートの前に止めてある。あれはあなたの自転車? と聞きなさい。", en: "Is that your bike?" },
+                { jp: "友人があなたに、あなたの車?と聞いた。いや、違うよと答えなさい。", en: "No, it isn't." },
+                { jp: "あなたは友人と沢登りをした。この水はきれいだねとコメントしなさい。", en: "The water is clean." },
+                { jp: "友人があなたの持っているスマホを見て、どのくらい前から所有しているか、聞いてきた。これは新しいスマホだよと答えなさい。", en: "This is a new smartphone." },
+                { jp: "あなたの友人が、あのコンピューターをどう思うか、と聞いてきた。あれは良いコンピューターだねと答えなさい。", en: "That is a good PC." },
+                { jp: "あなたは知り合いの家のパーティーで楽しい時間を過ごしている。そこにいる友人に、いい夕べだねとコメントしなさい。", en: "This is a nice evening." },
+                { jp: "友人があなたの英語の先生はどう? と聞いてきた。素晴らしい先生(女性)だよと答えなさい。", en: "She is a wonderful teacher." },
+                { jp: "スーパーに果物が並んでいる。あなたの友人が、ある果物を指差して、あれは甘いだろうか、とあなたに聞いた。あの果物は甘くないよとコメントしなさい。", en: "That fruit isn't sweet." },
+                { jp: "あなたの友人が目の前にある(1房の)ブドウを見て産地を聞いた。このブドウは山梨県産だよと答えなさい。", en: "These grapes are from Yamanashi." },
+                { jp: "友人があなたに、どうしてあの男の子たちを知っているのか、と聞いた。あの男の子たちは自分の町の出身だよと答えなさい。", en: "Those boys are from my town." },
+                { jp: "ズボンを買おうとして値段を見た。このズボンは高くないね、と一緒にいるあなたの友人にコメントしなさい。", en: "These pants aren't expensive." },
+                { jp: "流線形の電車が目の前に止まっている。一緒にいる友人に、この電車は速いのか聞きなさい。", en: "Is this train fast?" },
+                { jp: "アルバイトを探していて、時給の高い仕事を見つけた。その仕事について知っている友人に、この仕事は難しいのか聞きなさい。", en: "Is this job difficult?" },
+                { jp: "本棚の上のほうに分厚い英語の辞書がある。店員にあの辞書は高額か聞きなさい。", en: "Is that dictionary expensive?" }
+            ],
+            "Lesson 1-3": [
+                { jp: "友人があなたに、新任の数学の先生はどう? と聞いた。良い先生(女性)だと答えなさい。", en: "She is a nice teacher." },
+                { jp: "ミンがあなたに、ウェイはいつ掃除をしているのか聞いた。彼女は夕方に掃除をしていると答えなさい。", en: "She does the cleaning in the evening." },
+                { jp: "知人がメグミは面倒くさがり屋なのでペットを飼うようなタイプではないね、と言った。(彼女は)犬を1匹飼っているよと答えなさい。", en: "She has a dog." },
+                { jp: "あなたの知人が、ジェニファーはダイエット中なので朝食を抜いているだろう、と言った。(彼女は)毎朝、朝食を食べているよと答えなさい。", en: "She has breakfast every morning." },
+                { jp: "あなたの友人があなたに、キムのアパートの周りには良いレストランがたくさんあるので、キムの生活は外食中心だろう、と言った。彼女は家で食事をしているよと答えなさい。", en: "She eats at her house." },
+                { jp: "友人があなたに、あなたたち兄弟はどうやって会社に行っているのか、と聞いた。私たちは歩いて会社に行っていると答えなさい。", en: "We walk to work." },
+                { jp: "シェリーは毎晩、図書館から遅く帰ってくる。彼女はよく勉強するねと彼女の友人にコメントしなさい。", en: "She studies hard." },
+                { jp: "友人があなたに、トムはその大学の職員なのか、と聞いた。(彼は)その大学で教えているんだと答えなさい。", en: "He teaches at the college." },
+                { jp: "友人があなたに、ジョンは郊外に引っ越したそうだけど、バスで学校に通っているのかと聞いた。(彼は)学校へバスでは行っていないと答えなさい。", en: "He doesn't go to school by bus." },
+                { jp: "友人があなたに、都心に引っ越したので車は売ったと言った。その友人に、電車で仕事に行っているのか聞きなさい。", en: "Do you go to work by train?" },
+                { jp: "ポールは、キャンパス内の寮から、キャンパスから少し離れたところにあるアパートに引っ越した。友人に、(彼は)学校へバスで行っているのか聞きなさい。", en: "Does he go to school by bus?" },
+                { jp: "あなたの知人があなたに、最近ジョンを見かけることがあるか、と聞いた。(彼を)ジムでよく見かけるよと答えなさい。", en: "I often see him at the gym." },
+                { jp: "友人が作る料理は何でもおいしい。私はあなたの料理が好きとコメントしなさい。", en: "I like your cooking." },
+                { jp: "最近あなたとあなたの奥さんは忙しい。友人のジョージから週末のパーティーに誘われた。君にそのための時間はある? と奥さんに聞きなさい。", en: "Do you have time for this?" },
+                { jp: "コンはテレビを持っていないんだね、と友人が言った。彼はテレビを見ないからね、と答えなさい。", en: "He doesn't watch TV." },
+                { jp: "あなたの友人が、パメラがダイエットをしていると言った。(彼女が)朝食を食べているか聞きなさい。", en: "Does she eat breakfast?" },
+                { jp: "父母と離れて暮らすのは初めてだ、とクラスメートが言った。両親が電話をかけてくるか聞きなさい。", en: "Do your parents call you?" },
+                { jp: "友人があなたに、あなたのルームメートのカールは読書家だと聞いたけど、図書館で本を読んでいるのか、と聞いた。(彼は)自分の部屋で本を読んでいると答えなさい。", en: "He reads books in his room." },
+                { jp: "あなたの友人が、あなたは5人家族で電話料金が大変でしょう、と聞いた。私の両親はスマホは使わないんだよと答えなさい。", en: "My parents don't use smartphones." },
+                { jp: "あなたの友人が、最近ヨガを始めたと言った。ジムで(それを)しているのか聞きなさい。", en: "Do you do it at the gym?" },
+                { jp: "ヒデキは英語学習に熱心なようだね、と友人から言われた。彼は英語を毎日一生懸命学習していると答えなさい。", en: "He studies English very hard every day." },
+                { jp: "あなたの友人が、あなた方夫妻は朝食を何時に食べるのかを聞いた。私たちは朝食を食べないんだと答えなさい。", en: "We don't eat breakfast." },
+                { jp: "高校生が子供たちをからかっていた。子供たちには優しくしなさいと言いなさい。", en: "Be kind to children." },
+                { jp: "あなたのオフィスに学生が質問をしに来た。その学生に、座ってと言いなさい。", en: "Take a seat." },
+                { jp: "外から帰って来た子供の手が非常に汚れている。手を洗いなさいと言いなさい。", en: "Wash your hands." },
+                { jp: "財布をアパートに忘れてきたことに気がついた。一緒にいる友人にそこで待っていてと言いなさい。", en: "Wait there." },
+                { jp: "正午近くになり部屋の中が暑くなってきた。窓際に立っているルームメートのアンナに窓を開けてくださいと頼みなさい。", en: "Open the window, please." },
+                { jp: "トムが犬をいじめている。やめなさい、トム! と言いなさい。", en: "Stop, Tom!" },
+                { jp: "友人が学校をやめようかな、と言った。ふざけたことを言うなよと言いなさい。", en: "Don't be silly." }
+            ],
+            "Lesson 1-4": [
+                { jp: "友達に好きな果物を聞かれた。オレンジが好きな果物だと答えなさい。", en: "Oranges are my favorite fruit." },
+                { jp: "友人がおなかが空いたと言い、何か食べるものがないかと聞いてきた。オレンジ(いくつか)がかばんの中にあるけど、と答えなさい。", en: "I have some oranges in my bag." },
+                { jp: "友人があなたに、タブレットをよく使っているけど、コンピューターは持っているか聞いた。コンピューターは2台持っていると答えなさい。", en: "I have two computers." },
+                { jp: "友人が、学校でのコンピューターの普及度はすごいね、と言った。コンピューターは学校では必要だよねと答えなさい。", en: "Computers are necessary at school." },
+                { jp: "友人の家に泊まることになった。猫アレルギーのあなたは少し心配で、ネコを飼っているか聞きなさい。", en: "Do you have any cats?" },
+                { jp: "知り合いの家でランチをごちそうになり、その家のだんなさんの手料理がおいしかった。(彼は)料理がお上手ですねと言いなさい。", en: "He is a good cook." },
+                { jp: "パーティーで、あなたたちは立ちっぱなしで疲れてきた。ホストに椅子が(複数)必要だと言いなさい。", en: "I need chairs." },
+                { jp: "パーティーで、参加者たちが立って談笑している中、ホストに椅子が必要ではないかと聞かれた。私たちには椅子は要らないと答えなさい。", en: "We don't need any chairs." },
+                { jp: "彼の部屋は狭苦しく感じられるね、と友人が言った。彼はたくさん本を持っているからねと言いなさい。", en: "He has a lot of books." },
+                { jp: "友人があなたに、セーラは授業をいくつ履修しているか聞いた。(彼女は)毎日6つの授業を履修していると伝えなさい。", en: "She has six classes every day." },
+                { jp: "友人があなたに、よくトマトを食べているね、と言った。トマトにはビタミンが豊富だ(から)と答えなさい。", en: "Tomatoes are rich in vitamins." },
+                { jp: "出産直後の女性たちへ向けた赤ちゃん同伴セミナーがあった。あの赤ちゃんたちはとてもかわいいねとコメントしなさい。", en: "Those babies are very cute." },
+                { jp: "部屋の中が息苦しく感じられた。(私たちには)新鮮な空気が必要だねと言いなさい。", en: "We need some fresh air." },
+                { jp: "あなたの知り合いは、喫茶店でいつもコーヒーを飲んでいる。紅茶も飲むか聞きなさい。", en: "Do you drink tea?" },
+                { jp: "知り合いに、食べ物で何が好きかを聞かれた。天ぷらが好きな食べ物だと答えなさい。", en: "Tempura is my favorite food." },
+                { jp: "スミス家の人たちがあなたの家を訪ねてくるので、彼らに夕飯を振る舞うことになった。すし料理を考えていて、スミス家の人たちをよく知っている友人に、彼らはすしが好きかどうかを聞きなさい。", en: "Do they like sushi?" },
+                { jp: "あなたはジョンソンさんにケーキを出した。このケーキを食べてくださいねと言いなさい。", en: "Eat some cake, please." },
+                { jp: "ルームメートのリーが、おなかが空いたと言い、クッキーはまだあるかと聞いてきた。(私たちは)クッキーはないよと答えなさい。", en: "I don't have any cookies." },
+                { jp: "あなたのルームメートは忙しそうだね、とルイーズが言った。(彼女には)たくさんの宿題があるんだと答えなさい。", en: "She has a lot of homework." },
+                { jp: "あなたのお姉さんは読書が好きだから、たくさん本を持っているんでしょうね、とキムがあなたに言った。(彼女は)本をたくさんは持っていないよと答えなさい。", en: "She doesn't have many books." },
+                { jp: "トムは授業料の高額な某私立大学に行くつもりだ、と友人が言った。(彼は)お金をたくさん持っているのか聞きなさい。", en: "Does he have much money?" },
+                { jp: "ホセがあなたに、新たに同じクラスになった生徒たちはどんな感じか聞いてきた。このクラスの全ての生徒は頭が良いよと答えなさい。", en: "Every student in this class is smart." },
+                { jp: "あなたは、ある授業でプレゼンテーションを終えた。何か質問があるか聞きなさい。", en: "Do you have any questions?" },
+                { jp: "トムの家に行き、何か飲み物はいらないかと尋ねられた。コーラを1杯頼みなさい。", en: "A glass of cola, please." },
+                { jp: "友人たちと喫茶店に行った。コーヒーを3杯オーダーしなさい。", en: "Three cups of coffee, please." },
+                { jp: "あなたたちは喫茶店にいる。紅茶を2杯オーダーしなさい。", en: "Two teas, please." },
+                { jp: "イヤリングをしているあなたに、きれいなイヤリングだけど、高かったの? と友人が聞いてきた。このイヤリングはとても安いんだと答えなさい。", en: "These earrings are very cheap." },
+                { jp: "友人がしゃれたズボンを履いていた。そのズボン、いいねとコメントしなさい。", en: "Those pants are nice!" }
+            ],
+            "Lesson 1-5": [
+                { jp: "ルームメートがあなたの知人の田中さん(男性)にあいさつした。意外に思ったので、ルームメートに田中さんを知っているのか聞きなさい。", en: "Do you know Mr. Tanaka?" },
+                { jp: "ジェフは最近かなり暮らし向きが良い、と友人が私に言った。(彼が)何の仕事をしているのか聞きなさい。", en: "What does he do?" },
+                { jp: "図書館にトルストイの全集があり、それを見たサリーがトルストイの小説が好きだと言った。どの小説が好きか聞きなさい。", en: "Which novel do you like?" },
+                { jp: "ジェイソンが、大学内の寮から出てアパートに住み、バスで学校に通っている。ジェイソンの友人に(彼が)どこに住んでいるか聞きなさい。", en: "Where does he live?" },
+                { jp: "友人が、自分のクラスの数学の先生は教え方がうまい、と言った。誰が数学の先生か聞きなさい。", en: "Who is your math teacher?" },
+                { jp: "フランス語のクラスを履修している友人が、フランス語の上手な学生がいる、と言った。(あなたのフランス語のクラスで)誰がフランス語を上手に話すのか聞きなさい。", en: "Who speaks French well in your French class?" },
+                { jp: "友人が、自分は古くからの『スター・ウォーズ』ファンだと言った。その映画に出ている俳優で誰が好きか聞きなさい。", en: "Who do you like in the movie?" },
+                { jp: "ルームメートが小さな機械のようなものを買ってきた。それは何かと尋ねなさい。", en: "What's that?" },
+                { jp: "友人のスーツケースが異様に重そうだった。スーツケースに何が入っているのか聞きなさい。", en: "What's in your suitcase?" },
+                { jp: "大学のカフェテリアで友人のジョンがギョーザを食べていた。ふと英語でギョーザを何と言うのだろうな、と思ったが分からない。ジョンにそれは英語で何と言うのか聞きなさい。", en: "What's the English word for that?" },
+                { jp: "文化祭の催しもので、カフェを開く案が出た。一緒にいる友人にそのプランについてどう思うか聞きなさい。", en: "What do you think about the plan?" },
+                { jp: "友人が、午前中は家にいて、午後から学校に行っている、と言った。午前中は何をしているか聞きなさい。", en: "What do you do in the morning?" },
+                { jp: "友人らとのパーティーが終わり、帰りぎわに、掛けてあった自分のコートを取った。ついでに友人のコートも取ってあげようと思った。どれが友人のコートかその友人に聞きなさい。", en: "Which is your coat?" },
+                { jp: "あなたとあなたの友人がランチを共にすることになった。候補として中華料理店と天ぷらのレストランが挙がった。昼食にどちらがいいか聞きなさい。", en: "Which do you want for lunch?" },
+                { jp: "パーティーが盛り上がり、ダンスミュージックが鳴り響き出した。踊ろうよとナタリーを誘いなさい。", en: "Let's dance." },
+                { jp: "ジョンがあなたのルームメートに、明日の引っ越しを手伝ってくれと頼んできた。ルームメートのミックは躊躇している。ミックに、どうか彼のためにそれをやってあげてと言いなさい。", en: "Please do that for him." },
+                { jp: "友人があなたに、あなたの田舎の祖父母が高齢になって大変でしょ、と聞いた。ときどき彼らの手伝いをしているんだと言いなさい。", en: "I help them sometimes." },
+                { jp: "友人があなたに、アーロンの仕事は何か、と聞いた。アーロンは学校で英語を教えていると言いなさい。", en: "Aron teaches English at school." },
+                { jp: "友人があなたに、ニュージーランドは今頃どんな気候か、と聞いた。ニュージーランドは今は暑いと答えなさい。", en: "New Zealand is hot now." },
+                { jp: "友人があなたのためにある情報を持ってきてくれた。それを聞いて、それは素晴らしい情報だとコメントしなさい。", en: "That is wonderful information." },
+                { jp: "友人があなたに、あなたのお母さんはいつ出勤するのか、と聞いた。(母は)午後に出勤すると答えなさい。", en: "Mom goes to work in the afternoon." },
+                { jp: "友人があなたに、あなたのルームメートのメアリーに買い物につきあってもらえないか、と聞いてきた。(彼女は)今日はあまり時間がないと答えなさい。", en: "She doesn't have much time today." },
+                { jp: "友人があなたに、アンソニーはいつも忙しそうにしているね、と言った。(彼は)毎日たくさんの宿題があるんだよと答えなさい。", en: "He has a lot of homework every day." },
+                { jp: "久しぶりに旧友のキースと電話で話し、木曜日にランチに行かないかと誘ったが、キースは学校生活が結構忙しいと答えた。キースに毎日学校に行っているの、と聞きなさい。", en: "Do you go to school every day?" },
+                { jp: "キースが、大学進学についてよくお姉さんからアドバイスをもらっていると言った。お姉さんは大学に通っているのか聞きなさい。", en: "Does your sister go to college?" },
+                { jp: "友人があなたに、あなたのお母さんは買い物を週に1回ぐらいしているのか、と聞いてきた。母は毎日買い物に行くと答えなさい。", en: "My mother goes to the store every day." },
+                { jp: "友人があなたに、ジーンのアパートは図書館が近いから勉強するのに便利だね、と言った。彼女は図書館にはあまり行かないよと答えなさい。", en: "She doesn't go to the library much." },
+                { jp: "友人が、ホワイトハウスはニューヨークにあるのか、とあなたに聞いた。ホワイトハウスはワシントン DC にあると答えなさい。", en: "The White House is in Washington DC." },
+                { jp: "あなたはガールフレンドのノゾミへの誕生日プレゼントを買ってきた。ルームメートに誰へのプレゼントか、と聞かれたので、これはノゾミへのプレゼントだよと言いなさい。", en: "This is the present for Nozomi." },
+                { jp: "あなたとサラとアンはシェアハウスに住んでいる。アンがあなたに、サラは最近、家に帰るのが遅いけどどうかしたの、と聞いた。彼女はクラブに所属しているんだと答えなさい。", en: "She is in a club." },
+                { jp: "友人があなたに、ダスティンは今サッカーのチームに属しているのか、と聞いた。彼はそのチームに所属していると答えなさい。", en: "He is on the team." },
+                { jp: "友人があなたに、フォード氏は今どこに住んでいるのか、と聞いた。(彼は)その島に住んでいると答えなさい。", en: "He lives on the island." }
+            ],
+            "Lesson 1-6": [
+                { jp: "夏休み前、友人に、友人のルームメートのジョージが夏休みに向けてどんな計画を立てているか聞きなさい。", en: "What plans does he have for his summer vacations?" },
+                { jp: "あなたの友人のトムは雑誌をよく読みます。彼に、どんな雑誌を読むのか聞きなさい。", en: "What magazines do you read?" },
+                { jp: "2人の女の子が、少し離れたところで話している。友人がそれを見て妹がいると言った。どちらの女の子が妹か聞きなさい。", en: "Which girl is your sister?" },
+                { jp: "大きなプロジェクトが立ち上がった。これは誰のプロジェクトか聞きなさい。", en: "Whose project is this?" },
+                { jp: "あなたの友人がメアリーは絵が好きで、よく美術館に行くと言った。彼女は誰の絵画が好きか聞きなさい。", en: "Whose paintings does she like?" },
+                { jp: "友人の家に遊びに行ったら、棚の上に最新型のカメラが置いてあった。あれは誰のものか聞きなさい。", en: "Whose is that?" },
+                { jp: "ルームメイトの机の上に見慣れないメガネが置いてあった。それは誰のものか聞きなさい。", en: "Whose are those?" },
+                { jp: "ヨーコは頼まれると断れないタイプ。ルームメートのリリーはそのヨーコによく頼み事をする。リリーにあまりに多くのことを彼女に頼まないでと言いなさい。", en: "Don't ask a lot of things of her." },
+                { jp: "友人が、ある島がどこにあるのかと聞いた。(それは)インドネシアの北の方にあると言いなさい。", en: "It's to the north of Indonesia." },
+                { jp: "あなたは、どんな食べ物が好きかを聞かれた。すしが好きな食べ物だと答えなさい。", en: "Sushi is one of my favorite foods." },
+                { jp: "イギリスにいる友人が、日本の酒が好きだと言った。どんな酒が好きか聞きなさい。", en: "What kind of sake do you like?" },
+                { jp: "ルームメートがカップ麺を1個買って来た。その食べ物は健康に良くないよと言いなさい。", en: "That food isn't good for your health." },
+                { jp: "春先なのに外は暑く感じられた。今日は春にしては暑いねとコメントしなさい。", en: "Today is hot for spring." },
+                { jp: "あなたの落とし物が見つかった、とメールで友人が知らせてくれた。eメールをありがとうとお礼を言いなさい。", en: "Thank you for your email." },
+                { jp: "ジョージのお父さんが亡くなったと聞いた。彼が気の毒ですと言いなさい。", en: "I'm sorry for him." },
+                { jp: "いつ会おうか、とナンシーが聞いてきた。金曜日に私と会って、と言いなさい。", en: "Meet me on Friday." },
+                { jp: "知り合いが、ジェニーは東京に行くことがあるかと聞いてきた。彼女はときどき仕事で東京に行っているよと答えなさい。", en: "She sometimes goes to Tokyo on business." },
+                { jp: "パットがカフェテリアでランチを少ししか食べないのを見た友人が、彼女は気分でも悪いのか、とあなたに聞いた。彼女はダイエット中なんだよと答えなさい。", en: "She is on a diet." },
+                { jp: "ルームメートのジョンは車で学校に行っているのか、とあなたは友人に聞かれた。彼は歩いて学校に行っていると答えなさい。", en: "He goes to school on foot." },
+                { jp: "キムの両親は引っ越して、キムと離れて暮らしている。彼女の両親が今どこにいるのか、ミックが聞いてきた。彼女の両親はカナダに住んでいると答えなさい。", en: "Her parents live in Canada." },
+                { jp: "メイが見当たらないんだけど、とトムがあなたに言った。メイは車の中にいるよと答えなさい。", en: "Mei is in the car." },
+                { jp: "マリオがあなたのルームメートのサリーが病気だと聞き、サリーは病院にいるのか、と聞いた。彼女はベッドにいると答えなさい。", en: "She is in bed." },
+                { jp: "テストを受けようとしている生徒が、ボールペンで答案を書いてもいいか、と教員のあなたに聞いた。鉛筆で書いてと言いなさい。", en: "Write in pencil." },
+                { jp: "トンプソンさんにコーヒーを入れてあげた。コーヒーに砂糖を入れるか聞きなさい。", en: "Do you take sugar in your coffee?" },
+                { jp: "トムが、その歌手をあなたが知っているのは意外だと言った。彼はアジアではとても有名だと言いなさい。", en: "He is very famous in Asia." },
+                { jp: "あなたは、リズが眼鏡をかけているのを初めて見た。あなたと一緒にいる友人に、彼女は眼鏡が似合うねとコメントしなさい。", en: "She looks nice in glasses." },
+                { jp: "ホセが、あなたの両親は今、外出中なのかと聞いた。母と父は今、家にいるよと言いなさい。", en: "Mom and Dad are at home now." },
+                { jp: "ミンがあなたの家に遊びに来ている。夕食の支度ができたので、リビングにいるミンに、どうぞ来て食べてくださいと言いなさい。", en: "Please come and eat." },
+                { jp: "リチャードの部屋に入ったら快適だった。あなた(リチャード)の部屋は心地よくて暖かいねとコメントしなさい。", en: "Your room is nice and warm." },
+                { jp: "中国から来た留学生のリンさんと、入浴の話になった。あなた(リン)はお風呂とシャワーのどちらを使うの?と聞きなさい。", en: "Which do you take, a bath or a shower?" }
+            ],
+            "Lesson 1-7": [
+                { jp: "サリーから電話がかかってきた。今どこにいるか聞きなさい。", en: "Where are you now?" },
+                { jp: "リーは、自分のお兄さんが遠くから大学に通って来ていると言った。(彼は)どこに住んでいるのか聞きなさい。", en: "Where does he live?" },
+                { jp: "ジェイソンが近くに図書館がオープンしたとあなたに言った。彼に、その図書館は何時に開館するのか聞きなさい。", en: "When does the library open?" },
+                { jp: "通学中、交通渋滞で乗っているバスがなかなか進まなくなった。授業に間に合うか心配になり、隣に座って時計を見ている友人に、今、何時か聞きなさい。", en: "What time is it now?" },
+                { jp: "今、何時か、と友人に聞かれた。10時だと答えなさい。", en: "-It's ten o'clock." },
+                { jp: "普段はよく話すナオミが今日はおとなしくしている。ナオミのルームメートになぜ今日、彼女はとても静かなのか聞きなさい。", en: "Why is she so quiet today?" },
+                { jp: "トムは最近、図書館で過ごす時間が長い。彼のルームメートに、なぜ彼がよく図書館に行っているのか聞きなさい。", en: "Why does he go to the library often?" },
+                { jp: "友人たちと話していると、トムが離れたところにポツンと一人でいるのに気がついた。こっちに来なよと言いなさい。", en: "Why don't you come here?" },
+                { jp: "マリアは、自分のお父さんにとても遠慮している感じで、お母さんにばかり聞いている。お父さんに聞いてみたらと言いなさい。", en: "Why don't you ask your father?" },
+                { jp: "陽が傾いて寒くなってきた。家の外にいるメイに、入って紅茶を飲んだらと言いなさい。", en: "Why don't you come in and have some tea?" },
+                { jp: "ポールが先週けがをして病院に行った、と聞いた。ポールの友人に、彼は今どんな様子か聞きなさい。", en: "How's he now?" },
+                { jp: "あなたの友人のルームメート(女性)が替わった。その友だちに、彼女がどんな感じか(どんな感じで気に入っているか)聞きなさい。", en: "How do you like her?" },
+                { jp: "あなたのルームメートが、気分が悪くなってしばらくベッドに横になっている。今どんな気分か聞きなさい。", en: "How do you feel now?" },
+                { jp: "リサがあなたに、自分の妹は頭が良く、飛び級で大学に入ったと言った。彼女が何歳か聞きなさい。", en: "How old is she?" },
+                { jp: "クラスメートが、数学の問題の答えを教えてくれ、と頼んできた。しかし、難しくて解けそうもない。これは自分には難しいようだと言いなさい。", en: "This seems difficult to me." },
+                { jp: "朝食の支度ができたので、ルームメートに座って朝食を食べましょうと言いなさい。", en: "Let's sit down to breakfast." },
+                { jp: "少しなまりのある英語を話す生徒がいて、友人に彼はどこの出身か聞かれた。ドイツの出身だと答えなさい。", en: "He is from Germany." },
+                { jp: "メグの家を訪ねたとき、家の周囲の景色が美しいと思った。友人に、彼女の家から見た景色はきれいだと言いなさい。", en: "The view from her house is beautiful." },
+                { jp: "ヨンにジェイソンは今どこにいるのか、と聞かれた。ジェイソンはドアのところにいるよと答えなさい。", en: "Jason is at the door." },
+                { jp: "友人に、ボブの新しい住所を聞かれた。彼はサードストリートの200番地に住んでいると答えなさい。", en: "He lives at 200 Third St." },
+                { jp: "友人に、電車の乗り換えなしで学校に来ているのか聞かれた。渋谷で電車を乗り換えていると答えなさい。", en: "I change trains at Shibuya." },
+                { jp: "リーに、学校は何時に終わるのか聞かれた。(私の)学校は5時に終わると答えなさい。", en: "School is over at 5:00." },
+                { jp: "子犬が飼い主に連れられて公園を散歩していて、あなたの目の前を通り過ぎた。一緒にいるナタリーに、あのかかわいい犬を見てと言いなさい。", en: "Look at that cute dog!" },
+                { jp: "トムとマリーは今、何をしているのか、と友人に聞かれた。彼らは夕食の最中だよと答えなさい。", en: "They are at dinner." },
+                { jp: "友人が、自分はいつも遅くまで起きている、と言った。何時に寝るのか聞きなさい。", en: "What time do you go to bed?" },
+                { jp: "学校が終わった。チャールズを、川のほとりのレストランに行こうと誘いなさい。", en: "Let's go to the restaurant by the river." },
+                { jp: "ジーンと道ですれ違った。彼女の家族が元気にしているか聞きなさい。", en: "How is your family?" },
+                { jp: "ヤンに、あなたの家族は元気にしているかと聞かれた。私の家族はみなとても元気だと答えなさい。", en: "My family are all very well." },
+                { jp: "昼食が終わりかけた。一緒に食事をしているベネットを、昼食の後に果物を食べようと誘いなさい。", en: "Let's eat fruit after lunch." }
+            ],
+            "Lesson 1-8": [
+                { jp: "友人があなたに、ミックはマーガレットを知っているかと聞いた。彼は彼女の友人だと答えなさい。", en: "He is friends with her." },
+                { jp: "ジュンが、ジェフはアリソンには何でもしてあげるようだね、と言った。ジェフはアリソンに恋しているからねと答えなさい。", en: "Jeff is in love with Allison." },
+                { jp: "ガラスのコップを床に落として割ってしまった。近くに来た友人に、それに気をつけるように言いなさい。", en: "Be careful with those." },
+                { jp: "友人があなたに、あなたのルームメートのヨシが今日学校に来なかったが、どうしたのか、と聞いた。彼は風邪をひいて寝ていると答えなさい。", en: "He is in bed with a cold." },
+                { jp: "昨日のパーティーはとても面白かった、とジョージが言った。それについて話してとジョージに言いなさい。", en: "Tell me about it." },
+                { jp: "クラスで問題が起こった。それについて話しましょうとクラスの皆に言いなさい。", en: "Let's talk about it" },
+                { jp: "ジュンがあなたに、あなたの友人のマシューは何歳ぐらいだろうか、と聞いた。彼は私と同じくらいの年齢だと答えなさい。", en: "He is about my age." },
+                { jp: "友人とアパレルショップに行った。気に入ったジャケットがあったので、その友人にこのジャケットをどう思うか聞きなさい。", en: "How about this jacket?" },
+                { jp: "友人があなたに、ジャネットは授業が終わってからいつもどこに行っているのか、と聞いた。彼女は放課後には図書館に行っていると言いなさい。", en: "She goes to the library after school." },
+                { jp: "今日ボウリングに行こう、とキムが誘ってきた。5時以降なら時間が空くと言いなさい。", en: "I'm free after 5:00." },
+                { jp: "ソンが、あなたの夫が何時ごろに家に帰ってくるか聞いた。(彼は)いつも8時前に帰ってくると言いなさい。", en: "Usually, he comes home before 8:00." },
+                { jp: "客が店員のあなたに、向こうに飾られているTシャツはいくらか、と聞いた。あれは100ドルを超えると答えなさい。", en: "That costs over $100." },
+                { jp: "ナタリーが、あなたの両親はどこに住んでいるのか、と聞いた。(彼らは)ファーストストリートの230番地に住んでいると答えなさい。", en: "They live at 230 First Street." },
+                { jp: "リズが、あなたはどこに住んでいるのか、と聞いた。明治通り沿いに住んでいると答えなさい。", en: "I live on Meiji Street." },
+                { jp: "マリアがあなたに、毎年、夏はどんなふうに過ごすのか、と聞いた。夏には海や山によく行くんだと答えなさい。", en: "I often go to the sea and the mountains in summer." },
+                { jp: "ヨンがあなたに、このドイツ製の高価なペンは、あなたのか、あなたのルームメートのトムのか、と聞いた。このペンは彼のだよと答えなさい。", en: "This pen is his." },
+                { jp: "ルームメートが、自分の今学期の成績がオールAだった、と言った。わー、それは素晴らしい! と言いなさい。", en: "Wow, it's great!" },
+                { jp: "金づちを使いながら、誤って指をたたいてしまった。痛い!と言いなさい。", en: "Ouch!" },
+                { jp: "カフェテリアで肘が他の生徒の体に当たった。あ、ごめん!と言いなさい。", en: "Oops, I'm sorry!" },
+                { jp: "ロナルドが断りもなくあなたのスマホを使っている。おい、俺のスマホを使うなよと言いなさい。", en: "Hey! Don't use my smartphone." },
+                { jp: "サリーがあなたに、果物を食べるか聞いた。どんな果物があるか聞きなさい。", en: "What fruit do you have?" },
+                { jp: "久しぶりにパンケーキを作ろうと、材料を買ってきた。ルームメートのジョンに、パンケーキが好きか聞きなさい。", en: "Do you like pancakes?" },
+                { jp: "新しいルームメートは、芸術については何でも知っているようだ。君は芸術に対して良い目を持っているんだねと言いなさい。", en: "You have a good eye for art." },
+                { jp: "春になり、キャンパス内にたくさんの花が咲いている。目の前に何とも美しい花が咲き誇っている。この花はとてもきれいだねとコメントしなさい。", en: "These flowers are very beautiful." },
+                { jp: "友人があなたに、何点取れば成績にAが付くか聞いた。80点以上がAだと答えなさい。", en: "Eighty points or over is A." },
+                { jp: "サリーに一人っ子の雰囲気を感じた。たぶん、きょうだいはいないだろうと予想しつつ、彼女のクラスメートに(彼女に)きょうだいがいるか聞きなさい。", en: "Does she have any brothers or sisters?" },
+                { jp: "トムがあなたに、調子が悪そうだね、と声をかけてきた。腹痛と熱があるんだと答えなさい。", en: "I have a stomachache and a fever." },
+                { jp: "ジャネットがあなたに、自宅ではどんな服装か聞いた。自宅では、いつもTシャツとジーンズを着ていると答えなさい。", en: "I usually wear a T-shirt and jeans at home." },
+                { jp: "ポールがあなたに、良いズボンをはいているね、と言った。このズボンはとても(値段が)高いんだよと言いなさい。", en: "These pants are very expensive." }
+            ],
+            "Lesson 1-9": [
+                { jp: "友人があなたに、あなたの弟は大学に通っているのか、と聞いた。弟は高校生だと言いなさい。", en: "My brother is a high school student." },
+                { jp: "ヨンが、ヨンのお姉さんは東京で仕事をしている、と言った。お姉さんは仕事は何をしているのか聞きなさい。", en: "What does your sister do?" },
+                { jp: "フランシスが、あなたのおじいさんとおばあさんは犬好きだねと言った。祖父母は犬を5匹飼っていると言いなさい。", en: "My grandparents have five dogs." },
+                { jp: "最近、カフェテリアで朝食を食べているジョンを見かけない。クラスでジョンに会ったとき、君は朝食は食べているの、と聞きなさい。", en: "Do you have breakfast?" },
+                { jp: "メイの犬好きは有名だね、と友人が言った。彼女は自分の犬を(複数)とてもかわいがっているよと言いなさい。", en: "She loves her dogs very much." },
+                { jp: "友人があなたに、いつもいつ宿題をやるのか聞いた。いつも夕食前に宿題をやると答えなさい。", en: "I do my homework before dinner." },
+                { jp: "あなたは、大学に進学したアンナに、久しぶりに会った。大学生活を楽しんでいるか聞きなさい。", en: "Do you enjoy college life?" },
+                { jp: "サリーが、自分は料理が好きだと言った。どのくらいの頻度で家で料理をするのか聞きなさい。", en: "How often do you cook at home?" },
+                { jp: "友人が、金曜日は履修科目が多く、前夜に行う予習が大変だと言った。金曜日には何クラス履修しているか聞きなさい。", en: "How many classes do you take on Friday?" },
+                { jp: "友人が、今日ジョージに会うと言った。なぜ、彼に会うのか聞きなさい。", en: "Why do you meet him?" },
+                { jp: "友人が、ボーイフレンドの英語が最近ずいぶん上達したと思う、と言った。(彼は)英語を猛勉強しているのかと聞きなさい。", en: "Does he study English very hard?" },
+                { jp: "あなたは、マリアが去年パリに行ったことを思い出した。マリアの友人に、彼女が今もパリに住んでいるのか聞きなさい。", en: "Is she living in Paris now." },
+                { jp: "マリアは今、パリには住んでいないのだという。では、彼女は今どこに住んでいるのか聞きなさい。", en: "Where is she living now?" },
+                { jp: "トムがあなたに、マリーはまだ来ていないのかと聞いた。(彼女は)今まさに来るところだと答えなさい。", en: "She is coming right now." },
+                { jp: "リッチがあなたに、マギーは今どこにいるのかと聞いた。(彼女は)自分の部屋で音楽を聞いているよと答えなさい。", en: "She is listening to music in her room." },
+                { jp: "映画に誘おうと思い、ポールに電話をしたら、今忙しいという返事だった。君は今勉強しているの? と彼に聞きなさい。", en: "Are you studying now?" },
+                { jp: "パトリシアと出かけるために、ドアを出たところで彼女が来るのを待っていた。なかなか来ないので、彼女は何をもたもたしているのだろうか、と自分自身につぶやきなさい。", en: "What is taking her so long?" },
+                { jp: "郵便局への道が分からなくなった。近くを歩いていた人に、すみません、郵便局を探しているんですがと言いなさい。", en: "Excuse me. I'm looking for the post office." },
+                { jp: "あなたは自分の自転車を使いたかった。しかし、またあなたの妹が勝手にあなたの自転車で買い物に行ってしまった。友人に、彼女はいつも私の自転車を使うんだよねと、不満顔で言いなさい。", en: "She is always using my bike." },
+                { jp: "ルームメートのミンからの電話で、今どこにいるかあなたに聞いてきた。今、家に帰るところだと答えなさい。", en: "I'm on my way home." },
+                { jp: "チェリーが、珍しくあなたに親切にしてくれている。友人に、今日、彼女は(どういうわけか)親切なんだよねと言いなさい。", en: "She is being kind today." },
+                { jp: "友人があなたに、キムの病気はどんな具合か聞いた。(彼女は)今日は気分が良いよと答えなさい。", en: "She is feeling good today." },
+                { jp: "友人があなたに、ボブは寮から引っ越して一人で住んでいるのか、と聞いた。(彼は)今、彼の祖父母と住んでいるよ、と答えなさい。", en: "He is living with his grandparents now." },
+                { jp: "サリーが夕飯の準備ができたよ、と言った。すぐにそちらへ行くよと答えなさい。", en: "I'm coming!" },
+                { jp: "ペンを使いたいのに、自分のペンが見当たらない。メアリーのペンがテーブルの上に置いてある。メアリーにあなたのペンを使うよと言いなさい。", en: "I'm using your pen!" },
+                { jp: "サリーに道で会った。今あなたはどこに行くところ?と聞かれた。今、仕事に行くところだと答えなさい。", en: "I'm going to work now." },
+                { jp: "どうやって通勤しているのか、とジンに聞かれた。歩いて通勤しているよと答えなさい。", en: "I go to work on foot." }
+            ],
+            "Lesson 1-10": [
+                { jp: "友人があなたに、あなたのお母さんは英語が上手だねと言った。母は英語の先生だったんだよと言いなさい。", en: "My mother was an English teacher." },
+                { jp: "昨日なぜラマはパーティーに来なかったのかと友人が言った。彼は昨日、仕事がとても忙しかったと言いなさい。", en: "He was very busy at work yesterday." },
+                { jp: "友人が、シェリーはとてもバスケットボールが上手だと言った。彼女はそのバスケットボールのチームに属していたのか聞きなさい。", en: "Was she on the basketball team?" },
+                { jp: "友人が物価が高くなったね〜と言った。うなずいて、去年はあまり高くなかったと言いなさい。", en: "Those weren't very expensive last year." },
+                { jp: "キムが先週末に初めて東京に行って来た、とあなたに言った。東京への旅行は楽しかったか聞きなさい。", en: "Was your trip to Tokyo fun?" },
+                { jp: "トムは珍しく宿題をしていない、と教室にいるあなたに言った。トムに昨日は忙しかったのか聞きなさい。", en: "Were you busy yesterday?" },
+                { jp: "友人が、高校では理科の授業が面白かったと言った。高校では誰が理科の先生だったか聞きなさい。", en: "Who was your science teacher in high school?" },
+                { jp: "友人が、高校ではよく勉強したと言った。その友人に高校ではどの授業が好きだったか聞きなさい。", en: "Which class was your favorite in high school?" },
+                { jp: "ルームメートのトムが早朝に帰ってきた。昨夜はどこにいたのか聞きなさい。", en: "Where were you last night?" },
+                { jp: "友人があなたに、自分の犬を見なかったかと聞いた。裏庭にいたことを伝えなさい。", en: "It was in the backyard." },
+                { jp: "電話であなたの友人が、大阪で行われる予定の野球の試合が中止になった、と言った。友人に大阪は昨日は雨だったのか聞きなさい。", en: "Was it rainy in Osaka yesterday?" },
+                { jp: "ソンの家に夜遅くまで滞在したあと、帰ろうと思って外に出たら、月明かりもなく真っ暗だった。なんて暗いんだと友人に言いなさい。", en: "How dark it is!" },
+                { jp: "起きて学校に行く準備をしなければならない時刻なのに、ルームメートがベッドに寝そべったままグズグズしている。外は明るいよ、目を覚ませと言いなさい。", en: "It is light outside. Wake up!" },
+                { jp: "友人の新居を訪ねている。その友人に、ここから大学までどのくらい時間がかかるか聞きなさい。", en: "How long does it take from here to your college?" },
+                { jp: "田舎に引っ越してからの生活はどんな具合? とリンゴが電話であなたに聞いた。自然が好きなあなたは、ここ、気に入っているよと答えなさい。", en: "I like it here." },
+                { jp: "友人があなたに、あなたの両親と祖父母はどこに住んでいるか聞いた。彼らはみな、京都に住んでいると答えなさい。", en: "They all are living in Kyoto." },
+                { jp: "あなたはギア氏に弟を紹介しようとしている。こちらはショウで、弟ですと紹介しなさい。", en: "This is Sho, my brother." },
+                { jp: "ナンシーがあなたに、あなたの妹は大学でうまくやっているか、と聞いた。彼女はとてもうまくやっているよと答えなさい。", en: "She is doing very well." },
+                { jp: "ルームメートが、あなたがどこで何をしているか電話で聞いてきた。今、カフェで勉強していると伝えなさい。", en: "I'm studying at the café right now." },
+                { jp: "トムがあなたに、ある情報がウェブサイトのどこにあるのか聞いた。スマホの画面にウェブサイトを表示して見せながら、そのサイトの、まさにここにあると答えなさい。", en: "It is right here on the website." },
+                { jp: "知り合いがあなたに、大阪の郊外に住んでいるのかと聞いた。大阪のど真ん中に住んでいると答えなさい。", en: "I live right in the center of Osaka." },
+                { jp: "体育館に入ったら寒くて震えるほどだ。ここはかなり寒いねと言いなさい。", en: "It is pretty cold here." },
+                { jp: "友人が、あなたのルームメートのキョウコは就寝が早いね、と言った。彼女は朝起きるのが早いんだよと言いなさい。", en: "She gets up early in the morning." },
+                { jp: "友人があなたに何時に夕食を食べているかと聞いた。あなたは毎晩7時に夕食を食べていると答えなさい。", en: "I eat dinner at seven every evening." },
+                { jp: "チェンが、あなたに会いたいと言ってきた。明日の午前に私のオフィスに来てと言いなさい。", en: "Come to my office tomorrow morning." },
+                { jp: "知人が、体の調子が悪いので医者に診てもらわなければ、と言った。君は酒を飲み過ぎるんだよと言いなさい。", en: "You drink too much." },
+                { jp: "ミックが、あのパソコンがとても安いので買おうかな、と言った。あれは安すぎるよとコメントしなさい。", en: "That is too cheap." },
+                { jp: "友人が、あなたの顔色が悪いと言った。あまり気分が良くないと言いなさい。", en: "I don't feel too well." }
+            ],
+            "Lesson 1-11": [
+                { jp: "友人の獣医師に、ペットを飼った経験があるか聞かれた。以前、犬を2匹飼っていたと答えなさい。", en: "I had two dogs before." },
+                { jp: "友人があなたに、おなかが空いているようだね、と言った。今朝、朝食を食べなかったと言いなさい。", en: "I didn't have breakfast this morning." },
+                { jp: "同僚があなたに、見かけない男性が働いているねと言った。彼は昨年は在宅勤務だったと答えなさい。", en: "He worked from home last year." },
+                { jp: "中国語が流暢な女子学生がいて、大学で学んだにしては中国語が上手だね、と友人が言った。彼女は去年、中国で中国語を勉強したんだよと答えなさい。", en: "She studied Chinese in China last year." },
+                { jp: "あなたは高校時代、バス通学だったの? と友人に聞かれた。高校には自転車で行っていたと伝えなさい。", en: "I went to high school by bike." },
+                { jp: "友人が、ジュンの英語はとても流暢だね、と言った。彼女は高校で英語を一生懸命に勉強したからねと言いなさい。", en: "She didn't study English hard at high school." },
+                { jp: "新たに男性社員が入社してきた。同僚があなたに、彼の以前の仕事は何だったのか、と聞いた。彼は学校で数学を5年間教えていたんだと言いなさい。", en: "He taught math for five years at a school." },
+                { jp: "あなたの友人が、先週神戸に行ったと言った。電車で神戸に行ったのか聞きなさい。", en: "Did you go to Kobe by train?" },
+                { jp: "友人が、ゆうべはオリンピックの試合を午前4時に見終わり、それから寝た、と言った。今朝は何時に起きたのか聞きなさい。", en: "What time did you get up this morning?" },
+                { jp: "友人が、あなたとルームメートのミックは昨日のパーティーに行ったか、と聞いた。彼は昨夜のパーティーには行っていないと答えなさい。", en: "He didn't go to school by bike in rainy days." },
+                { jp: "友人が、ロサンゼルスに行ってきた、と言った。どうやってロサンゼルスに行ったのか聞きなさい。", en: "How did you go to Los Angeles?" },
+                { jp: "ルームメートが早朝に帰ってきた。昨夜どこに行っていたのか聞きなさい。", en: "Where did you go yesterday?" },
+                { jp: "友人があなたに、週末どこに行ったのか聞いた。金沢に行ったと答えなさい。", en: "-I went to Kanazawa." },
+                { jp: "日曜日に自宅の庭でバーベキューパーティーを行う予定だ。知り合いのトムに、日曜日にここに来られるか聞きなさい。", en: "Can you come here on Sunday?" },
+                { jp: "あなたの隣の田中さんのところにオーストラリアから女子高生がホームステイに来た。彼女は日本語がしゃべれるか聞きなさい。", en: "Doew she speak Japanese?" },
+                { jp: "友だちが自分の母親に電話したいが、自宅にスマホを忘れてしまったという。あなたのスマホを使っていいと言いなさい。", en: "You can use my smartphone." },
+                { jp: "インターナショナルスクールの教員のあなたは、子供たちが廊下を走っているのを見た。ここで走っちゃだめだよと言いなさい。", en: "You can't run here." },
+                { jp: "この地域は夏に暑いのか、と聞かれた。このエリアは夏はとても暑くなる可能性があるよと言いなさい。", en: "Summer can be very hot in this area." },
+                { jp: "あなたは医者として患者さんとその人の病気について話している。その患者さんに一般的にこの病気はシリアスになる(重症化する)可能性があると言いなさい。", en: "This illness can be serious." },
+                { jp: "あなたと友人は、ジェイソンが出場するアメリカンフットボールの試合を見に行った。その友人が、あれがジェイソン? と聞いた。ジェイソンはもっと小柄なので、ジェイソンであるはずはないよと答えなさい。", en: "That can't be Jason." },
+                { jp: "友人に相談があり、その友人に今夜会えるか、丁寧に聞きなさい。", en: "Could I see you tonight?" },
+                { jp: "あなたには、明日はたくさん買い物をする必要がある。車を持っている友人に、明日お店に一緒に行ってくれる? と丁寧に聞きなさい。", en: "Could you come with me to the store tomorrow?" },
+                { jp: "友人があなたに、午後にジムに行ったのかと聞いた。午後にそこに行くことはできなかったと答えなさい。", en: "I couldn't go there this afternoon." },
+                { jp: "友人から、あなたの祖父はお金持ちなんだってね、と言われた。祖父の家は大きくてプールがあると言いなさい。", en: "My grandpa's house is large and has a pool." },
+                { jp: "ルームメートのマリアが、あなたの机の上にある時計を指でさして、誰の時計?と聞いた。これは弟の時計だと答えなさい。", en: "This is my brother's watch." },
+                { jp: "友人に道でばったり会い、今どこに行くところか聞かれた。歯医者に行くところだと言いなさい。", en: "I'm going to the dentist's." },
+                { jp: "知り合いに、こちらは友人のジェイソンですと紹介しなさい。", en: "This is my friend, Jason." },
+                { jp: "友人があなたに、ジェリーと知り合いなのかと聞いた。ジェリーは知っているよ。(彼は)友人の一人だよと答えなさい。", en: "I know Jerry. He is a friend of mine." },
+                { jp: "ジュリアが怪我をしたと聞いたけど、とあなたの友人が言った。彼女は父親の車で事故を起こしてしまったと答えなさい。", en: "She had an accident with her father's car." }
+            ],
+            "Lesson 2-1": [
+                { jp: "彼は今、本を読んでいます。", en: "He is reading a book now." },
+                { jp: "彼らは公園でサッカーをしています。", en: "They are playing soccer in the park." },
+                { jp: "私は夕食を作っていません。", en: "I am not cooking dinner." },
+                { jp: "あなたは英語を勉強していますか？", en: "Are you studying English?" },
+                { jp: "はい、しています。 / いいえ、していません。", en: "Yes, I am. / No, I am not." },
+                { jp: "彼女は何をしていますか？", en: "What is she doing?" },
+                { jp: "彼女はピアノを弾いています。", en: "She is playing the piano." },
+                { jp: "私たちは今、テレビを見ています。", en: "We are watching TV now." },
+                { jp: "その猫は眠っていますか？", en: "Is the cat sleeping?" },
+                { jp: "私の弟は部屋を掃除していません。", en: "My brother is not cleaning his room." },
+                { jp: "誰が歌っていますか？", en: "Who is singing?" },
+                { jp: "メアリーが歌っています。", en: "Mary is." },
+                { jp: "子供たちはどこで遊んでいますか？", en: "Where are the children playing?" },
+                { jp: "彼らは庭で遊んでいます。", en: "They are playing in the garden." },
+                { jp: "雨が降っていますか？", en: "Is it raining?" }
+            ],
+            "Lesson 2-2": [
+                { jp: "私は明日、東京に行きます。", en: "I will go to Tokyo tomorrow." },
+                { jp: "彼は来週、車を買うつもりです。", en: "He is going to buy a car next week." },
+                { jp: "私たちはパーティーに行きません。", en: "We will not go to the party." },
+                { jp: "彼女は明日、忙しいですか？", en: "Will she be busy tomorrow?" },
+                { jp: "はい、そうです。 / いいえ、違います。", en: "Yes, she will. / No, she won't." },
+                { jp: "あなたは今週末、何をしますか？", en: "What are you going to do this weekend?" },
+                { jp: "私は本を読むつもりです。", en: "I am going to read a book." },
+                { jp: "明日は晴れるでしょう。", en: "It will be sunny tomorrow." },
+                { jp: "彼らは来月、結婚します。", en: "They will get married next month." },
+                { jp: "私は今日、早く家に帰るつもりです。", en: "I'm going to go home early today." },
+                { jp: "手伝ってくれますか？", en: "Will you help me?" },
+                { jp: "ドアを開けましょうか？", en: "Shall I open the door?" },
+                { jp: "一緒に夕食を食べましょうか？", en: "Shall we have dinner together?" },
+                { jp: "彼はすぐにここに来るでしょう。", en: "He will come here soon." },
+                { jp: "私はそれを忘れません。", en: "I won't forget it." }
+            ],
+            "Lesson 2-3": [
+                { jp: "私は英語を話すことができます。", en: "I can speak English." },
+                { jp: "彼女は速く泳ぐことができません。", en: "She cannot swim fast." },
+                { jp: "あなたはピアノを弾けますか？", en: "Can you play the piano?" },
+                { jp: "はい、弾けます。 / いいえ、弾けません。", en: "Yes, I can. / No, I can't." },
+                { jp: "彼は漢字を読むことができますか？", en: "Can he read Kanji?" },
+                { jp: "私は明日、あなたを手伝うことができます。", en: "I can help you tomorrow." },
+                { jp: "ここで写真を撮ってもいいですか？", en: "Can I take a picture here?" },
+                { jp: "はい、いいですよ。", en: "Yes, you can." },
+                { jp: "窓を開けてくれますか？", en: "Can you open the window?" },
+                { jp: "あの話は本当であるはずがない。", en: "That story cannot be true." },
+                { jp: "子供の頃、私は速く走れました。", en: "I could run fast when I was a child." },
+                { jp: "昨日はよく眠れませんでした。", en: "I couldn't sleep well yesterday." },
+                { jp: "駅までの道を教えていただけますか？", en: "Could you tell me the way to the station?" },
+                { jp: "彼らは時間通りに来ることができるでしょう。", en: "They will be able to come on time." },
+                { jp: "彼は一人でそこに行くことができました。", en: "He was able to go there alone." }
+            ],
+            "Lesson 2-4": [
+                { jp: "あなたは早く起きなければなりません。", en: "You must get up early." },
+                { jp: "私たちは今日、宿題をしなければなりません。", en: "We have to do our homework today." },
+                { jp: "彼は車を洗わなければなりません。", en: "He has to wash his car." },
+                { jp: "私はそこに行かなければなりませんか？", en: "Must I go there?" },
+                { jp: "はい、行かなければなりません。", en: "Yes, you must." },
+                { jp: "いいえ、行く必要はありません。", en: "No, you don't have to." },
+                { jp: "ここでタバコを吸ってはいけません。", en: "You must not smoke here." },
+                { jp: "彼女は明日、働く必要はありません。", en: "She doesn't have to work tomorrow." },
+                { jp: "彼は病気に違いない。", en: "He must be sick." },
+                { jp: "昨日、私は部屋を掃除しなければなりませんでした。", en: "I had to clean my room yesterday." },
+                { jp: "あなたはもっと野菜を食べるべきです。", en: "You should eat more vegetables." },
+                { jp: "彼はそんなにテレビを見るべきではありません。", en: "He shouldn't watch TV so much." },
+                { jp: "私は医者に行くべきですか？", en: "Should I go to a doctor?" },
+                { jp: "明日は雨が降るかもしれない。", en: "It may rain tomorrow." },
+                { jp: "ペンを借りてもいいですか？", en: "May I borrow your pen?" }
+            ],
+            "Lesson 2-5": [
+                { jp: "この本は彼によって書かれました。", en: "This book was written by him." },
+                { jp: "英語は多くの国で話されています。", en: "English is spoken in many countries." },
+                { jp: "その窓は私の弟によって割られました。", en: "The window was broken by my brother." },
+                { jp: "この部屋は毎日掃除されます。", en: "This room is cleaned every day." },
+                { jp: "その車は日本で作られましたか？", en: "Was the car made in Japan?" },
+                { jp: "はい、そうです。 / いいえ、違います。", en: "Yes, it was. / No, it wasn't." },
+                { jp: "これらの写真はいつ撮られましたか？", en: "When were these pictures taken?" },
+                { jp: "それらは昨日撮られました。", en: "They were taken yesterday." },
+                { jp: "彼女はパーティーに招待されませんでした。", en: "She wasn't invited to the party." },
+                { jp: "私の自転車が盗まれました。", en: "My bike was stolen." },
+                { jp: "彼はクラスのみんなに好かれています。", en: "He is liked by everyone in his class." },
+                { jp: "その会議は明日開かれます。", en: "The meeting will be held tomorrow." },
+                { jp: "私はその知らせに驚きました。", en: "I was surprised at the news." },
+                { jp: "私たちはその試合に興奮しました。", en: "We were excited about the game." },
+                { jp: "その山は雪で覆われています。", en: "The mountain is covered with snow." }
+            ],
+            "Lesson 2-6": [
+                { jp: "私は何か食べるものが欲しい。", en: "I want something to eat." },
+                { jp: "彼にはするべき仕事がたくさんあります。", en: "He has a lot of work to do." },
+                { jp: "私は本を読むための時間がありません。", en: "I have no time to read books." },
+                { jp: "京都には見るべき場所がたくさんあります。", en: "There are many places to see in Kyoto." },
+                { jp: "何か冷たい飲み物をくれませんか？", en: "Can you give me something cold to drink?" },
+                { jp: "彼女は彼に会うためにここに来ました。", en: "She came here to see him." },
+                { jp: "私は英語を勉強するためにアメリカに行きたいです。", en: "I want to go to America to study English." },
+                { jp: "彼は新しい車を買うために一生懸命働いています。", en: "He is working hard to buy a new car." },
+                { jp: "なぜあなたは早く起きたのですか？", en: "Why did you get up early?" },
+                { jp: "始発列車に乗るためです。", en: "To catch the first train." },
+                { jp: "私はあなたに会えて嬉しいです。", en: "I am glad to see you." },
+                { jp: "彼女はそのニュースを聞いて驚きました。", en: "She was surprised to hear the news." },
+                { jp: "彼は財布をなくして悲しんでいました。", en: "He was sad to lose his wallet." },
+                { jp: "あの男の子は成長して医者になりました。", en: "That boy grew up to be a doctor." },
+                { jp: "私は目を覚ますと、病院にいることに気づきました。", en: "I awoke to find myself in the hospital." }
+            ],
+            "Lesson 2-7": [
+                { jp: "私は外国に行くのが好きです。", en: "I like going abroad." },
+                { jp: "彼女は手紙を書くことを終えました。", en: "She finished writing a letter." },
+                { jp: "テレビを見るのをやめなさい。", en: "Stop watching TV." },
+                { jp: "彼はピアノを弾くのが上手です。", en: "He is good at playing the piano." },
+                { jp: "私の趣味は音楽を聞くことです。", en: "My hobby is listening to music." },
+                { jp: "新しい言語を学ぶことは面白いです。", en: "Learning a new language is interesting." },
+                { jp: "お待たせしてすみません。", en: "I am sorry for keeping you waiting." },
+                { jp: "彼はさよならを言わずに去りました。", en: "He left without saying goodbye." },
+                { jp: "私は彼に会うのを楽しみにしています。", en: "I am looking forward to seeing him." },
+                { jp: "私は昨夜、その本を読み始めました。", en: "I began reading the book last night. / I began to read the book last night." },
+                { jp: "彼女は歌うのが大好きです。", en: "She loves singing. / She loves to sing." },
+                { jp: "ドアを閉めていただけますか？（気になりますか？）", en: "Would you mind closing the door?" },
+                { jp: "私は手紙を投函したことを覚えています。", en: "I remember posting the letter." },
+                { jp: "忘れずにその手紙を投函してください。", en: "Please remember to post the letter." },
+                { jp: "私は英語を勉強することを諦めました。", en: "I gave up studying English." }
+            ],
+            "Lesson 3-1": [
+                { jp: "ヨーロッパには一度行ったことがあると答えなさい。", en: "I have been to Europe once." },
+                { jp: "以前バスケットボールをしていたんだと言いなさい。", en: "I have played basketball before." },
+                { jp: "宿題は終わったよと彼に言いなさい。", en: "I have finished my homework." },
+                { jp: "メキシコに行ったことがあるか聞きなさい。", en: "Have you ever been to Mexico?" },
+                { jp: "どのくらいの期間、スティープを知っているか聞きなさい。", en: "How long have you known Steve?" },
+                { jp: "昨秋にタイに行ったんだと答えなさい。", en: "I went to Thailand last fall." },
+                { jp: "今朝、公園の周りを走ってきたと言いなさい。", en: "I ran around the park this morning." },
+                { jp: "ちょうど夕食を終えたところだと答えなさい。", en: "I've just finished my dinner." },
+                { jp: "その新聞もう来たの? と言いなさい。", en: "Has the newspaper come already?" },
+                { jp: "新聞はもう来ているか聞きなさい。", en: "Has the newspaper come yet?" },
+                { jp: "もう朝食を食べたか聞きなさい。", en: "Have you finished eating breakfast yet?" },
+                { jp: "イギリスには15年住んでいると言いなさい。", en: "I have lived in England for fifteen years." },
+                { jp: "彼をどのくらい前から知っているのか聞きなさい。", en: "How long have you known him?" },
+                { jp: "日曜日以来とても暑いんだと答えなさい。", en: "It's been very hot since Sunday." },
+                { jp: "以前その小説を読んだことがあるよと言いなさい。", en: "I've read the novel before." },
+                { jp: "あつ、(自分の)時計が止まっていると言いなさい。", en: "Oh, my watch has stopped!" },
+                { jp: "ニュージーランドに行ったよ、と答えなさい。", en: "He has gone to New Zealand." },
+                { jp: "ケイコのテストは終わったよと答えなさい。", en: "Keiko has finished her tests." },
+                { jp: "ケイコはテストが終わっているよと答えなさい。", en: "Keiko is finished with her tests." },
+                { jp: "これは彼女が昨日買ったパソコンだよと答えなさい。", en: "This is the PC that she bought yesterday." },
+                { jp: "私にはバイオリンのとても上手なおばがいると言いなさい。", en: "I have an aunt who plays the violin very well." },
+                { jp: "おいしいすしを食べられる店を知っているか聞きなさい。", en: "Do you know anywhere that I can get nice sushi?" },
+                { jp: "これはかつて住んでいた家だよと友人に言いなさい。", en: "This is the house that I once lived in." },
+                { jp: "彼にはスペイン語を話す人が必要なんだよと答えなさい。", en: "He needs a person who speaks Spanish." },
+                { jp: "よく働く人はもっとお金をもらうべきだよねと言いなさい。", en: "Those who work hard should be paid more." },
+                { jp: "12歳から子供はみな中学に行かなければならないと答えなさい。", en: "Any child who is 12 or older has to go to junior high school." },
+                { jp: "(彼は)野生の動物を見るのが好きだと言いなさい。", en: "He likes to see animals which are in the wild." },
+                { jp: "あなたが図書館から借りたCDはテーブルの上にあるよと言いなさい。", en: "The CD which you borrowed from the library is on the table." },
+                { jp: "彼は捨てたくない古い物をたくさん持っているからねと答えなさい。", en: "He has a lot of old things that he doesn't want to throw away." },
+                { jp: "それをすべきなのは君だよと言いなさい。", en: "It's you that should do it." }
+            ],
+            "Lesson 3-2": [
+                { jp: "なぜフレッドはいつも早く帰っていくのか聞きなさい。", en: "Why does Fred always leave early?" },
+                { jp: "なぜ彼は早めに帰ろうとしているのか聞きなさい。", en: "Why is he leaving early?" },
+                { jp: "(いつも)クリスマスイブには何をしているのか聞きなさい。", en: "What do you do on Christmas Eve?" },
+                { jp: "クリスマスイブに何をする予定か聞きなさい。", en: "What are you doing on Christmas Eve?" },
+                { jp: "(彼は)自分のビジネスへの興味を失ったんだと答えなさい。", en: "He lost interest in his business." },
+                { jp: "彼は最近ここに来ているか聞きなさい。", en: "Has he been here lately?" },
+                { jp: "彼女ほど頭の良い人に会ったことがないと言いなさい。", en: "I have never met any person as smart as her." },
+                { jp: "(彼は) ドイツで5年間働いたと答えなさい。", en: "He worked in Germany for five years." },
+                { jp: "(彼は)ドイツで5年間働いていると答えなさい。", en: "He has worked in Germany for five years." },
+                { jp: "彼女は学校生活を終えたよと答えなさい。", en: "She finished school." },
+                { jp: "(私は)その夜7時に出たんだと言いなさい。", en: "I left at seven that night." },
+                { jp: "彼の電話番号を忘れてしまったと言いなさい。", en: "I forget his phone number." },
+                { jp: "分かった?と聞きなさい。", en: "Do you understand?" },
+                { jp: "うん、分かったと答えなさい。", en: "Yes, I understand." },
+                { jp: "ミーティングを始めますと言いなさい。", en: "We start our meeting." },
+                { jp: "彼女は料理が上手だと聞いていると友人に言いなさい。", en: "I hear she is good at cooking." },
+                { jp: "おじいさんが科学の先生だったと彼が言っていたよと答えなさい。", en: "He says his grandfather was a science teacher." },
+                { jp: "彼女は向こうに座っているよと答えなさい。", en: "She is sitting over there." },
+                { jp: "今日はきれいなイヤリングを着けているねと言いなさい。", en: "You are wearing pretty earrings today." },
+                { jp: "うん、それほどおなかが空いてないからと答えなさい。", en: "No, I'm not so hungry." },
+                { jp: "うん、腹痛だったからねと答えなさい。", en: "No. I had a stomachache." },
+                { jp: "彼は彼女と付き合っているんだと答えなさい。", en: "He is going out with her." },
+                { jp: "今夜、車を運転できないか聞きなさい。", en: "Can't you drive tonight?" },
+                { jp: "夏休み中にもクラスを履修しているよね、違う?と聞きなさい。", en: "You have some classes during the summer vacation, no?" },
+                { jp: "どうかなと答えなさい。", en: "I doubt it." },
+                { jp: "ああ、そう? 冷蔵庫に炭酸飲料があるよと言いなさい。", en: "Are you? I have soda in the fridge." },
+                { jp: "それをどうやるのかは難しい問題だねと言いなさい。", en: "How to do it is a difficult question." },
+                { jp: "問題はそれをどう避けるかだねと言いなさい。", en: "The problem is how to avoid it." }
+            ],
+            "Lesson 3-3": [
+                { jp: "この季節には雨はあまり降らないよと答えなさい。", en: "We don't get much rain during this season." },
+                { jp: "一番よくしゃべる人が一番何もしないものだよと答えなさい。", en: "They do least who talk most." },
+                { jp: "コロンビアではコーヒーが栽培されていると答えなさい。", en: "They grow coffee in Colombia." },
+                { jp: "日本の面積はイギリスのそれより大きいと答えなさい。", en: "The size of Japan is larger than that of the UK." },
+                { jp: "そうは思わないと答えなさい。", en: "I don't think so." },
+                { jp: "そう望むよと答えなさい。", en: "I hope so." },
+                { jp: "あの大学生は13歳かそこらにちがいないねと言いなさい。", en: "The college student must be thirteen or so." },
+                { jp: "どういうふうに(危ないの)? と聞きなさい", en: "How so?" },
+                { jp: "今のところは順調だよと答えなさい。", en: "So far, so good." },
+                { jp: "それがどうしたっていうの? と答えなさい。", en: "So what?" },
+                { jp: "同じものにしますと答えなさい。", en: "I'll have the same." },
+                { jp: "私も妻もあなたと同じように感じると答えなさい。", en: "My wife and I feel the same as you." },
+                { jp: "良い夜を! と言いなさい。", en: "Have a good night!" },
+                { jp: "あなたもねと返事をしなさい。", en: "-The same to you!" },
+                { jp: "どちらがどちらか見分けがつかないよと言いなさい。", en: "It is difficult to tell one from the other." },
+                { jp: "私は他のどのブランドよりこのブランドが好きだ、と答えなさい。", en: "I prefer this brand to any other." },
+                { jp: "彼はクラスではどの男の子よりも背が高いよと言いなさい。", en: "He is taller than any other male student in the class." },
+                { jp: "1日おきに料理をしているよと答えなさい。", en: "I cook every other day." },
+                { jp: "いつかそれについて議論しましょうと言いなさい。", en: "Let's discuss it some other day." },
+                { jp: "女子生徒たちはみな助け合っていたからねと答えなさい。", en: "All female students helped each other." },
+                { jp: "もう一杯どうぞ、と言いなさい。", en: "Have another cup." },
+                { jp: "彼女はすごい人だと思うと答えなさい。", en: "I think she's somebody." },
+                { jp: "彼女は大したことないよと答えなさい。", en: "She is nothing." },
+                { jp: "うちの妹のおしゃべり好きは今に始まったことではないからねと答えなさい。", en: "My sister's love of chatting is nothing new." },
+                { jp: "コーヒーか何か飲んでおいて、いい? と言いなさい。", en: "Drink coffee or something, OK?" },
+                { jp: "飲み物か何かいる? と聞きなさい。", en: "Do you want a drink or something?" },
+                { jp: "寒いか何かなの? と聞きなさい。", en: "Do you feel cold or something?" }
+            ],
+            "Lesson 3-4": [
+                { jp: "彼はたくさんの国に行っているけれど、私はたくさんは行っていないと答えなさい。", en: "He has visited a lot of countries, but I haven't been to many." },
+                { jp: "1月にそこにたくさん雪が降ったか聞きなさい。", en: "Was there much snow in January?" },
+                { jp: "本当にありがとうと言いなさい。", en: "Thank you so much." },
+                { jp: "夏になると、そのビーチには人が多過ぎるくらいいると答えなさい。", en: "There are too many people on the beach in summer." },
+                { jp: "このパズルはわずかな人しか解けないよと言いなさい。", en: "Few people can solve this puzzle." },
+                { jp: "来年は彼らに少しは希望があるねと言いなさい。", en: "There is a little hope for them next year." },
+                { jp: "彼女は今、少し気分は良いと答えなさい。", en: "She feels a little better now." },
+                { jp: "そのパーティーには人がたくさんいたよと答えなさい。", en: "There were quite a few people at the party." },
+                { jp: "UFOを見たって言っている人はいるけどねと答えなさい。", en: "Some say they have seen UFOs." },
+                { jp: "彼の具合がいくらかよくなっているか聞きなさい。", en: "Is he feeling any better?" },
+                { jp: "砂糖ある?とルームメートに聞きなさい。", en: "Is there any sugar?" },
+                { jp: "遅くまで隣家てパーティーをやっていて、昨夜はなかなか寝つけなかったと答えなさい。", en: "It was very difficult to get any sleep last night." },
+                { jp: "それらの植物は問題なくすぐに成長するよと答えなさい。", en: "Those plants grow quickly without any problems." },
+                { jp: "どんな質問でもあれば、電話してと言いなさい。", en: "If you have any questions, please call me." },
+                { jp: "紅茶はいかがですか?と聞きなさい。", en: "Would you like some tea?" },
+                { jp: "いつかフランスに行きたいと言いなさい。", en: "I want to go to France someday." },
+                { jp: "彼はどんな犠牲を払ってでも成功したいんだよと言いなさい。", en: "He wants to succeed at any cost." },
+                { jp: "大地震は今すぐにでも起こるかもしれないと言いなさい。", en: "A big earthquake may occur at any moment." },
+                { jp: "あの国の人々は豚肉をあまり食べないよと言いなさい。", en: "People in that country don't eat much pork." },
+                { jp: "彼女の変化にはとても驚かされると言いなさい。", en: "The change in her is very surprising." },
+                { jp: "彼女の親切はすごく感謝されたよと言いなさい。", en: "Her kindness was much appreciated." },
+                { jp: "新しい隣人のジョンソン一家はカナダの出身だよと言いなさい。", en: "The Johnsons, our new neighbors, are from Canada." },
+                { jp: "あそこに立っている男の子が(私の)弟だと言いなさい。", en: "The boy standing over there is my brother." },
+                { jp: "私にはその理由を説明するのはとても難しいと言いなさい。", en: "The reason is very difficult for me to explain." },
+                { jp: "彼が禁酒するのは難しいよと言いなさい。", en: "It will be difficult for him to stop drinking." },
+                { jp: "彼が自分のビジネスを始めるのは簡単かもしれないと言いなさい。", en: "It may be easy for him to start his own business." },
+                { jp: "彼がそれをしたのは間違っていたと言いなさい。", en: "It was wrong of him to do it." },
+                { jp: "家まで車で送ってくれるなんて親切だねと言いなさい。", en: "It is kind of you to drive me home." }
+            ],
+            "Lesson 3-5": [
+                { jp: "このピアノを動かすのを手伝ってと頼みなさい。", en: "Will you help me (to) move this piano?" },
+                { jp: "父はときどき料理で母を手伝うことがあると言いなさい。", en: "Dad sometimes helps Mom (to) do the cooking." },
+                { jp: "昼食の準備ができたよ。来て食べてと言いなさい。", en: "Your lunch is ready. Come eat." },
+                { jp: "顧客の一人に会いに行かなきゃならないと言って断りなさい。", en: "I have to go see my client." },
+                { jp: "外は寒いよ。ジャケットを取りに行ったほうがいいよと言いなさい。", en: "It's cold outside. You should go get your jacket." },
+                { jp: "それは図書館に返すべきだよと言いなさい。", en: "You'd better return it to the library." },
+                { jp: "イギリスで英語が通じた?と聞きなさい。", en: "Could you make yourself understood in English in England?" },
+                { jp: "もっと彼女に(強制的に)勉強させなさいと言いなさい。", en: "Make her study harder!" },
+                { jp: "オーストラリア人の学生がホームステイしているんだと答えなさい。", en: "We have an Australian student staying with us." },
+                { jp: "ヨウコに切ってもらったと言いなさい。", en: "I had Yoko cut my hair." },
+                { jp: "彼女に(指示して)早く来てもらって、とあなたの秘書に言いなさい。", en: "Have her come early." },
+                { jp: "(私は)後でそれを取り戻したと言いなさい。", en: "I got it back later." },
+                { jp: "彼女はやっと娘に(説得して)朝食を食べさせたと言いなさい。", en: "Finally, she got her daughter to eat breakfast." },
+                { jp: "芝生を伸ばしっぱなしにしてはいけないと言いなさい。", en: "Don't let the grass grow too long." },
+                { jp: "私は彼が1人でいるところを見たことがないと言いなさい。", en: "I've never seen him alone." },
+                { jp: "ジェニスが、その男が部屋に入る瞬間を見たんだと言いなさい。", en: "Jennice saw the man entering the room." },
+                { jp: "ジェニスが、その男が部屋に入る一部始終を見たんだと答えなさい。", en: "Jennice saw the man enter the room." },
+                { jp: "(彼女の)講義は分かりやすいよと答えなさい。", en: "Her lectures are easy to understand." },
+                { jp: "出かける準備ができたか聞きなさい。", en: "Are you ready to go?" },
+                { jp: "彼女と一緒に働けてとても幸運だったと言いなさい。", en: "I was very fortunate to work / in working with her." },
+                { jp: "彼は言語の習得が速いんだと言いなさい。", en: "He is quick to learn / at learning languages." },
+                { jp: "彼女はいつも私にお金を返すのが遅いからねと言いなさい。", en: "She is always slow to pay / at paying back my money." },
+                { jp: "タクシーに乗ってと言いなさい。", en: "Get in the taxi!" },
+                { jp: "飛行機に乗るまでたくさん時間はあるよと答えなさい。", en: "We have a lot of time before we get on the plane." },
+                { jp: "駅の前でバスを降りたと言いなさい。", en: "I got off the bus in front of the train station." },
+                { jp: "それ(入ってはいけないこと)は掲示板に書いてあるよと言いなさい。", en: "It's on the sign." },
+                { jp: "この木は枯れているのかいないのか聞きなさい。", en: "Is this tree alive or dead?" },
+                { jp: "このドレスは綿製だよと答えなさい。", en: "This dress is made of cotton." },
+                { jp: "日本酒はコメから作られるよと言いなさい。", en: "Sake is made from rice." }
+            ],
+            "Lesson 3-6": [
+                { jp: "彼と初めて会った場所のことを覚えているよと言いなさい。", en: "I remember the place where I met him for the first time." },
+                { jp: "ジョンは私たちがどこで会う予定なのか知っているのか、と聞きなさい。", en: "Does John know the place where we are meeting?" },
+                { jp: "私は月曜日が一番忙しいと答えなさい。", en: "Monday is when I'm busiest." },
+                { jp: "だから私がここに来たんだと言いなさい。", en: "That's why I came here." },
+                { jp: "なぜ彼が授業を欠席し続けるのか分からないと言いなさい。", en: "I don't understand why he keeps skipping his classes." },
+                { jp: "それが彼のしゃべり方だよと言いなさい。", en: "That's how he talks." },
+                { jp: "ジャネットは私たちがスミスさんに会わなければならない時刻を知っているよと言いなさい。", en: "Janet knows the time when we should meet Mr. Smith." },
+                { jp: "マイケルは僕らが会おうとしている理由を知らないよと答えなさい。", en: "Michael doesn't know why we're meeting." },
+                { jp: "彼女がアパートを借りている女性は教師だよと言いなさい。", en: "The woman whose apartment she rents is a teacher." },
+                { jp: "もし雨が降れば、その試合は中止だよと答えなさい。", en: "If it rains, the game will be cancelled." },
+                { jp: "もし彼女に十分な時間があれば、彼女は私を手伝うだろうけどねと言いなさい。", en: "If she had enough time, she would help me." },
+                { jp: "彼女にもし十分にお金があれば、彼女はアメリカに留学するよと言いなさい。", en: "If she has enough money, she will go to America to study." },
+                { jp: "もし彼女に十分にお金があれば、アメリカに留学するだろうけどと言いなさい。", en: "If she had money, she would go to America to study." },
+                { jp: "もし私があなたなら行くだろうけど、と言いなさい。", en: "If I were you, I would go." }
+            ],
+            "Lesson 4-0": [
+                { jp: "トムはロンドンに住んでいます", en: "Tom lives in London." },
+                { jp: "彼はロンドンに住んでいます", en: "He lives in London." },
+                { jp: "きれいな水は健康のために必要です", en: "Clean water is necessary for our health." },
+                { jp: "この湖の水はとてもきれいです", en: "The water in this lake is very clean." },
+                { jp: "私は犬を(一匹) 飼っています。その犬はとても人懐こいです", en: "I have a dog. The dog is very friendly." },
+                { jp: "彼は、東京に住むもう一方の祖父母を訪問した", en: "He visited his other grandparents in Tokyo." },
+                { jp: "サリーは、お店でそれを買うでしょう", en: "Sally will buy it in the store." },
+                { jp: "私はこれをよく使っています", en: "I use this often." },
+                { jp: "彼の成績はとてもいいです", en: "His grades are very good" },
+                { jp: "彼は手紙を非常に注意深く読みました", en: "He read the letter very carefully." },
+                { jp: "多分彼女は勝ちました", en: "Perhaps, she won." },
+                { jp: "マリーは英語教師です", en: "Mary is an English teacher." },
+                { jp: "彼はとても背が高くなりました", en: "He became very tall." },
+                { jp: "子供たちは今学校です", en: "My kids are at school now." },
+                { jp: "彼は車を運転します", en: "He drives." },
+                { jp: "彼は私にそのお金をくれました", en: "He gave the money to me. / He gave me the money." },
+                { jp: "私は明日はここにいます", en: "I will be here tomorrow." },
+                { jp: "今夜何をなさりたいですか", en: "What would you like to do this evening?" },
+                { jp: "今夜電話しましょうか", en: "Shall I call you tonight?" },
+                { jp: "それはいい映画だよ。きみ見なけりゃあ", en: "It's a good movie. You should see it." },
+                { jp: "手伝える?", en: "Can you help me?" },
+                { jp: "私は昨夜疲れていたが、眠ることができなかった", en: "I was tired last night, but I couldn't sleep." },
+                { jp: "誰か君に会いに来たけど。君の兄さんだったのかも", en: "Someone came to see you. It may have been your brother." },
+                { jp: "彼は今夜でかけるかもしれない", en: "He might go out this evening." },
+                { jp: "急がなくっちゃ", en: "I must hurry." },
+                { jp: "彼女は来ることができます", en: "She is able to come." },
+                { jp: "サラは自分の車を売るつもりです", en: "Sarah is going to sell her car." },
+                { jp: "お店に行かなくちゃ", en: "I have to go to the store." },
+                { jp: "私は、毎日テレビを見ています", en: "I watch TV every day." },
+                { jp: "私は、毎日テレビを見ていました", en: "I watched TV every day." },
+                { jp: "私は昨日の午後に彼に電話した", en: "I called him yesterday afternoon." },
+                { jp: "どうかお座りになってください", en: "Would you sit down, please?" },
+                { jp: "もし今お金があれば、これを買うんだけど", en: "If I had any money now, I'd buy this." },
+                { jp: "私は来年二十歳になります", en: "I will be 20 next year." },
+                { jp: "私は、今夜は家で食べるつもりだ", en: "I'm going to eat at home this evening." },
+                { jp: "仕事の後、家に帰る予定にしている", en: "I'm going home after work." },
+                { jp: "私の飛行機は8時に出る予定です", en: "My plane leaves at eight." },
+                { jp: "ちょうどそのテストが終わった", en: "I've just finished the test." },
+                { jp: "彼は私の長年の知り合いです", en: "I have known him for many years." },
+                { jp: "私は中国に一度行ったことがある", en: "I have been to China once." },
+                { jp: "彼は英語を勉強しています", en: "He is studying English." },
+                { jp: "彼は(一時的に) 東京に住んでいます", en: "He is living in Tokyo." },
+                { jp: "彼は追い出された", en: "He was kicked out." },
+                { jp: "ちょっと待って", en: "Wait a second." },
+                { jp: "私は息子とレースをした", en: "I had a race with my son." },
+                { jp: "彼は家の中にいる", en: "He is in the house." },
+                { jp: "きみ、これについては確かなの?", en: "Are you sure about this?" },
+                { jp: "これは面白い物語です", en: "This is an interesting story." },
+                { jp: "口語の日本語は文語の日本語と違う", en: "Spoken Japanese is different from written Japanese." },
+                { jp: "彼はディナーのために正装することにした", en: "He decided to dress up for dinner." },
+                { jp: "ここは見るべきものがたくさんあります", en: "There are a lot to see here." },
+                { jp: "何歳になっても学べる", en: "No man is too old to learn." },
+                { jp: "私たちは海岸でのドライブを楽しみました", en: "We enjoyed driving along the coast." },
+                { jp: "できるだけ急ぎましょう", en: "Let's hurry as much as possible." },
+                { jp: "彼女はかつてない程エネルギッシュだ", en: "She's more energetic now than ever." },
+                { jp: "経験は最良の師", en: "Experience is the best teacher." },
+                { jp: "誰がこの花瓶を割ったの?", en: "Who broke this flower vase?" },
+                { jp: "彼は何をしたの?", en: "What did he do?" },
+                { jp: "どっちの女の子が年上なの?", en: "Which girl is older?" },
+                { jp: "あれは誰の過ちだったの?", en: "Whose mistake was that?" },
+                { jp: "あなたはどこに住んでいるの?", en: "Where do you live?" },
+                { jp: "今朝、何時に起きたの?", en: "When did you get up this morning?" },
+                { jp: "私たちのところへ来て泊まって", en: "Come and stay with us." },
+                { jp: "彼は貧乏だが幸せだ", en: "He is poor but happy." },
+                { jp: "真面目に勉強しなさい。じゃないとテスト失敗するよ", en: "Study hard, or you'll fail the test." },
+                { jp: "問題は、私の父が病気なことです", en: "The trouble is that my father is sick." },
+                { jp: "この本を書いた男性を知っていますか", en: "Do you know the man who wrote this book?" },
+                { jp: "それをすることを頼まれたので私はそれをやった", en: "I did it because I was asked to do it." },
+                { jp: "もしあなたが正しければ、私は間違っている", en: "If you are right, then I am wrong." }
+            ],
+            "Lesson 4-1": [
+                { jp: "彼に最初に出会った夜を覚えています", en: "I remember the night when I met him for the first time." },
+                { jp: "ここが私たちがよく野球をした場所です", en: "This is the place where we played baseball often." },
+                { jp: "彼女は私たちが会う場所を知っていますか?", en: "Does she know the place where we are meeting?" },
+                { jp: "私は金曜日が一番忙しいです", en: "Friday is when I'm busiest." },
+                { jp: "家に到着したのは3月の最初の日でした", en: "It was the first day of March when I arrived home." },
+                { jp: "それが私の来た理由です", en: "That's why I came here." },
+                { jp: "彼女がクラスをサボりつつける理由が理解できない", en: "I don't understand why she keeps skipping her classes." },
+                { jp: "それが彼女の話し方です", en: "That's how she talks." },
+                { jp: "それが私たちの社会でうまく機能する方法です", en: "That is the way it works in our society." },
+                { jp: "1990年はショウの生まれた年だ", en: "1990 is the year when Sho was born." },
+                { jp: "1990年はユイの生まれた年だ", en: "1990 is the year in which Yui was born." },
+                { jp: "ケンは私たちがスミスさんに会わなければならない時間を知っています", en: "Ken knows the time when we should meet Mr. Smith. / Ken knows the time at which we should meet Mr. Smith." },
+                { jp: "サリーは私たちが会う理由を知りません", en: "Sally doesn't know (the reason) why we're meeting. / Sally doesn't know the reason for which we're meeting." },
+                { jp: "彼がアパート借りている男性は先生です", en: "The man whose apartment he is renting is a teacher." },
+                { jp: "私にはお父さんがお医者さんの彼女がいます", en: "I have a girlfriend whose father is a doctor." },
+                { jp: "ケリー(その旦那さんを君は知っているけど) 英語がかなり得意です", en: "Kelly, whose husband you know, is very good at English." },
+                { jp: "1998年にトムは香港に行って、以来その市に住んでいる", en: "In 1998 Tom went to Hong Kong, in which city he has lived ever since." },
+                { jp: "その川で泳いではダメ", en: "Don't swim in the river." },
+                { jp: "小学生の時は歩いて学校に行きました", en: "I walked to school when I was an elementary student." },
+                { jp: "かつてスキーをやってました", en: "I have skied before." },
+                { jp: "スノーボードは2年やっています", en: "I have snowboarded for two years." },
+                { jp: "ロンドンでホームスティをしています", en: "I'm staying with my host family in London." },
+                { jp: "私は何年も英語の勉強をしています", en: "I have been studying English for many years." },
+                { jp: "私はその柵を塗るつもりだ", en: "I'm going to paint the fence." },
+                { jp: "私はいつか小説を書きたい", en: "I want to write a novel someday." },
+                { jp: "大学に行きたい", en: "I wanna go to college." },
+                { jp: "すぐにも雨が降りそうだよ。傘ある?", en: "It's gonna rain soon. Do you have an umbrella?" },
+                { jp: "私、行かなきゃ", en: "I gotta go." },
+                { jp: "彼女はたくさんのカバンを作った", en: "She has made many bags." },
+                { jp: "彼らは新しい図書館を建設中です", en: "They are building the new library." },
+                { jp: "四月以来、彼らはそれを建設しています", en: "They have been building it since April." },
+                { jp: "財布を失くした!", en: "I lost my wallet!" },
+                { jp: "ご自身の誤りにお気付きですか?", en: "Did you realize your own mistake?" },
+                { jp: "腰の痛みがやっとおさまった", en: "My back has finally stopped hurting." },
+                { jp: "全生徒が今サッカーのボールを蹴っています", en: "Every student is kicking a soccer ball now." },
+                { jp: "彼女はそれを5年間以上勝ち続けている", en: "She has been winning it for over five years." },
+                { jp: "なぜ彼が私と話そうとしないか知っています", en: "I know why he won't talk to me." },
+                { jp: "あなたは疲れていて退屈している感じですね", en: "You sound tired and bored." },
+                { jp: "私はこの家は2008年以来所有しています", en: "I have owned this house since 2008." },
+                { jp: "私はかつて別荘を持っていました", en: "I have owned a second house before." },
+                { jp: "彼女は今日はやけに僕にツンツンしている", en: "She is being very rude to me today." },
+                { jp: "目がなんかおかしい。二重に見えるよ", en: "There is something wrong with my eyes. I'm seeing double." },
+                { jp: "彼女はお笑いタレントと付き合っています", en: "She has been seeing a comedian." },
+                { jp: "彼は大学を終えたら田舎に帰ってしまっているでしょう", en: "He will have gone back to his hometown after he finishes his college." },
+                { jp: "彼は大学を終えたら田舎に帰ります", en: "He will go back to his hometown after he finishes his college." },
+                { jp: "もう3年も働けば、海外留学できるお金が貯金できているでしょう", en: "After I have worked three more years, I will have saved enough money to study abroad." },
+                { jp: "彼女がすでに来ていたことに気がついた", en: "I noticed that she had already arrived." },
+                { jp: "彼女は、誰かが廊下に落としたお金を拾い上げた", en: "She picked up some money that someone had dropped on the hall." },
+                { jp: "その映画が終わってから掃除をしました", en: "I did the cleaning after the movie was over." },
+                { jp: "彼はここで30年以上働き、去年引退した", en: "He worked here for more than 30 years and retired last year." },
+                { jp: "私は明日の午後はフロリダをドライブしているでしょう", en: "I will be driving to Florida tomorrow afternoon." },
+                { jp: "本日は、日本の英語教育について話すことになっています", en: "Today, we will be talking about English education in Japan." },
+                { jp: "今日は早く帰ることになりそう", en: "I will be leaving early today." },
+                { jp: "1時間で東京駅に到着することになっております", en: "We will be arriving at Tokyo Station in one hour." },
+                { jp: "うわ~、君やったね!", en: "Wow, you did it!" },
+                { jp: "あら、もう帰って来ているのね!", en: "Oh, you are back already!" },
+                { jp: "痛い! 離して!", en: "Ouch! Let me go!" },
+                { jp: "まずい。またやってしまった!", en: "Oops, I did it again!" },
+                { jp: "ええと、君も来ていいよ", en: "Well, you can come too." },
+                { jp: "やれやれ、やっと到着か", en: "Well, here we are at last." },
+                { jp: "おい! 僕にそんな風に話さないで", en: "Hey! Don't talk to me like that." },
+                { jp: "うつ、君は僕のコンピューターを手荒に扱ってるね!", en: "Ow! You're rough with my computer!" },
+                { jp: "あら、とてもうるさいわね", en: "Oh, boy! It's so noisy." },
+                { jp: "あのう、私のペンを使ってますが", en: "Ah, you are using my pen." },
+                { jp: "あら、あなたは速くて強いのね", en: "(Oh) my, you're fast and strong." },
+                { jp: "なんとういうきれいな写真でしょう!", en: "What a beautiful picture it is!" },
+                { jp: "なんというかわいいイアリングでしょう!", en: "What cute earrings they are!" },
+                { jp: "これ、なんておいしいの!", en: "How tasty it is!" },
+                { jp: "彼女、なんて早口なの!", en: "How fast she talks!" }
+            ],
+             "Lesson 4-2": [
+                { jp: "黒と白を混ぜれば灰色になります", en: "If black is mixed with white, the color turns grey." },
+                { jp: "ルームメイトが皿洗いをすれば、私はトイレ掃除をしています", en: "If my roommate does the dishes, I do the bathroom." },
+                { jp: "もし雨が降れば、その試合はキャンセルされるでしょう", en: "If it rains, the game will be cancelled." },
+                { jp: "彼に十分な時間があれば、私を手伝ってくれるんだろうけど", en: "If he had enough time, he would help you." },
+                { jp: "もし君が空港に車で迎えに来てくれれば、50ドルあげるんだけどね", en: "If you picked me up at the airport, I would give you fifty dollars." },
+                { jp: "もし彼にお金があれば、アメリカに留学するでしょう", en: "If he has money, he will go to America to study." },
+                { jp: "もし彼にお金があれば、アメリカに留学するんでしょうがね", en: "If he had money, he would go to America to study." },
+                { jp: "もし私があなたならそこにはいかないでしょう", en: "If I were you, I wouldn't go there." },
+                { jp: "もし祖母が去年生きていたら、100歳だったんですが", en: "If my grandma had been alive last year, she would have been 100." },
+                { jp: "もしいい成績をとっていたら、あの大学に行けたんだけどね", en: "If I had had good grades, I could have gone to the university." },
+                { jp: "こんな風に食べ続ければ、太るでしょう", en: "If you keep eating like this, you will get fatter." },
+                { jp: "もし君がジムに行けばね、もっと健康になるんだろうけど", en: "If you went to the gym, you would become healthier." },
+                { jp: "その電車に乗り遅れてなければ、飛行機に間に合ったところなんだけど", en: "If I hadn't missed the train, I would have been in time for my plane." },
+                { jp: "もし私が去年大学を終えていたら、今頃はアメリカにいるんだろうけど", en: "If I had finished college last year, I would be in America now." },
+                { jp: "古着は捨てなさい", en: "Throw away your old clothes. / Throw your old clothes away." },
+                { jp: "それらは捨てなさい", en: "Throw them away." },
+                { jp: "これらをみんなに配って", en: "Please pass them out to everyone." },
+                { jp: "彼はこれのつぐないをすると約束した", en: "He promised he would make it up to me." },
+                { jp: "その選手がカムバックしました", en: "The player has come back." },
+                { jp: "彼女の母親がスペインからやって来た", en: "Her mother came over from Spain." },
+                { jp: "こっちに(一緒に)来て", en: "Come along this way." },
+                { jp: "彼女は、私のPCを持って行っちゃった", en: "She walked away with my PC." },
+                { jp: "彼はビジネスであちこち旅行をしています", en: "He travels around a lot on business." },
+                { jp: "この二つを混同してしまった", en: "I mixed up with these two things." },
+                { jp: "彼の車は帰宅中に故障した", en: "His car broke down on his way home." },
+                { jp: "その子供が柵を壊した", en: "The child broke down the fence." },
+                { jp: "私は彼の住所を見つけた", en: "I found out his address." },
+                { jp: "書類にざっと目を通してください", en: "Please look over the documents." },
+                { jp: "その子供は階段から落ちた", en: "The child fell down the stairs." },
+                { jp: "その夜、彼女は歌い、踊り続けた", en: "She carried on singing and dancing that night." },
+                { jp: "今日しなければならないことを先延ばししないで", en: "Don't put off what you should do today." },
+                { jp: "ついにその答えを見つけ出した!", en: "I finally came up with the answer!" },
+                { jp: "すぐにあなたに追いつきますよ", en: "I will soon catch up with you." },
+                { jp: "彼は新しい上司と上手くやっています", en: "He is getting along with his new boss." },
+                { jp: "最新の流行に乗り遅れないようにしようよ", en: "Let's keep up with the latest fashions." },
+                { jp: "私は彼女と座ります", en: "I'll sit down with her." },
+                { jp: "彼は奥さんの2倍の年齢です", en: "He is twice as old as his wife." },
+                { jp: "このチケットはあなたのものの4倍の値段です", en: "This ticket is four times as expensive as yours." },
+                { jp: "ロシアは日本の約40倍の大きさです", en: "Russia is about forty times as large as Japan." },
+                { jp: "カナダは日本の約25倍の大きさです", en: "Canada is about twenty-five times bigger than Japan." },
+                { jp: "中国は日本の何倍の大きさですか?", en: "How many times larger is China than Japan?" },
+                { jp: "その仕事は予想の3分の1しか収入をもたらさなかった", en: "The job brought me only one third as much money as I had expected." },
+                { jp: "この橋はあれの3分の2の長さです", en: "This bridge is two thirds as long as that one." },
+                { jp: "よくもそんなことが言えるね", en: "How dare you say such a thing?" },
+                { jp: "よくもそんな風な口のきき方ができるね", en: "How dare you speak to me like that?" },
+                { jp: "そこに行く必要はないよ", en: "You needn't go there." },
+                { jp: "あえてその厄介なことをやる必要がなかったのに", en: "You needn't have gone to the trouble." },
+                { jp: "私に約束したことはやるのが当然だ", en: "You ought to do what you promised me." },
+                { jp: "明日は雪模様のはずだ", en: "It ought to be snowy tomorrow." },
+                { jp: "彼は午前中に到着しているはずです", en: "He ought to have arrived before noon." },
+                { jp: "あれは、彼がやるべきでしたが、彼はやらなかった", en: "That is what he ought to have done, but he did not do it." },
+                { jp: "何か新しい出来事でもある?", en: "What's going on?" },
+                { jp: "久しぶりねぇ", en: "Long time no see. / It's been a long time." },
+                { jp: "さようなら", en: "Goodbye-. / Bye." },
+                { jp: "気をつけてね。じゃあまた", en: "Take care. See you." },
+                { jp: "お目にかかれてうれしいです", en: "Glad to see you. / (I'm) pleased to meet you." },
+                { jp: "私もです", en: "Me, too." },
+                { jp: "お会いできるなんてなんて素晴らしい", en: "It's so nice to see you!" },
+                { jp: "私もです", en: "-You, too." }
+            ],
+            "Lesson 4-3": [
+                { jp: "雨が降らない限り、そのイベントは外で行われます", en: "The event will be held outdoors unless it rains." },
+                { jp: "もし雨が降らなければ、そのイベントは外で行われます", en: "The event will be held outdoors if it doesn't rain." },
+                { jp: "自由になる時間がたくさんあれば別だけど、それには申し込んではだめ", en: "You shouldn't apply for it unless you have a lot of free time." },
+                { jp: "もし自由になる時間がたくさんはない場合は、それには申し込んではだめ", en: "You shouldn't apply for it if you don't have a lot of free time." },
+                { jp: "彼らに速い車があれば別だったが、時間には間に合わなかった", en: "They couldn't have made it on time unless they had had a fast car." },
+                { jp: "彼らに速い車がなかったら、時間には間に合わなかっただろう", en: "They couldn't have made it on time if they hadn't had a fast car." },
+                { jp: "もし彼が勝ったらあなたはどうする?", en: "Suppose/Supposing he wins, what will you do?" },
+                { jp: "君が来年アメリカに行くと仮定してみようか", en: "Let's suppose you went to America next year." },
+                { jp: "もし私が私の約束を忘れたら、指摘してね", en: "In case I forget, please remind me of my promise." },
+                { jp: "君が知らないといけないので言っているんだ", en: "I'm telling you in case you don't know." },
+                { jp: "仮にお金がなくても大学には行った方がいいよ", en: "You'd better go to college even if you don't have much money. / You'd better go to college even though you don't have much money." },
+                { jp: "僕は君を長いこと知っている感じがする", en: "I feel as if I have known you for a long time." },
+                { jp: "彼は2、3日何も食べていないかの様子だった", en: "He looked as though he hadn't eaten for a couple days." },
+                { jp: "彼は大学を終えて故郷に帰って行った", en: "He returned to his hometown after finishing his college." },
+                { jp: "新しい車を買う前に、それを調べておかなければならないよ", en: "Before buying a new car, you should do research on it." },
+                { jp: "スピーチをするときはいつも聴衆に顔を向けておかなければなりません", en: "You should always keep facing the audience when giving your speech." },
+                { jp: "運転中は電話で話してはいけない", en: "You shouldn't talk on the phone while driving." },
+                { jp: "気分が悪ければソファーに横になりなさい", en: "Lie down on the couch if feeling sick." },
+                { jp: "この方法を使えば別だけど、これは上手くいかないよ", en: "This won't work unless using this method." },
+                { jp: "いくぶん気分が悪かったが、彼は仕事でヨーロッパに行った", en: "Although feeling rather sick, he went to Europe on business." },
+                { jp: "テストが終わったら帰っていいよ", en: "When finished with the test, you can leave." },
+                { jp: "このルールは必要なときに適応されるでしょう", en: "This rule would be applied where needed." },
+                { jp: "適切に使わない限り、これは上手く働かない", en: "This doesn't work unless used properly." },
+                { jp: "必要があれば、この薬を飲みなさい", en: "Take this medicine as needed." },
+                { jp: "富士山の近くにあるけど、この地域はあまり雪が降りません", en: "Though located near Mt. Fuji, we don't have much snow in this area." },
+                { jp: "これはとても面白い意見です", en: "This is a very interesting opinion." },
+                { jp: "あなたのご意見はとても興味深いです", en: "Your opinion is very interesting." },
+                { jp: "下記で正しい一つはどれか?", en: "Which one of the following is correct?" },
+                { jp: "多くのお年寄りたちは医療的なケアが必要だ", en: "Many of the aged need medical care." },
+                { jp: "彼は一月の終わりにニューヨークに発つ予定にしている", en: "He is leaving for New York at the end of January." },
+                { jp: "ミュージカルに行ったことはありますか?", en: "Have you ever been to a musical?" },
+                { jp: "この状況で誤解されたら君ならどうする?", en: "What do you do when you are misunderstood in this situation?" },
+                { jp: "道路から見上げた時、空に変な光があるのに気がついた", en: "Looking up from the street. I noticed a strange light in the sky." },
+                { jp: "先生として、すべての生徒は異なったバックグラウンドから来ていることを忘れてはいけなかった", en: "Being a teacher, I had to remember that everybody comes from different backgrounds." },
+                { jp: "もう2時間も車を運転すればカナダに入るよ", en: "Driving ahead for two more hours, you will be in Canada." },
+                { jp: "僕が間違っていることは認めるけど、君も全く正しいわけではないよ", en: "Admitting I'm wrong, you are not totally right." },
+                { jp: "天気に関してだけど、今日は一日中雪が降ることになっているよ", en: "Speaking of weather, it's supposed to snow all day today." },
+                { jp: "音楽に関してだけど、僕はジャズが一番好きだ", en: "Talking of music, I like jazz the most." },
+                { jp: "君の脳力から言って、君はもっとうまく出来るはずだ", en: "Considering your ability, you could do better." },
+                { jp: "彼女の反応から判断すると、彼女はそれについては何も知らなかった", en: "Judging from her reaction, she didn't know anything about it." },
+                { jp: "風邪で寝ているときは、できるだけたくさん寝るように心がけなくてはならない", en: "While staying in bed with a cold, you should try to sleep as much as possible." },
+                { jp: "正直に言えば、今夜は出かけたくない", en: "Frankly speaking. I don't want to go out tonight." },
+                { jp: "大雑把に言って、彼は私の2倍のお金を稼いでいる", en: "Roughly speaking, he earns double my salary." },
+                { jp: "厳密に言えば、それはこの地域だけの真実だ", en: "Strictly speaking, this is true only in this area." },
+                { jp: "一人になって、彼女は泣き始めた", en: "Left to herself, she began to cry." },
+                { jp: "うまく使えば、これは大きな利益をもたらす可能性がある", en: "Used wisely, this can be a great advantage." },
+                { jp: "簡単な英語で書かれているので、この本は初心者には有益です", en: "Written in simple English, this book is useful for beginners." },
+                { jp: "一旦提出されれば、委員会のメンバーによって読まれます", en: "Once submitted, this is read by a member of the committee." },
+                { jp: "適切に使えば、この方法は効果的で安全だ", en: "If used properly, this method is effective and safe." },
+                { jp: "太陽は東に昇り、西に沈む", en: "The sun rises in the east and sets in the west." },
+                { jp: "質問があれば手を挙げなさい", en: "Raise your hand if you have any questions." },
+                { jp: "彼は両腕を頭の下にして仰向けに横になっていた", en: "He lay on his back with his hands behind his head." },
+                { jp: "赤ちゃんをうつ伏せに寝かさないで", en: "Do not lay the baby on the stomach." }
+            ],
+            "Lesson 4-4": [
+                { jp: "彼女の言ったことは真実ではありません", en: "What she said is not true." },
+                { jp: "君に僕が言ったことを信じないって言うの?", en: "Are you saying you don't believe what I told you?" },
+                { jp: "これが私が本当に望んでいたことです", en: "This is what I wanted so much." },
+                { jp: "彼女はネズミのようなものを指差した", en: "She pointed to what looked like a mouse." },
+                { jp: "来る人は誰でも歓迎です", en: "Whoever comes is welcome." },
+                { jp: "どちらでも好きな方をとって", en: "You can take whichever you want." },
+                { jp: "彼は彼女の望む通りの人だ", en: "He is whatever she wants him to be." },
+                { jp: "推薦したい本はどれでも選んでよろしいです", en: "You may choose whatever book you want to recommend." },
+                { jp: "自分が選択したどちらの道でも行きなさい", en: "Take whichever road you choose." },
+                { jp: "行きたいところはどこでも行っていいよ", en: "You can go wherever you want." },
+                { jp: "君の望み通りにいつでもくるよ", en: "I will come whenever you want me." },
+                { jp: "何を選んでも彼女は満足しないだろう", en: "Whichever she chooses, she won't be satisfied." },
+                { jp: "どこにいようとも、それについて考えている", en: "Wherever I am, I'm thinking about it." },
+                { jp: "君がいつ来ても、ここにあなたと共にいるようにするから", en: "Whenever you come, I'll be with you right here.." },
+                { jp: "彼女は英語のレベルを上げるためにフィリピンに行った", en: "She went to the Philippines in order to improve her English level." },
+                { jp: "始発の電車に間に合うように彼女は早く起きた", en: "She woke up early so as to catch the first train." },
+                { jp: "それを水に落とさないように気をつけて", en: "Be careful not to drop it in the water." },
+                { jp: "君はこれをするにはまだ十分に大人じゃないよ", en: "You aren't big enough to do this." },
+                { jp: "彼女は自分一人でそれを行うにはあまりにも年をとりすぎていた", en: "She was just too old to do it by herself." },
+                { jp: "起こることは受け入れるほかはない", en: "You can't do anything but accept what comes." },
+                { jp: "彼女はテレビを見続けることしかしなかった", en: "She did nothing but keep watching TV." },
+                { jp: "健康のためにもっと野菜を食べた方がいいよ", en: "You'd better eat more vegetables for your health." },
+                { jp: "車で来ない方がいいよ", en: "You'd better not come by car." },
+                { jp: "どうして食べ物のことで議論しているの?", en: "Why argue about food?" },
+                { jp: "これらをもっと食べないの?", en: "Why not eat more of these?" },
+                { jp: "それを今僕に言うのは無駄だよ。2週間前に知っておくべきだった", en: "It's no use telling me now. I needed to know two weeks ago." },
+                { jp: "君は笑わざるを得ないよね", en: "You can't help laughing, can you?" },
+                { jp: "彼はとっても面白い。どうしても笑ってしまう", en: "He is so funny. I can't help but laugh." },
+                { jp: "今夜は軽いものを食べたい気分よ", en: "I feel like eating something light tonight." },
+                { jp: "今日は仕事に行きたくない気分だ", en: "I don't feel like going to work today." },
+                { jp: "それについて考えることなく私はすぐに同意した", en: "I agreed instantly without thinking about it." },
+                { jp: "窓を閉めてもらっていいでしょうか?", en: "Would you mind closing the window?" },
+                { jp: "ここでタバコ吸っていいですか?", en: "Do you mind my smoking here?" },
+                { jp: "彼が私たちの赤ん坊の面倒を見てくれて感謝した", en: "We appreciated his taking care of our baby." },
+                { jp: "彼は、それは見逃すには非常にいいお買い得品だと思った", en: "He thought it was too good a bargain to miss." },
+                { jp: "これはそんなに不利なことではない", en: "This is not so big a disadvantage." },
+                { jp: "それはそんない素晴らしい取引ではない", en: "It is not really that good a deal." },
+                { jp: "なんという素晴らしいお子さんに育てたの!", en: "How wonderful a child you have raised!" },
+                { jp: "それについて彼はセカンドオピニオンが必要だ", en: "He needs a second opinion about it." },
+                { jp: "私は週に二度ジムに行っている", en: "I go to the gym twice a week." },
+                { jp: "スミスさんという方から今朝お電話がありました", en: "A Mr. Smith called you this morning." },
+                { jp: "彼女は私の腕をつかんだ", en: "She caught me by the arm." },
+                { jp: "胃の痛みが続いた", en: "The pain in the stomach continued." },
+                { jp: "誰かが私の肩を揺すって、私の名前を呼んだ", en: "Someone shook me by the shoulder and called me." },
+                { jp: "私は学校が終わったらだいたい毎日図書館に行っています", en: "I go to the library after school almost every day." },
+                { jp: "彼女はよく映画に行きますが、劇場には長年行っていない", en: "She often goes to the movies, but hasn't been to the theater for many years." },
+                { jp: "喫茶店に行くところ?", en: "Are you going to the café?" },
+                { jp: "誰が電話を発明したか知っている?", en: "Do you know who invented the telephone?" },
+                { jp: "ラジオを聴きながら同時に他のことができるよ", en: "I can listen to the radio and do something else at the same time." },
+                { jp: "彼女の子供達は、テレビを見る前に宿題を終えなければならない", en: "Before her kids watch TV, they must do their homework." },
+                { jp: "地下鉄はバスよりかなり早い", en: "The subway is much faster than the bus." },
+                { jp: "自転車は大きな市では便利な交通手段です", en: "The bike is a convenient means of transportation in a big city." },
+                { jp: "私は学校へは電車で行っています", en: "I go to school by train." },
+                { jp: "彼女はほとんど毎日1時間ピアノを弾いています", en: "She plays the piano almost every day for an hour." },
+                { jp: "彼は週末には何時間もギターを弾いている", en: "He plays the guitar for hours on weekends." },
+                { jp: "彼はかつてサッカーをしていました", en: "He used to play soccer before." },
+                { jp: "持てば持つほど心配のタネが増える", en: "The more you have, the more you have to worry about." },
+                { jp: "2つの課でどちらの方が大きいのですか?", en: "Which is the largest of the two divisions?" },
+                { jp: "どの川が一番長いんですか?", en: "Which rive is (the) longest?" },
+                { jp: "これが最も私にトラブルを引き起こした", en: "This one troubled me (the) most." },
+                { jp: "自然で何が最も美しいですか?", en: "What is (the) most beautiful in nature?" },
+                { jp: "私は工学を専攻しています", en: "I major in engineering." },
+                { jp: "夫はエンジニアです", en: "My husband is an engineer." }
+            ],
+            "Lesson 4-5": [
+                 { jp: "英語を一生懸命勉強しなさい。そうすればより大きな世界に進出できるから", en: "Study English hard, and you can enter a bigger world." },
+                 { jp: "シートベルト締めなさい。それが嫌なら車から降りて歩きなさい", en: "Fasten your seat belt, or get out and walk." },
+                 { jp: "あそこに陳列してある上着を見せて", en: "Let me see the jacket on display.." },
+                 { jp: "夕食の前に散歩しようよ", en: "Let's take a walk before dinner." },
+                 { jp: "遅れないようにしよう", en: "Let's not be late." },
+                 { jp: "彼女にトイレを使わせてあげて", en: "Let her use the bathroom." },
+                 { jp: "ええとはて", en: "Let me see." },
+                 { jp: "例えばそれが可能だとしたら、どうなるの?", en: "(Let's) say it were possible, then what?" },
+                 { jp: "休暇中にどっかに行かなきゃ。例えばビーチとか公園とか", en: "We should go somewhere during our vacation, (let's) say to the beach or the park." },
+                 { jp: "彼は英語を書くのはもちろんのこと、読むこともできません", en: "He can't read English, let alone write." },
+                 { jp: "現実を直視しよう", en: "Let's face it." },
+                 { jp: "今日は、ええと.... 4月2日だ", en: "Today is...let me see...April (the) second." },
+                 { jp: "パイをもう一つどうぞ", en: "Have another piece of pie." },
+                 { jp: "今夜外食しようよ", en: "Let's eat out tonight." },
+                 { jp: "窓を閉めてください", en: "Shut the window, please." },
+                 { jp: "あなたのジャケット忘れないで", en: "Don't forget your jacket." },
+                 { jp: "トラックに気をつけて!", en: "Watch out for the truck." },
+                 { jp: "小さじ一杯の砂糖を入れて", en: "Add a teaspoon of sugar." },
+                 { jp: "入って", en: "Come in." },
+                 { jp: "素晴らしい週末を!", en: "Have a nice weekend!" },
+                 { jp: "この道をまっすぐ行ってください", en: "Go straight down this road." },
+                 { jp: "誰も同じようには苦しまないだろう", en: "No one else could suffer in the same way." },
+                 { jp: "そのお金のどれも戻ってこなかった", en: "None of the money was recovered." },
+                 { jp: "あの野球選手は本当にプロでないみたい", en: "The baseball player is really unprofessional." },
+                 { jp: "彼女はプロではないピアニストです", en: "She is a nonprofessional pianist." },
+                 { jp: "彼は酒もタバコもやりません", en: "He neither drinks nor smokes." },
+                 { jp: "どちらの親もそれについては何も知らなかった", en: "Neither parents knew anything about it." },
+                 { jp: "私は銀行お金を眠らせておくことも危険な投資をすることもできない", en: "I can't leave my money in the bank or/nor make a risky investment." },
+                 { jp: "あなたか彼女がそこに行かなければならない", en: "Either you or she must go there." },
+                 { jp: "どちらでも間に合います", en: "Either will do." },
+                 { jp: "どちらの日でもOKです", en: "Either day is all right." },
+                 { jp: "君が忙しすぎるのか、その仕事を適切にやっていないかのどちらかだ", en: "Either you are too busy, or you're not doing the work properly." },
+                 { jp: "私も妻も京都生まれです", en: "Both my wife and I were born in Kyoto" },
+                 { jp: "その包みをあける前に冷ましといて", en: "Leave it cool before you unwrap it." },
+                 { jp: "あなたはなんという恥知らずだろう!", en: "How shameless of you!" },
+                 { jp: "ここは禁煙の喫茶店です", en: "This is a smoke-free coffee shop." },
+                 { jp: "彼の新妻はとても不注意な人です", en: "His new wife is a very careless person." },
+                 { jp: "彼女のだんなはお金持ちのビジネスマンなので、彼女はお金の心配がない", en: "She is carefree with money because her husband is a rich businessman." },
+                 { jp: "うっそ〜!", en: "No kidding!" },
+                 { jp: "信じられん", en: "I can't believe it." },
+                 { jp: "これは安くてほとんどどこでも手に入る", en: "It is inexpensive and available just about everywhere." },
+                 { jp: "彼女は料理はあまり上手ではない", en: "She isn't very good at cooking." },
+                 { jp: "ある人たちはスポーツ選手はあまりスマートではないと考えているけど、僕はそうは思わない", en: "Some people think athletes aren't very smart, but I disagree with them." },
+                 { jp: "私のためにそこに行ってくれる?", en: "Will you go there for me?" },
+                 { jp: "私のためにそこに行ってもらえませんか?", en: "Won't you go there for me?" },
+                 { jp: "彼女はあまり愛情深い人ではありません", en: "I don't think she is a very loving person." },
+                 { jp: "これが素晴らしい論文だとは思いません", en: "I don't feel this is a very good paper." },
+                 { jp: "彼女はそれほどあったかい心の人ではないです", en: "She isn't very warm hearted." },
+                 { jp: "彼女がそれが本気であったのは疑いの余地がないです", en: "There is no doubt she meant it." },
+                 { jp: "君の車、午後に使っていい?", en: "Can I use your car this afternoon?" },
+                 { jp: "とんでもない", en: "No way." },
+                 { jp: "なるほど!", en: "No wonder!" },
+                 { jp: "それへの答えはYesとNoだ", en: "The answer for that is yes and no." },
+                 { jp: "あの赤ちゃんとってもかわいい!", en: "That baby is so cute!" },
+                 { jp: "そうだね!", en: "Isn't it!" },
+                 { jp: "その子供は道に迷った", en: "The child lost its way." },
+                 { jp: "どなたですか?", en: "Who is it?" },
+                 { jp: "彼ら飲みすぎたね", en: "They drink too much." },
+                 { jp: "そうだね!", en: "Don't they!" },
+                 { jp: "彼とっても面白いわ", en: "He is so funny." },
+                 { jp: "そうだね", en: "Isn't he, though?" }
+            ],
+            "Lesson 4-6": [
+                { jp: "もう一つのミーティングが金曜日に行われる予定です", en: "Another meeting is to be held on Friday." },
+                { jp: "君はベストを尽くすべきだ", en: "You're to do your best work.." },
+                { jp: "今年利益を上げようと思ったら、大規模な改善が必要です", en: "A dramatic improvement is needed if we are to make a profit this year." },
+                { jp: "彼女が何が欲しいか、彼はよく知っているように見える", en: "He seems to know exactly what she wants." },
+                { jp: "この値段はまずまずです", en: "This price seems (to be) reasonable." },
+                { jp: "ここに問題があるように思う", en: "I think there seems to be a problem here." },
+                { jp: "毎朝ジョギングをしているの?", en: "Do you jog every morning?" },
+                { jp: "かつてね", en: "- I used to." },
+                { jp: "今夜パーティーがあるけど、来ない?", en: "We're having a party tonight. Won't you come?" },
+                { jp: "喜んで", en: "I'm glad to." },
+                { jp: "感情を傷つけたのなら謝ります。そんなつもりではなかったんです", en: "Sorry if I hurt your feelings; I didn't mean to." },
+                { jp: "彼女は成長してこんなに美しい女性になった", en: "She grew up to be such a beautiful woman." },
+                { jp: "空港に急いていったが、乗り遅れただけだった", en: "I went to the airport in a big rush only to miss my flight." },
+                { jp: "ついに君が妹と結婚するというニュースを聞いてとても嬉しい", en: "I am so pleased to hear the news that you and my sister will marry at last." },
+                { jp: "彼女は私たちに本当のことを言わないなんて最低だわ", en: "She is terrible not to tell us the truth." },
+                { jp: "言うまでもなく、私はその結果に喜びを感じた", en: "Needless to say, I felt pleased with the result." },
+                { jp: "まず、自己紹介させてください", en: "To begin with, let me introduce myself." },
+                { jp: "本当を言えば、そのパーティーに行くことで喜んではいない", en: "To tell the truth, I'm not excited about going to the party." },
+                { jp: "奇妙なことに、彼らは善行をすることを拒絶した", en: "Strange to say, they refused to do any good." },
+                { jp: "この桃は簡単に剥ける", en: "This peach peels easily." },
+                { jp: "これらは非常によく売れており、主なアトラクションの一つだ", en: "These sell very well and they are one of the main attractions." },
+                { jp: "チキンがいい感じで焼けつつある", en: "The chicken is roasting nicely." },
+                { jp: "魚が美味しそうに焼けつつあります", en: "The fish are grilling deliciously." },
+                { jp: "クッキーがゆっくり焼ける時の台所の匂いが好き", en: "I love the smell in the kitchen when cookies are baking slowly." },
+                { jp: "リストに私の名前を見つけた時、心臓が高鳴った", en: "My heart beat fast when I saw my name in the list." },
+                { jp: "時代は変わり、私たちも時代と共に変わって来ている", en: "Times have changed and we have changed with them." },
+                { jp: "このカメラは写りがいい", en: "This camera takes good pictures." },
+                { jp: "このPCは扱いが易しいです", en: "This PC handles easily." },
+                { jp: "彼の手が滑って、川に落ちてしまった", en: "His hand slipped and fell down into the river." },
+                { jp: "彼女は5フィート8インチの背の高さだ", en: "She stands five feet eight inches." },
+                { jp: "乾いた肌はすぐ老化する", en: "Dry skin ages quickly." },
+                { jp: "安い製品は簡単に壊れる傾向にある", en: "Cheap products tend to break easily." },
+                { jp: "熱い風呂上がりの冷たいビールに勝るものはない", en: "Nothing compares with drinking cold beer after taking a hot bath." },
+                { jp: "このお金は長く持たないだろう", en: "This money won't keep." },
+                { jp: "この家は月9万5千円で貸しています", en: "The house rents at ¥95,000 a month." },
+                { jp: "彼女はテレビ番組が子供に与える影響に関して心配していた", en: "She was worried about how TV programs would affect her child." },
+                { jp: "あのニュースには私たち皆心配させられている", en: "That news is worrying to all of us." },
+                { jp: "彼女は孤独であることに飽きている", en: "She is bored with being alone." },
+                { jp: "その男が退屈な人だという意味ではない", en: "It doesn't mean the guy is boring." },
+                { jp: "彼女は混乱して腹を立てている", en: "She is so confused and angry." },
+                { jp: "最初、これは非常に込み入っている感じだった", en: "At first, it seemed very confusing." },
+                { jp: "彼女は母親を恐れていた", en: "She was frightened of her mother." },
+                { jp: "この国の暴力は本当に恐ろしい", en: "The violence in this country is really frightening." },
+                { jp: "私は自分のやっていることに満足しています", en: "I'm satisfied with what I'm doing." },
+                { jp: "それはすべてのレベルで満足いくものだった", en: "It was satisfying on every level." },
+                { jp: "彼女がスタンフォード大学から入学を認められたのは、彼には大きな驚きだった", en: "He was very surprised to hear she was accepted by Stanford." },
+                { jp: "これらがよく除外されるのは驚きだ", en: "It is surprising how often they are omitted." },
+                { jp: "雨が降り暗くもなったので、試合はキャンセルされました", en: "Owing to the rain and darkness, the game was cancelled." },
+                { jp: "あなたの状況で、あなたは少し精神的に沈んでいる感じかも", en: "Because of your situation, you might feel a bit depressed." },
+                { jp: "彼女は病気で働けません", en: "She is unable to work due to her illness." },
+                { jp: "気分が悪かったにもかかわらず彼はジョギングに出かけた", en: "In spite of his feeling unwell, he went jogging." },
+                { jp: "いい年齢にもかかわらず、彼は30歳の人のように歩き回った", en: "Despite his age, he walked around as a man of thirty." },
+                { jp: "あのノートブックパソコンの代わりにこれを買うことできる?", en: "Could we buy this laptop instead of that one?" },
+                { jp: "映画に行くより家にいようよ", en: "Let's stay at home instead of going to the movies." },
+                { jp: "私以外、何が起きていたのかみんな知っていたの?", en: "Did everyone know except me what was going on?" },
+                { jp: "ちょっとした風邪以外は私は大丈夫です", en: "I feel all right except for a slight cold." },
+                { jp: "彼以外、ミーティングには誰もいなかった", en: "Besides him, there was no one in the meeting." },
+                { jp: "テレビニュースによると、ヨーロッパでひどい飛行機事故があったそうだ", en: "According to TV news, there was a terrible plane crash in Europe." },
+                { jp: "環境に応じてその法律は変わるかもしれない", en: "The law may be changed according to circumstances." },
+                { jp: "あなたの助力のおかげで全て上手くいっている", en: "Thanks to your help, all is well." }
+            ],
+            "Lesson 4-7": [
+                { jp: "あなたの言ったことは事実ではありません", en: "What you said isn't true." },
+                { jp: "あなた方お二人とも正しいというわけではありません", en: "You cannot both be true." },
+                { jp: "すべての人たちが共通の価値観を共有しているわけではない", en: "Not all people share common values." },
+                { jp: "確かに何かが非常にうまく行っているわけではない", en: "Something is certainly not quite right." },
+                { jp: "彼らは民主主義のシステムの可能性は完全に放棄したわけではない", en: "They did not totally dismiss the possibility of a democratic system." },
+                { jp: "彼はその説を完全に理解したり受け入れたことはなかった", en: "He never fully understood or accepted the theory." },
+                { jp: "私たちにかつてわずかな人しか会いに来ない", en: "Few people ever come to see us," },
+                { jp: "小さなステップを踏むのは簡単だし、努力もほとんど必要ないし", en: "Small steps are easy to make and require little effort." },
+                { jp: "事実だというだけで人を動かすということはめったにない", en: "It is seldom that truth only inspires us." },
+                { jp: "田舎にはよく帰るの?", en: "Do you often go back to your hometown?" },
+                { jp: "いや、めったに帰りません", en: "- No, hardly at all." },
+                { jp: "私がそれに参加することは、ほとんど考えたことはなかったです", en: "Little did I dream that I would be a part of it." },
+                { jp: "そんなバカな質問はほとんどめったに聞いたことがない", en: "Rarely have I heard such a silly question." },
+                { jp: "こんなに遠くまで来たことがない", en: "Never have I gone this far." },
+                { jp: "それについてはどんな場合でも言及したことはなかった", en: "On no occasion did I ever mention it." },
+                { jp: "彼が飲みすぎたのは一度しかありません", en: "Only once in his life did he ever drink too much." },
+                { jp: "私があなたならそれを買わないでしょう", en: "Were I you, I wouldn't buy it." },
+                { jp: "万一6時前に着くようなことがあったら、電話して", en: "Should you arrive before 6, just give me a call." },
+                { jp: "彼がもっと時間を使っていたら、それを見つけたかも", en: "Had he taken more time, he might have found that." },
+                { jp: "彼は車を直してもらっています", en: "His car is being repaired." },
+                { jp: "トムはスーツを作ってもらっています", en: "Tom's suit is being made." },
+                { jp: "現代は“情報化時代”と呼ばれている", en: "Modern age is being called an 'information age." },
+                { jp: "私のマンションは白く塗装されつつあります", en: "My apartment building is being painted white." },
+                { jp: "空港に到着した時、おじいちゃんが出迎えてくれました", en: "Arriving at the airport, I was met by my grandfather." },
+                { jp: "海軍は大きな組織で、世界展開していた", en: "The Navy was a very large organization and was spread out all over the world." },
+                { jp: "月は水に反射していた", en: "The moon was reflected in the water." },
+                { jp: "行って洗って、服を着て", en: "Go get washed, and get dressed." },
+                { jp: "これはあなたには無用でしょう", en: "This will be wasted on you." },
+                { jp: "この本は図書館から借りたものです", en: "This book is borrowed from the library." },
+                { jp: "私が成し遂げたものはゼロだ", en: "I'm accomplished in nothing." },
+                { jp: "彼らはこの難しい状況に慣れて来た", en: "They became accustomed to this difficult situation." },
+                { jp: "私は大学から任命されていて支払いもされています", en: "I'm appointed and paid by the university." },
+                { jp: "この場所はきれいな空気に恵まれている", en: "This place is celebrated for its clean air." },
+                { jp: "そのお店は月曜日には閉まっています", en: "The store is closed every Monday." },
+                { jp: "この数学の問題はとっても込み入っていて、私には2、3分で解くことはできない", en: "This math problem is so complicated that I can't solve it in a few minutes." },
+                { jp: "彼は禁煙することにしている", en: "He is determined to quit smoking." },
+                { jp: "彼は奥さんを熱愛している", en: "He is very devoted to his wife." },
+                { jp: "私はそういったことにはあまり経験がない", en: "I'm not much experienced in those things." },
+                { jp: "その子はその活動が終わっています", en: "This child is finished/done with the activity." },
+                { jp: "その料金は固定されていて、もしかしたら来年上がるのかもしれません", en: "The fee is fixed and might be increased next year." },
+                { jp: "ミシガン湖は冬中凍っている", en: "Lake Michigan is frozen over most winters." },
+                { jp: "その本当の意味は失われているか、忘れられている", en: "The true meaning is lost, or has been forgotten." },
+                { jp: "私は英語の先生として十分適任だと思います", en: "I think I'm well qualified as an English teacher." },
+                { jp: "彼らはアメリカに落ち着いている", en: "They are settled in the US." },
+                { jp: "あなたのテレビは箱みたい", en: "Your TV is shaped like a box." },
+                { jp: "あなたがトラブルに巻き込まれているということは全然ないとわかることでしょう", en: "You will find you aren't troubled at all." },
+                { jp: "教育はこの国では長年の問題です", en: "Education is an age-old problem in this country." },
+                { jp: "彼らの衣装の着方は非常に人目を引きます", en: "The way they dress is really eye-catching." },
+                { jp: "たくさんの健康関連の問題があります", en: "There are a number of health-related issues." },
+                { jp: "彼女は大柄で、私よりはるかに大きかった", en: "She was big sized, much bigger than me." },
+                { jp: "小さいところではなく有名なところで買うのが必ずしもいいわけではない", en: "It is not necessarily better to buy from a big-name company than from a small company." },
+                { jp: "彼女はこの大学の常勤の先生です", en: "She is a full-time teacher at this college." },
+                { jp: "現在ハイテク技術を持った従業員の需要が続いている", en: "The demand for employees with high-tech skills continues today." },
+                { jp: "現実は、大きな投資が必要です", en: "The reality is a large scale investment is needed." },
+                { jp: "現代の日本では女性はどういうふうに扱われていますか?", en: "How are women treated in present-day Japan?" },
+                { jp: "このCDは史上最高に売れたものの一つだ", en: "This CD is among the biggest selling of all time." },
+                { jp: "出来合いの食べ物がいつもの食べ物になってはダメだ", en: "Ready-made food should not be a regular food." },
+                { jp: "特にオーブンから出したてで熱い場合、これは非常に好かれている食べ物だ", en: "This is a much-loved food, particularly when it is hot from the oven." }
+            ],
+            "Lesson 4-8": [
+                { jp: "ダイブするのを恐れないで", en: "Don't be afraid to dive." },
+                { jp: "彼女は彼にお金の無心をするのは恥ずかしかった", en: "She was ashamed to ask him for money." },
+                { jp: "その患者は愛情があり支えてくれる家族があって幸運だ", en: "The patient is fortunate to have a loving, supportive family." },
+                { jp: "あの生徒は物覚えが早く、忘れるのが遅い", en: "That student is quick to understand and slow to forget." },
+                { jp: "やっていることはかなり面白いと彼らは考えています", en: "They think what they are doing is pretty interesting." },
+                { jp: "すぐにも仕事に行くことになっている", en: "Pretty soon I will be going to work." },
+                { jp: "もっと前にお知らせしなくてすいません", en: "I'm awfully sorry that I didn't let you know earlier." },
+                { jp: "ロシアは驚くほど大きい", en: "Russia is amazingly big." },
+                { jp: "私たちは経済に対しての影響について深い関心を持っている", en: "We are deeply concerned about its effects on the economy." },
+                { jp: "彼らがすごくインテリだと私にはわかった", en: "I found them highly intelligent." },
+                { jp: "車の運転は非常に危険なことがある", en: "Driving can be extremely dangerous." },
+                { jp: "彼は非常に緊張していて、うつの状態だった", en: "He was terribly nervous and depressed." },
+                { jp: "そんな態度はこの国では完全にナンセンスだ", en: "Such an attitude would be totally nonsense in this country." },
+                { jp: "海外でカルチャーショックを受けるのは全く自然なことだ", en: "It is totally natural for you to experience culture shock in foreign countries." },
+                { jp: "彼は数学になるとちょっと鈍い", en: "He is a bit slow when it comes to math." },
+                { jp: "そこに行ったのは初めてで、彼女はいくぶん居心地が悪かった", en: "She was somewhat uneasy because it was her first time to visit there." },
+                { jp: "彼女がその国で日本語を話すのはややまれだった", en: "It was rather rare for her to speak Japanese in the country." },
+                { jp: "その製品を見つけるのは今やほとんど不可能だ", en: "It is nearly impossible to find the product now." },
+                { jp: "あの国の経済発展はゆっくりでほとんど分からなかった", en: "Economic growth in that country was so slow it was hardly noticeable." },
+                { jp: "この会社では、ここは相対的に小さいセクションです", en: "It is a relatively small section in this company." },
+                { jp: "今君はアパートに住んでいるの?", en: "Are you living in an apartment right now?" },
+                { jp: "彼女は手助けをするためにまさにここにいる", en: "She is right here to help." },
+                { jp: "言いたくないけど、あのプログラムはかなり時間の無駄だよ", en: "I hate to say that the program is pretty much a waste of time." },
+                { jp: "すぐにもっと雪が降るかもしれない", en: "We may have more snow pretty soon." },
+                { jp: "彼らは本当によく私を扱ってくれた", en: "They treated me really well." },
+                { jp: "一般に日本女性は気が利く", en: "In general, Japanese women are attentive." },
+                { jp: "私の意見では中国は大きすぎて、あまりにも複雑すぎる", en: "In my view, China is too vast and too complex." },
+                { jp: "要するに、お金をかけないで英語を上達させることはできます", en: "In short, you can improve your English without spending much money." },
+                { jp: "実のところ、私はそれについては実際に知らなかった", en: "In fact, I didn't actually know anything about it." },
+                { jp: "疑いなく、まさにその時になったら彼は助けてくれるよ", en: "No doubt, he will help you when it is the very time." },
+                { jp: "彼によると彼女は彼に対していつも素晴らしかった", en: "According to him, she was always wonderful to him." },
+                { jp: "正直に言って、多くの現代芸術は好きではない", en: "Quite honestly, I don't like a lot of modern art." },
+                { jp: "一般的に言って、女の子は男の子より英語をよく勉強します", en: "Generally speaking, girls study English harder than boys." },
+                { jp: "言い換えれば、君は数の上で20歳だということ", en: "In other words, you are twenty in number." },
+                { jp: "誰か知っていると思う?", en: "Who knows?" },
+                { jp: "彼が失敗したらどうする?", en: "What if he fails?" },
+                { jp: "彼らは返事をくれたことがないし、さらに言えば、これからも返事をくれるとは思わない", en: "They never replied, and what is more, I don't think they will." },
+                { jp: "なんて言ったの?", en: "You what?" },
+                { jp: "あのね", en: "(I'll) tell you what." },
+                { jp: "あのね", en: "You know what/something." },
+                { jp: "どうしたの?", en: "What's the matter with you? / What's the matter?" },
+                { jp: "かまうものか", en: "What's up?" },
+                { jp: "どちらがどちら?", en: "Which is which?" },
+                { jp: "ええと、どこまで話したっけ?", en: "Where was I?" },
+                { jp: "どうしてダメなの?", en: "Why not?" },
+                { jp: "一体どうやってそんな考えを持ったの?", en: "How in the world did you think that way?" },
+                { jp: "今夜外で食べるってのはどう?", en: "How about eating out tonight?" },
+                { jp: "どうして僕のPC使っているのさ", en: "How come you are using my PC?" },
+                { jp: "素晴らしい!", en: "How about that!" },
+                { jp: "あなたはどう?", en: "How about you?" },
+                { jp: "いつものところで2時に会いましょう", en: "Let's meet at the usual spot at 2:00." },
+                { jp: "あれを6つください", en: "Can I have six of those?" }
+            ],
+            "Lesson 4-9": [
+                { jp: "ここに私たちの一人が残ることは重要です", en: "It is important for one of us to stay here." },
+                { jp: "どちらの会社がよりいいスポンサーだろうか?", en: "Which of the companies will be a better sponsor?" },
+                { jp: "彼らの多くは非常に成功しているビジネスマンです", en: "Many of them are very successful businessmen." },
+                { jp: "かつてよりはるかに多くある", en: "There are a lot more of them than there used to be." },
+                { jp: "木星は太陽系で一番大きな惑星です", en: "Jupiter is the biggest of all planets in the solar system." },
+                { jp: "彼らは3日間の議論を開始するために今日ホテルに集まった", en: "They gathered today in a hotel to begin three days of discussion." },
+                { jp: "この病院ではすべてのアレルギーの治療ができる", en: "This hospital can treat all kinds of allergies." },
+                { jp: "40ドルではそれは十分には買えない", en: "Forty dollars won't buy enough of that." },
+                { jp: "彼はこの分野では広い知識があります", en: "He has a broad range of knowledge in this field." },
+                { jp: "彼はコーヒーを飲みながらまたその写真を見た", en: "He had a look at the photos again as he drank the coffee." },
+                { jp: "あなたたち2人にはうんざりしたわ", en: "I've had it with both of you." },
+                { jp: "私には何が起こっているのかわからなかった", en: "I had no idea what was going on." },
+                { jp: "私と妻は夕飯にあなたをご招待したい", en: "My wife and I want to have you over for dinner." },
+                { jp: "昨夜ロンドンから帰ってきたばかり", en: "I just got back from London last night." },
+                { jp: "サリーは、自分でなんとかやりくりできることを知っている", en: "Sally knows she could manage to get by on her own." },
+                { jp: "うちの犬とジョギングをやることによって自然と触れ合おうとしている", en: "I try to get in touch with nature by jogging with my dog." },
+                { jp: "一旦最初の恥ずかしさを克服したら、彼女は非常に行動的になった", en: "Once she got over her initial shyness, she became quite active." },
+                { jp: "ネガティブな考えを完全に取り除くことは出来ない", en: "We can't get rid of negative thoughts completely." },
+                { jp: "彼は自分で生計を立てるべきであることは知っていた", en: "He knew he must make a living for himself." },
+                { jp: "君は間違いを犯したけど、それは大丈夫", en: "You made a mistake and that's okay." },
+                { jp: "私が勝とうが負けようが違いはないよ", en: "It doesn't make any difference whether I win or not." },
+                { jp: "週末に埋め合わせをするよ", en: "I will make it up to you this weekend." },
+                { jp: "パーティーをするけど、来れる?", en: "We have a party tonight. Can you make it?" },
+                { jp: "この最後のパラグラフは意味をなさない", en: "This last paragraph doesn't make any sense." },
+                { jp: "これが私たちにとって安全か確認をしておいて", en: "Please make sure it is safe for us." },
+                { jp: "まだ決心してないの?", en: "Haven't you made up your mind yet?" },
+                { jp: "彼は6時に起きて、シャワーを浴び、仕事に出かけた", en: "He woke up at six, took a shower, and went to work." },
+                { jp: "何を持っているかチェックしようよ", en: "Let's take a look at what we've got." },
+                { jp: "彼は去年の夏に奥さんとイタリアに旅行した", en: "He took a trip to Italy with his wife last summer." },
+                { jp: "自分の面倒を見るのは利己的ではない", en: "It is not selfish to take care of yourself." },
+                { jp: "彼女は、彼女の母親が亡くなった時にショックを受けた", en: "She took it very hard when her mother died." },
+                { jp: "その飛行機は5時にハワイに出発する", en: "The plane takes off for Hawaii at five." },
+                { jp: "農業従事者として彼は父親の後を継いだ", en: "He took over his father's job as a farmer." },
+                { jp: "彼らは皆そのパレードに参加した", en: "They all took part in the parade." },
+                { jp: "交代であの子の面倒を見ようよ", en: "Let's take turns looking after the child." },
+                { jp: "あれらは時間がかかるよ。諦めないで", en: "Those things take time. Don't give up." },
+                { jp: "仕事を辞めてアメリカに英語の勉強しにいく彼女を止めるものは何もないでしょう", en: "Nothing would stop her from quitting her job and going to America to study English." },
+                { jp: "この道を行けば町には入れますか?", en: "Will this road take us right into town?" },
+                { jp: "あなたの顔の表情で私たちがあなたから知りたいことがわかるわ", en: "Your face tells us all we need to know." },
+                { jp: "これは大学生活の最初を思い出させます", en: "This reminds me of the beginning of my college life." },
+                { jp: "君がそんなことをいうのは僕には大きな驚きだ", en: "I'm very surprised that you (should) say something like that." },
+                { jp: "君が僕にそれを聞いてくるなんて奇妙だよ", en: "It is strange that you (should) ask me that." },
+                { jp: "彼女が楽しんでくれているか気を揉んでいる", en: "I'm anxious that she (should) enjoy herself." },
+                { jp: "君がこれを再び持ち出して、僕はちょっと失望している", en: "I'm a little disappointed that you (should) bring the matter up again." },
+                { jp: "彼が故郷を離れなければならないのはかわいそうだ", en: "It's a pity that he (should) leave his town." },
+                { jp: "8時までに到着することが必須です", en: "It is a requirement that you (should) arrive by eight." },
+                { jp: "彼女の私との滞在は私の意図ではありません", en: "It isn't my intention that she should stay with me." },
+                { jp: "この問題の詳しい部分を扱うことは必要ですか?", en: "Is it necessary that I (should) enter the details on this subject?" },
+                { jp: "あなたに心構えができていることは重要です", en: "It is important that you (should) be prepared." },
+                { jp: "彼女が自力で考え、行動することは不可欠です", en: "It is essential that she (should) think and act for herself." },
+                { jp: "彼のすべての料金の受け取りの禁止を推奨します", en: "We recommend that he (should) be prohibited from receiving any fees." },
+                { jp: "私は彼女がもっと支払われるようにアドバイスしました", en: "I advised that she (should) be paid more." },
+                { jp: "これについてコメントをするように彼らからリクエストされました", en: "They requested that we (should) leave some comment on this." },
+                { jp: "これを手伝ってくれれば80ドルあげるよ", en: "I will give you eighty dollars if you help me with this." },
+                { jp: "彼にそれを言わないでもらえたらありがたいのですが", en: "I'd appreciate it if you didn't tell him about it." },
+                { jp: "帰ったら僕のオフィスに来て", en: "Come to my office when you get back." },
+                { jp: "ちょっと私のオフィスに来てもらえませんか?", en: "Could you come to my office for a minute?" },
+                { jp: "健康な食事を心がけるべきだと思います", en: "I think you should eat healthy food." },
+                { jp: "家まで車に乗せていただけますか", en: "I wonder if you could drive me home." },
+                { jp: "間違っておられるようです", en: "I'm afraid you're mistaken." }
+            ]
+        };
+    </script>
+
+    <script>
+        // State variables
+        let currentLesson = "Lesson 4-0";
+        let currentIndex = 0;
+        let isAutoMode = false;
+        let sentences = [];
+        let autoPlayTimeout = null;
+        let speechCheckInterval = null;
+        let isEnglishShown = false;
+        
+        // Speech Synthesis setup
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let selectedVoice = null;
+
+        // DOM Elements
+        const lessonSelect = document.getElementById('lesson-select');
+        const modeManualBtn = document.getElementById('mode-manual-btn');
+        const modeAutoBtn = document.getElementById('mode-auto-btn');
+        const delaySelect = document.getElementById('delay-select');
+        const rateSlider = document.getElementById('rate-slider');
+        const rateDisplay = document.getElementById('rate-display');
+        const sliderProgress = document.getElementById('slider-progress');
+        const voiceSelect = document.getElementById('voice-select');
+        
+        const jpTextEl = document.getElementById('japanese-text');
+        const enSection = document.getElementById('english-section');
+        const enTextEl = document.getElementById('english-text');
+        
+        const showPlayBtn = document.getElementById('show-play-btn');
+        const replayBtn = document.getElementById('replay-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const currentIndexDisplay = document.getElementById('current-index-display');
+        const totalCountDisplay = document.getElementById('total-count-display');
+
+        function populateVoices() {
+            voices = synth.getVoices().filter(voice => voice.lang.includes('en')); // Filter for English voices
+            voiceSelect.innerHTML = '';
+            
+            if (voices.length === 0) {
+                voiceSelect.innerHTML = '<option value="">English voices not available</option>';
+                return;
+            }
+
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                
+                if (voice.default) {
+                    option.textContent += ' — Default';
+                }
+                
+                option.setAttribute('data-lang', voice.lang);
+                option.setAttribute('data-name', voice.name);
+                voiceSelect.appendChild(option);
+
+                // Prefer a generic US female voice if available as default
+                if (voice.name.includes("Google US English") || (voice.lang === 'en-US' && voice.name.includes("Female"))) {
+                    option.selected = true;
+                }
+            });
+            updateSelectedVoice();
+        }
+
+        function updateSelectedVoice() {
+            const selectedOption = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
+            selectedVoice = voices.find(voice => voice.name === selectedOption);
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoices;
+        }
+
+        function initApp() {
+            // Populate Lesson Dropdown
+            for (const lesson in lessonData) {
+                const option = document.createElement('option');
+                option.value = lesson;
+                option.textContent = lesson;
+                lessonSelect.appendChild(option);
+            }
+            
+            // Set initial slider progress
+            updateSliderProgress();
+            
+            // Load initial lesson
+            loadLesson(lessonSelect.value);
+            
+            // Initial voice load attempt
+            populateVoices();
+        }
+
+        function loadLesson(lessonName) {
+            currentLesson = lessonName;
+            sentences = lessonData[lessonName];
+            currentIndex = 0;
+            totalCountDisplay.textContent = sentences.length;
+            updateCard();
+        }
+
+        function updateCard() {
+            // Clear any pending timeouts
+            clearTimeout(autoPlayTimeout);
+            clearInterval(speechCheckInterval);
+            synth.cancel();
+
+            const currentData = sentences[currentIndex];
+            jpTextEl.textContent = currentData.jp;
+            enTextEl.textContent = currentData.en;
+            
+            // Reset visibility
+            enSection.classList.add('hidden');
+            showPlayBtn.classList.remove('hidden');
+            replayBtn.classList.add('hidden');
+            isEnglishShown = false;
+
+            // Update counter
+            currentIndexDisplay.textContent = currentIndex + 1;
+            
+            // Reset progress bar (待ち時間タイマーのリセット)
+            resetProgressBar();
+
+            // Update Nav Buttons
+            prevBtn.disabled = currentIndex === 0;
+            prevBtn.classList.toggle('opacity-50', currentIndex === 0);
+            prevBtn.classList.toggle('cursor-not-allowed', currentIndex === 0);
+            
+            nextBtn.disabled = currentIndex === sentences.length - 1;
+            nextBtn.classList.toggle('opacity-50', currentIndex === sentences.length - 1);
+            nextBtn.classList.toggle('cursor-not-allowed', currentIndex === sentences.length - 1);
+
+            if (isAutoMode) {
+                startAutoSequence();
+            }
+        }
+
+        function resetProgressBar() {
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            if (progressBarFill) {
+                progressBarFill.style.transition = 'none';
+                progressBarFill.style.width = '0%';
+            }
+        }
+
+        function startProgressBar(duration) {
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            if (progressBarFill) {
+                // DOMの再描画を確実に待ってからアニメーションを開始する
+                window.requestAnimationFrame(() => {
+                    window.requestAnimationFrame(() => {
+                        progressBarFill.style.transition = `width ${duration}ms linear`;
+                        progressBarFill.style.width = '100%';
+                    });
+                });
+            }
+        }
+
+        function playAudio(text) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            const utterThis = new SpeechSynthesisUtterance(text);
+            if (selectedVoice) {
+                utterThis.voice = selectedVoice;
+            }
+            utterThis.rate = parseFloat(rateSlider.value);
+            synth.speak(utterThis);
+        }
+
+        function showEnglishAndPlay() {
+            // 手動でクリックされた場合、タイマーをキャンセルしてバーをMAXにする
+            clearTimeout(autoPlayTimeout);
+            const progressBarFill = document.getElementById('progress-bar-fill');
+            if (progressBarFill && !isEnglishShown) {
+                progressBarFill.style.transition = 'none';
+                progressBarFill.style.width = '100%';
+            }
+
+            enSection.classList.remove('hidden');
+            showPlayBtn.classList.add('hidden');
+            replayBtn.classList.remove('hidden');
+            isEnglishShown = true;
+            playAudio(sentences[currentIndex].en);
+        }
+
+        function startAutoSequence() {
+            const delayMs = parseInt(delaySelect.value);
+            
+            // 待機時間プログレスバー開始
+            startProgressBar(delayMs);
+
+            // 1. Show Japanese immediately (handled by updateCard)
+            // 2. Wait for 'delayMs'
+            autoPlayTimeout = setTimeout(() => {
+                // 3. Show English & Play
+                showEnglishAndPlay();
+                
+                // 4. Wait for speaking to finish + small pause, then go next
+                waitForSpeechEndAndNext();
+
+            }, delayMs);
+        }
+
+        function waitForSpeechEndAndNext() {
+            // Poll to check if speaking is done. 
+            // onend event can be buggy in some browsers, setInterval is more reliable.
+            speechCheckInterval = setInterval(() => {
+                if (!synth.speaking) {
+                    clearInterval(speechCheckInterval);
+                    // Add a small pause before jumping to next sentence
+                    autoPlayTimeout = setTimeout(() => {
+                        if (currentIndex < sentences.length - 1) {
+                            currentIndex++;
+                            updateCard();
+                        } else {
+                            // Reached the end, turn off auto mode
+                            toggleMode();
+                        }
+                    }, 1000); 
+                }
+            }, 100);
+        }
+
+        lessonSelect.addEventListener('change', (e) => loadLesson(e.target.value));
+        
+        voiceSelect.addEventListener('change', updateSelectedVoice);
+
+        rateSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value).toFixed(1);
+            rateDisplay.textContent = val + 'x';
+            updateSliderProgress();
+            // If already showing English, replay with new rate
+            if (isEnglishShown) {
+                playAudio(sentences[currentIndex].en);
+            }
+        });
+
+        function updateSliderProgress() {
+            const min = parseFloat(rateSlider.min);
+            const max = parseFloat(rateSlider.max);
+            const val = parseFloat(rateSlider.value);
+            const percentage = ((val - min) / (max - min)) * 100;
+            sliderProgress.style.width = percentage + '%';
+        }
+
+        showPlayBtn.addEventListener('click', showEnglishAndPlay);
+        
+        replayBtn.addEventListener('click', () => {
+            playAudio(sentences[currentIndex].en);
+        });
+
+        stopBtn.addEventListener('click', () => {
+            synth.cancel();
+            clearTimeout(autoPlayTimeout);
+            clearInterval(speechCheckInterval);
+            resetProgressBar(); // プログレスバーもリセット
+            if (isAutoMode) {
+                setMode(false);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < sentences.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        });
+
+        // Mode Selection
+        function setMode(auto) {
+            if (isAutoMode === auto) return;
+            isAutoMode = auto;
+            
+            if (isAutoMode) {
+                // UI update for Auto mode
+                modeManualBtn.classList.remove('bg-white', 'shadow-sm', 'text-gray-800');
+                modeManualBtn.classList.add('text-gray-500', 'hover:text-gray-700');
+                
+                modeAutoBtn.classList.remove('text-gray-500', 'hover:text-gray-700');
+                modeAutoBtn.classList.add('bg-white', 'shadow-sm', 'text-blue-600');
+                
+                delaySelect.disabled = false;
+                delaySelect.classList.remove('cursor-not-allowed', 'bg-gray-50', 'text-gray-400');
+                delaySelect.classList.add('bg-white', 'text-gray-700');
+                document.getElementById('delay-label').classList.replace('text-gray-400', 'text-gray-700');
+                
+                // Hide manual buttons
+                showPlayBtn.classList.add('hidden');
+                replayBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+                prevBtn.classList.add('hidden');
+
+                // Start sequence from current card
+                updateCard();
+
+            } else {
+                // UI update for Manual mode
+                modeAutoBtn.classList.remove('bg-white', 'shadow-sm', 'text-blue-600');
+                modeAutoBtn.classList.add('text-gray-500', 'hover:text-gray-700');
+                
+                modeManualBtn.classList.remove('text-gray-500', 'hover:text-gray-700');
+                modeManualBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-800');
+                
+                delaySelect.disabled = true;
+                delaySelect.classList.add('cursor-not-allowed', 'bg-gray-50', 'text-gray-400');
+                delaySelect.classList.remove('bg-white', 'text-gray-700');
+                document.getElementById('delay-label').classList.replace('text-gray-700', 'text-gray-400');
+
+                // Show manual buttons
+                nextBtn.classList.remove('hidden');
+                prevBtn.classList.remove('hidden');
+                
+                // Reset current card to initial state
+                clearTimeout(autoPlayTimeout);
+                synth.cancel();
+                updateCard();
+            }
+        }
+
+        modeManualBtn.addEventListener('click', () => setMode(false));
+        modeAutoBtn.addEventListener('click', () => setMode(true));
+        
+        delaySelect.addEventListener('change', () => {
+            if (isAutoMode) {
+                updateCard(); // Restart sequence with new delay
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initApp);
+
+    </script>
+</body>
+</html>
