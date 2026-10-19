@@ -229,6 +229,9 @@
   .topics span b{font-family:var(--en);color:var(--orange);margin-right:5px}
   .mode{display:none}
   .mode.on{display:block}
+  iframe.subapp{display:block;width:100%;height:900px;border:0;background:transparent}
+  .wrap.ext #chapbar,.wrap.ext #partbar,.wrap.ext #head{display:none}
+  .wrap.ext{padding-top:10px}
   .btn.danger{border-color:var(--red);color:var(--red)}
   .tbar{position:sticky;top:49px;z-index:10;display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(6px);padding:10px 0;margin-bottom:6px;border-bottom:1px solid var(--rule)}
   .tbar .score{font-size:13px;color:var(--ink-2)}
@@ -413,7 +416,7 @@
       <p class="mast-en">Kodai Yonehara</p>
       <p class="mast-et">Basic Grammar for Mastering English Conversation ＋ English Grammar for Speaking</p>
       <h1 class="mast-h"><span>英会話のための</span>基本英文法<em class="plus">＋</em><wbr><em class="sec2"><small>スピーキングのための</small>英文法</em></h1>
-      <p class="mast-sub">文法理解度チェック・入れ替えドリル・瞬間英作</p>
+      <p class="mast-sub">文法理解度チェック・入れ替えドリル・瞬間英作・単語帳</p>
     </div>
     <div class="covers">
       <img class="cover" src="cover1.jpg" width="576" height="820" alt="『英会話のための基本英文法完全マスター』（米原幸大 著・IBCパブリッシング）の表紙">
@@ -426,6 +429,7 @@
     <button class="mt" type="button" role="tab" data-m="check" aria-selected="true"><span class="num">1</span>文法理解度チェック</button>
     <button class="mt" type="button" role="tab" data-m="drill" aria-selected="false"><span class="num">2</span>入れ替えドリル</button>
     <button class="mt" type="button" role="tab" data-m="speak" aria-selected="false"><span class="num">3</span>瞬間英作</button>
+    <button class="mt" type="button" role="tab" data-m="tango" aria-selected="false"><span class="num">4</span>単語帳</button>
     <button class="theme" id="themeBtn" type="button" aria-pressed="false">ダーク</button>
   </div>
 </nav>
@@ -523,6 +527,7 @@
       <ol class="slist" id="sList"></ol>
     </div>
   </div>
+  <div class="mode sub" id="m-tango"><iframe class="subapp" data-src="tango.html" title="単語帳"></iframe></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -616,7 +621,7 @@ $("chapbar").addEventListener("click", e => {
 });
 $("partbar").addEventListener("click", e => { const b = e.target.closest(".ptab"); if (b) selectLesson(Number(b.dataset.i)); });
 
-const MODE_NAME = { check: "文法理解度チェック", drill: "入れ替えドリル", speak: "瞬間英作" };
+const MODE_NAME = { check: "文法理解度チェック", drill: "入れ替えドリル", speak: "瞬間英作", tango: "単語帳" };
 function drawHead(){
   const L = LESSONS[LI];
   $("head").innerHTML =
@@ -640,12 +645,29 @@ function setMode(m){
   MODE = m;
   document.querySelectorAll(".mt").forEach(b => b.setAttribute("aria-selected", String(b.dataset.m === m)));
   document.querySelectorAll(".mode").forEach(d => d.classList.toggle("on", d.id === "m-" + m));
+  extMode();
   drawHead();
   try { localStorage.setItem("gs-pos", JSON.stringify({ li: LI, m: MODE })); } catch (e) {}
   window.scrollTo({ top: 0 });
 }
+
+/* ===== 単語帳（tango.html を iframe で表示）===== */
+function extMode(){
+  const ext = MODE === "tango";
+  document.querySelector(".wrap").classList.toggle("ext", ext);
+  if (ext) { const f = document.querySelector("#m-tango iframe"); if (!f.getAttribute("src")) f.src = f.dataset.src; }
+}
+function subPost(msg){ document.querySelectorAll("iframe.subapp").forEach(f => { try { f.contentWindow && f.contentWindow.postMessage(msg, "*"); } catch (e) {} }); }
+function subTheme(){ subPost({ t: "theme", dark: document.documentElement.getAttribute("data-theme") === "dark" }); }
+window.addEventListener("message", e => {
+  const d = e.data; if (!d || !d.sub) return;
+  const f = [...document.querySelectorAll("iframe.subapp")].find(x => x.contentWindow === e.source); if (!f) return;
+  if (d.t === "h") f.style.height = Math.max(400, d.h) + "px";
+  else if (d.t === "ready") subTheme();
+  else if (d.t === "top") { const y = f.getBoundingClientRect().top + window.scrollY - 70; if (window.scrollY > y) window.scrollTo({ top: Math.max(0, y) }); }
+});
 document.querySelector(".nav-in").addEventListener("click", e => { const b = e.target.closest(".mt"); if (b) setMode(b.dataset.m); });
-function stopAll(){ AUD.stop(); dStop(); sStop(); }
+function stopAll(){ AUD.stop(); dStop(); sStop(); subPost({ t: "stop" }); }
 
 /* =====================================================================
    1. 文法理解度チェック（元アプリの採点ロジックをそのまま使用）
@@ -1212,6 +1234,7 @@ $("themeBtn").onclick = () => {
   const dark = document.documentElement.getAttribute("data-theme") !== "dark";
   if (dark) document.documentElement.setAttribute("data-theme", "dark"); else document.documentElement.removeAttribute("data-theme");
   $("themeBtn").textContent = dark ? "ライト" : "ダーク"; $("themeBtn").setAttribute("aria-pressed", String(dark));
+  subTheme();
 };
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,textarea,select")) return;
@@ -1222,7 +1245,7 @@ document.addEventListener("keydown", e => {
 (function(){
   let st = {}; try { st = JSON.parse(localStorage.getItem("gs-pos") || "{}"); } catch (e) {}
   LI = (st.li >= 0 && st.li < LESSONS.length) ? st.li : 0;
-  if (st.m && MODE_NAME[st.m]) { MODE = st.m; document.querySelectorAll(".mt").forEach(b => b.setAttribute("aria-selected", String(b.dataset.m === MODE))); document.querySelectorAll(".mode").forEach(d => d.classList.toggle("on", d.id === "m-" + MODE)); }
+  if (st.m && MODE_NAME[st.m]) { MODE = st.m; document.querySelectorAll(".mt").forEach(b => b.setAttribute("aria-selected", String(b.dataset.m === MODE))); document.querySelectorAll(".mode").forEach(d => d.classList.toggle("on", d.id === "m-" + MODE)); extMode(); }
   selectLesson(LI, true);
 })();
 </script>
