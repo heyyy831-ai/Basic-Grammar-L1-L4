@@ -553,22 +553,30 @@ const AUD = (() => {
   let unlocked = false;
   const unlock = () => { if (unlocked) return; unlocked = true; try { el.src = SILENT; const p = el.play(); if (p) p.then(() => { if (el.src.startsWith("data:")) el.pause(); }).catch(() => {}); } catch (e) {} };
   ["pointerdown", "touchend", "keydown"].forEach(ev => document.addEventListener(ev, unlock, { capture: true, passive: true }));
+  // 自然な音声（Edge の Natural/Online、Chrome の Google、Apple の Premium/Enhanced）を優先。選んだ声は単語帳と共有
+  const NOVELTY = /\b(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Ralph|Kathy|Grandma|Grandpa|Eddy|Flo|Reed|Rocko|Sandy|Shelley)\b/;
+  const vRank = v => { const n = v.name, us = /^en[-_]US/i.test(v.lang) ? 0 : 0.5;
+    if (NOVELTY.test(n)) return 9; if (/Natural|Online/i.test(n)) return us; if (/^Google/i.test(n)) return (/US English/i.test(n) ? 1 : 1.2) + us;
+    if (/Premium|Enhanced|Siri/i.test(n)) return 2 + us; if (/Samantha|Ava|Allison|Aria|Jenny|Alex|Daniel|Karen|Moira/i.test(n)) return 3 + us; return 5 + us; };
+  const VKEY = "goi-voice", vget = () => { try { return localStorage.getItem(VKEY) || ""; } catch (e) { return ""; } }, vset = x => { try { localStorage.setItem(VKEY, x); } catch (e) {} };
   let voices = [];
   const loadVoices = () => {
-    voices = (speechSynthesis.getVoices() || []).filter(v => /^en/.test(v.lang));
+    voices = (speechSynthesis.getVoices() || []).filter(v => /^en/i.test(v.lang)).sort((a, b) => vRank(a) - vRank(b) || a.name.localeCompare(b.name));
+    const chosen = vget();
     ["dVoice", "sVoice"].forEach(id => {
-      const s = $(id), cur = s.value;
-      s.innerHTML = '<option value="">（自動）</option>' + voices.slice(0, 20).map(v => '<option value="' + esc(v.voiceURI) + '">' + esc(v.name + " (" + v.lang + ")") + '</option>').join("");
-      s.value = cur;
+      const s = $(id);
+      s.innerHTML = '<option value="">（自動）' + (voices[0] ? esc(voices[0].name) : '') + '</option>' + voices.map(v => '<option value="' + esc(v.voiceURI) + '">' + (vRank(v) < 3 ? "★ " : "") + esc(v.name + " (" + v.lang + ")") + '</option>').join("");
+      s.value = voices.some(v => v.voiceURI === chosen) ? chosen : "";
+      s.onchange = () => { vset(s.value); ["dVoice", "sVoice"].forEach(o => { if (o !== id) $(o).value = s.value; }); };
     });
   };
-  if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; setTimeout(loadVoices, 800); }
   function tts(text, rate, voiceURI){
     return new Promise(res => {
       if (!window.speechSynthesis) return res();
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      const v = voices.find(v => v.voiceURI === voiceURI) || voices.find(v => /Google US English|Samantha|Ava|Allison/.test(v.name)) || voices[0];
+      const v = voices.find(v => v.voiceURI === voiceURI) || voices[0];
       if (v) u.voice = v;
       u.lang = "en-US"; u.rate = rate; u.onend = u.onerror = () => res();
       speechSynthesis.speak(u);
