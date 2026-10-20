@@ -316,6 +316,9 @@
   .disp .qjp strong{background:linear-gradient(transparent 62%,var(--hl) 62%);font-weight:700}
   .disp .ans{border-top:1px dashed var(--rule);padding-top:12px;margin-top:4px}
   .disp .ans .en{font-size:clamp(22px,4vw,30px)}
+  .disp.sans{min-height:0;margin-top:6px}
+  .disp.sans:empty{display:none}
+  .disp.sans .ans{margin-top:8px}
   .disp .ph{color:var(--ink-3);font-size:13px;letter-spacing:.06em}
   .disp.fade{animation:fd .25s ease}
   @keyframes fd{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -512,6 +515,7 @@
         <button class="btn" id="sNext" type="button">次へ ▶</button>
         <button class="btn" id="sAuto" type="button" aria-pressed="false">⏵ 自動モード</button>
       </div>
+      <div class="disp sans" id="sAns"></div>
     </div>
     <details class="sets" id="sSets">
       <summary>⚙ 再生の設定</summary>
@@ -1187,10 +1191,11 @@ function renderSpeak(){
 }
 function sShow(){
   const qs = sItems(), q = qs[sIdx];
-  if (!q) { $("sDisp").innerHTML = '<p class="ph">このレッスンには問題がありません</p>'; return; }
+  if (!q) { $("sDisp").innerHTML = '<p class="ph">このレッスンには問題がありません</p>'; $("sAns").innerHTML = ''; return; }
   $("sProg").textContent = (sIdx + 1) + " / " + qs.length;
   $("sDisp").innerHTML = '<div class="qjp">' + jpPrompt(q.jp) + '</div>' +
-    (sOpen ? '<div class="ans"><div class="en">' + esc(q.en) + '</div></div>' : '<p class="ph">頭の中で英語にしてから「英語を表示＆再生」</p>');
+    (sOpen ? '' : '<p class="ph">頭の中で英語にしてから「英語を表示＆再生」</p>');
+  $("sAns").innerHTML = sOpen ? '<div class="ans"><div class="en">' + esc(q.en) + '</div></div>' : '';
   $("sDisp").classList.remove("fade"); void $("sDisp").offsetWidth; $("sDisp").classList.add("fade");
   $("sPrev").disabled = sIdx === 0;
   $("sNext").textContent = sIdx >= qs.length - 1 ? "最初から ↺" : "次へ ▶";
