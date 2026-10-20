@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>異文化コミュニケーション</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F4F1EA; --paper:#FFFFFF; --soft:#F8F5EE; --ink:#1E2A3A; --ink-2:#4A5568; --ink-3:#8A93A3;
+  --rule:#E2DCCF; --navy:#2B3F5C; --orange:#C8693E; --orange-soft:#F7E6DC; --green:#3E8A6A; --green-soft:#E3F1EA;
+  --violet:#6B5BA8; --violet-soft:#ECE8F6; --hl:#FFF0B8; --hl-line:#E9C46A;
+  --en:"Crimson Pro","Georgia","Times New Roman",serif;
+  --jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#13171E; --paper:#1B212B; --soft:#202733; --ink:#E9EDF3; --ink-2:#B8C1CF; --ink-3:#7F8A9C;
+    --rule:#2F3846; --navy:#9CB8E0; --orange:#E89A72; --orange-soft:#3A2A22; --green:#6CC49E; --green-soft:#1C3229;
+    --violet:#B3A6E8; --violet-soft:#2A2540; --hl:#4A3F17; --hl-line:#C9A443;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#13171E; --paper:#1B212B; --soft:#202733; --ink:#E9EDF3; --ink-2:#B8C1CF; --ink-3:#7F8A9C;
+  --rule:#2F3846; --navy:#9CB8E0; --orange:#E89A72; --orange-soft:#3A2A22; --green:#6CC49E; --green-soft:#1C3229;
+  --violet:#B3A6E8; --violet-soft:#2A2540; --hl:#4A3F17; --hl-line:#C9A443;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--jp);font-size:15.5px;line-height:1.8;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px 80px}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+header{padding:28px 0 10px}
+.kicker{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--ink-3);font-size:12.5px}
+.badge{background:var(--navy);color:var(--paper);border-radius:6px;padding:5px 11px;line-height:1.15;font-weight:700;font-size:13px}
+.theme{margin-left:auto;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);border-radius:99px;padding:4px 12px;font-size:12.5px}
+h1{font-size:clamp(22px,5vw,30px);line-height:1.35;margin:12px 0 4px;letter-spacing:.01em}
+.lead{color:var(--ink-2);margin:0;font-size:14px}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 4px}
+.search{flex:1 1 220px;min-width:0;border:1px solid var(--rule);background:var(--paper);border-radius:10px;padding:9px 12px;font:inherit;font-family:var(--en);font-size:17px;color:var(--ink)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 12px;font-size:13px;font-weight:700;color:var(--ink-3)}
+.chip[aria-pressed="true"]{color:var(--ink);border-color:var(--ink-3);background:var(--soft)}
+.chip i{font-style:normal;display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+.lettertitle{display:flex;align-items:baseline;gap:12px;margin:22px 0 10px}
+.lettertitle b{font-family:var(--en);font-size:44px;line-height:1;color:var(--navy)}
+.lettertitle span{color:var(--ink-3);font-size:13px}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.w{display:flex;align-items:center;gap:8px;text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:10px;padding:7px 10px;min-width:0}
+.w:hover{border-color:var(--ink-3)}
+.w .hw{font-family:var(--en);font-size:18px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.w .n{font-size:11.5px;color:var(--ink-3)}
+.lv{flex:none;font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 6px;line-height:1.5;letter-spacing:.02em}
+.lv.B1{background:var(--green-soft);color:var(--green)}
+.lv.B2{background:var(--orange-soft);color:var(--orange)}
+.lv.C1,.lv.C2,.lv.C1p{background:var(--violet-soft);color:var(--violet)}
+.empty{color:var(--ink-3);padding:30px 0;text-align:center}
+
+/* detail */
+.back{border:1px solid var(--rule);background:var(--paper);border-radius:99px;padding:5px 14px;font-size:13px;font-weight:700;color:var(--ink-2);margin-top:20px}
+.dhead{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:14px 0 6px}
+.dhead h2{font-family:var(--en);font-size:clamp(32px,8vw,44px);margin:0;line-height:1.1}
+.dhead .lv{font-size:12px;padding:3px 9px}
+.dsub{color:var(--ink-3);font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 16px}
+.btn{border:1px solid var(--rule);background:var(--paper);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.btn:hover{border-color:var(--ink-3);color:var(--ink)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:var(--paper)}
+.btn[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--ink-3)}
+.vsel{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ink-2)}
+.vsel select{max-width:220px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:8px;padding:5px 8px;font:inherit;font-weight:500}
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:12px 16px 12px}
+.card.playing{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange-soft)}
+.loc{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--ink-3);font-weight:500}
+.loc .tag{background:var(--soft);border:1px solid var(--rule);border-radius:5px;padding:0 7px}
+.loc .adv{background:var(--orange-soft);color:var(--orange);border-radius:5px;padding:0 7px;font-weight:700}
+.loc .src{background:var(--green-soft);color:var(--green);border-radius:5px;padding:0 7px;font-weight:700}
+.w.ph .hw{font-style:italic;white-space:normal;overflow:visible;line-height:1.3}
+.w.wide{grid-column:span 2}
+.loc .app{background:var(--navy);color:var(--paper);border-radius:5px;padding:0 7px;font-weight:700}
+.en{font-family:var(--en);font-size:21px;line-height:1.45;margin:6px 0 8px;overflow-wrap:anywhere}
+.en mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;font-weight:700;padding:0 1px}
+.ja{color:var(--ink-2);font-size:14.5px;border-left:3px solid var(--hl-line);padding:2px 0 2px 10px;margin:0 0 8px}
+.ja[hidden]{display:none}
+.acts{display:flex;gap:6px}
+.embed header{padding-top:6px}
+.embed .kicker{display:none}
+.embed .az{position:static;backdrop-filter:none;background:transparent}
+.foot{margin-top:48px;color:var(--ink-3);font-size:12px;line-height:1.7;border-top:1px solid var(--rule);padding-top:14px}
+.foot a{color:var(--ink-2)}
+@media (max-width:560px){
+  .az-in{grid-template-columns:repeat(9,1fr)}
+  .az button{font-size:16px}
+  .words{grid-template-columns:repeat(auto-fill,minmax(135px,1fr))}
+  .en{font-size:19.5px}
+}
+
+.vbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 2px}.vbar .vnote{font-size:12px;color:var(--ink-3)}.vbar .vpick{max-width:280px}
+.grades{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0 4px}
+.grades .grade .lv{font-size:inherit;font-weight:inherit;color:inherit;letter-spacing:inherit;margin:0;padding:0;background:none}
+@media (max-width:560px){.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.grades .grade{padding:8px 2px;font-size:14px;min-width:0}.grades .lv{display:none}}
+.grade{border:2px solid var(--rule);background:var(--paper);border-radius:12px;padding:10px 6px;font-size:15px;white-space:nowrap;font-weight:700;color:var(--ink-2)}
+.grade:hover{border-color:var(--ink-3);color:var(--ink)}
+.grade[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--paper)}
+.grade small{display:block;font-size:11.5px;font-weight:500;opacity:.8}
+.wnav{display:flex;justify-content:space-between;gap:8px;margin-top:16px}
+.wnav .btn{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hint{color:var(--ink-3);font-size:14px;padding:26px 0;text-align:center}
+
+.vbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 2px}.vbar .vnote{font-size:12px;color:var(--ink-3)}.vbar .vpick{max-width:280px}
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-top:16px}
+.ix{display:flex;align-items:baseline;gap:10px;text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:12px;padding:10px 14px;min-width:0}
+.ix:hover{border-color:var(--ink-3)}
+.ix .no{flex:none;font-family:var(--en);font-weight:700;font-size:18px;color:var(--orange);min-width:22px}
+.ix .tt{font-weight:700;font-size:15px;line-height:1.5}
+.sech{font-size:18px;margin:26px 0 4px;display:flex;align-items:baseline;gap:10px}
+.sech span{font-size:12.5px;color:var(--ink-3);font-weight:500}
+.wnav{display:flex;justify-content:space-between;gap:8px;margin-top:18px}
+.wnav .btn{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dno{color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.06em;margin-top:14px}
+.dt{font-size:clamp(22px,5vw,30px);line-height:1.4;margin:2px 0 10px}
+.body p{margin:0 0 12px}
+.body h3{font-size:18px;font-family:var(--en);margin:22px 0 6px;color:var(--navy)}
+.body h4{font-size:15px;margin:18px 0 6px;color:var(--navy)}
+.body .fn{font-size:13.5px;color:var(--ink-2);background:var(--soft);border-left:3px solid var(--orange);border-radius:6px;padding:6px 10px;margin:0 0 12px}
+.exs{display:flex;flex-direction:column;gap:0;background:var(--paper);border:1px solid var(--rule);border-radius:12px;margin:4px 0 16px;overflow:hidden}
+.xr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 14px;border-top:1px dashed var(--rule)}
+.xr:first-child{border-top:0}
+.xr.playing{background:var(--orange-soft)}
+.xr .xj{grid-column:1;color:var(--ink);font-size:14.5px}
+.xr .xe{grid-column:1;font-family:var(--en);font-size:20px;line-height:1.45;color:var(--navy);white-space:pre-line;overflow-wrap:anywhere}
+.xr .xe b{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit}
+.xr .xn{grid-column:1;font-size:12.5px;color:var(--ink-3)}
+.xr .sp{grid-column:2;grid-row:1/span 3;align-self:center}
+.hideen .xr .xe,.hideen .xr .xn{display:none}
+.hideen .xr .q{display:block}
+.xr .q{display:none;grid-column:1;font-family:var(--en);color:var(--ink-3);letter-spacing:.2em}
+.hideen .xr .sp{display:none}
+.xr .rv{display:none}
+.hideen .xr.open .xe,.hideen .xr.open .xn{display:block}
+.hideen .xr.open .q{display:none}
+.hideen .xr.open .sp{display:inline-flex}
+.sym{font-family:var(--en);font-size:clamp(40px,10vw,56px);line-height:1.1;color:var(--navy);margin:2px 0 6px}
+.wl{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.wl button{border:1px solid var(--rule);background:var(--paper);border-radius:99px;padding:3px 12px;font-family:var(--en);font-size:19px}
+.wl button:hover{border-color:var(--ink-3)}
+.wl button.playing{border-color:var(--orange);background:var(--orange-soft)}
+.wl b{color:var(--orange);text-decoration:underline;text-underline-offset:3px}
+.wnote{font-size:12.5px;color:var(--ink-3);margin:-6px 0 10px}
+.syms{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px;margin-top:8px}
+.sb{display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:10px;padding:6px 10px;min-width:0}
+.sb:hover{border-color:var(--ink-3)}
+.sb .s{font-family:var(--en);font-size:24px;font-weight:700;color:var(--navy);line-height:1.2}
+.sb .w{border:0;padding:0;background:none;font-family:var(--en);font-size:14px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block}
+.sb .w b{font-weight:400}
+.top2{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 0}
+@media (max-width:560px){.xr .xe{font-size:18.5px}.idx{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker"><span class="badge">異文化コミュ</span><span>英語と日本語の文化の違い</span>
+      <button class="theme" id="theme" type="button">表示切替</button></div>
+    <h1>異文化コミュニケーション</h1>
+    <div class="vbar">
+      <label class="vsel">声<select class="vpick" aria-label="読み上げの声"></select></label>
+      <button class="btn" type="button" id="rate" aria-pressed="false">ゆっくり</button>
+      <button class="btn" type="button" id="hideen" aria-pressed="false">英語を隠す</button>
+      <span class="vnote">★ は自然な音声（Google など）</span>
+    </div>
+  </header>
+  <main id="main"></main>
+</div>
+<script>
+const NOTES = [{"no": 1, "title": "挨拶", "items": [{"k": "p", "t": "日本語文化は、自分のグループメンバーとそうでないメンバーをはっきり区別する傾向があり、非メンバーに対しては“よそよそしさ”の度合いが高くなります。一方、英語文化では赤の他人に対しても比較的フレンドリーで、相応にあいさつも友好的になる傾向があります。"}, {"k": "p", "t": "簡単に、英語の「あいさつ表現」を日本語訳とパラレルに覚えるレベルでは、“いつ、だれに、どこで、どう”適切に使うのかを知らないので、ミスコミュニケーションになる危険性が高くなるので気をつけてください。"}, {"k": "h", "t": "1. Hello. / Hi."}, {"k": "p", "t": "このあいさつ表現は「こんにちは」とは限りません。なぜなら（１）朝昼晩の２４時間使え、しかももっとも広く用いられているあいさつ表現だからです。（２）「やあ！」にも、（３）電話に出たときの「もしもし」にもなります。（４）身内や同居相手にも使えるところも日本語の「こんにちは」とは違う点です。（５）お店や知人の家に入って誰もいない時、「すみませ〜ん」も“Hello?”を使います。"}, {"k": "ex", "rows": [["おはよう！", "Hello! / Hi! （１）", ""], ["こんにちは！", "Hello! / Hi! （１）", ""], ["こんばんは！", "Hello! / Hi! （１）", ""], ["やあ、トム！", "Hi, Tom! （２）", ""], ["（電話に出て）もしもし。", "Hello. / Hi. （３）", ""], ["やあ、マリー（Maryはルームメート）。", "Hi, Mary. （４）", ""], ["すみませ〜ん（どなたかいませんか？）。", "Hello? （５）", ""]]}, {"k": "h", "t": "2. How are you?"}, {"k": "p", "t": "“How are you?”と「お元気ですか？」は違います。「お元気ですか？」はよく会っている間柄では使えませんが、“How are you?”は毎日顔を合わせていても使えます。"}, {"k": "p", "t": "つまり、“How are you?”は、実際の相手の調子を聞いている場合は少なく、“Hi!”に続けて使うあまりに習慣化したあいさつ表現なので、自身の調子と関係なく“I am good, thanks.”などと機械的に答えるケースがよくありますし、“How are you?”に対する問いに答えもしないで会話に入っていく場合さえあります。"}, {"k": "p", "t": "だいたいは、“Fine (thank you).”（まあ元気だよ）、“Pretty good!”（かなりいいよ）、“Great!”（とてもいいよ）、“OK.”（まあなんとか）などで答えます。"}, {"k": "ex", "rows": [["やあ。どお（調子は）？", "Hi! How are you?", ""], ["−いいよ / とてもいいよ / まあなんとか / そんなに悪くないよ。", "-Fine (thank you). / -Great! / -OK. / -No so bad.", ""]]}, {"k": "h", "t": "3. Good morning."}, {"k": "p", "t": "日本語の「おはよう」は、形容詞の“早い”からできているのでそのイメージがありますが、英語のmorningは一応午前12時までなので、遅い朝であってもこの表現が使えます（“Hi.”の方がふつうですが）。ちなみにmorningは午前０時からです。Morning.はよりくだけた言い方です。短い表現であればあるほどカジュアルになる傾向があります。"}, {"k": "ex", "rows": [["おはよう、ジョン。", "Good morning, John.", ""], ["−おはよう。", "-(Good) morning.", ""]]}, {"k": "h", "t": "4. Good afternoon."}, {"k": "p", "t": "この英語表現は、日本語の「こんにちは」程は使われないやや改まった表現で、会議の始まりや公の場ではじめにあいさつする場合などに限られています。一般には、やはり“Hello.”や“Hi.”を使います。ちなみに、afternoonは午後から日没または夕食時までです。"}, {"k": "ex", "rows": [["こんにちは、ABC銀行でございます。", "Good afternoon, ABC Bank.", ""], ["−こんにちは。", "-Hello.", ""]]}, {"k": "h", "t": "5. Good evening."}, {"k": "p", "t": "“Good evening.”も“Good afternoon.”同様、使われる状況はフォーマルな場合に限られ、クラスや会合などの始めのあいさつなどによく使われます。eveningの時間帯は、日没から就寝時までです。"}, {"k": "ex", "rows": [["こんばんは。どうぞ、お入りになって！", "Good evening. Please, come in!", ""], ["−ありがとうございます。", "-Thank you.", ""]]}, {"k": "h", "t": "6. Good night."}, {"k": "p", "t": "“Good night”は、「おやすみ」以外に、仕事などが終わった時の同僚への別れの際のあいさつとして「いい夜をお過ごしください」の意味でも使われます。"}, {"k": "ex", "rows": [["おやすみ。", "Good night.", ""], ["−おやすみ。", "-Good night.", ""], ["いい夜を！", "Good night!", ""], ["−あなたもね！", "-Same to you!", ""]]}, {"k": "p", "t": "nightは外が暗い時間帯です。で、その逆の明るい時間帯はdayです。つまり1日の区分の仕方は、morning, afternoon, eveningの3分法と、day, nightの2分法があることになります。"}, {"k": "h", "t": "7. Goodbye."}, {"k": "p", "t": "“Goodbye.”は、日本語の「さよなら」と違って身内や同居人に対しても使えます。さらに、日本語の「さよなら」は、しばらく会わないこと（例えば翌日まで会わない）が前提ですが、“(Good)bye.”はちょっとした用事で出かけて帰ってくる場合にも使えます。"}, {"k": "ex", "rows": [["さようなら（じゃ、またね）。", "Goodbye.", ""], ["−じゃ、また。", "-Bye.", ""]]}, {"k": "h", "t": "8. Thank you."}, {"k": "p", "t": "“感謝”で最もよく使われる英語表現は“Thank you.”ですが、日本語の状況で「ありがとう（ございます）」と言う場面と、英語で“Thank you.”と言う場面は必ずしも同じではありません。“Thank you.”と言うべきところで言わないで黙っていると、相手の気持ちをそこねる可能性が非常に高いです（逆に、言わないで良い場合に“Thank you.”と言うと当然おかしく響きます）。"}, {"k": "p", "t": "具体的には、前を歩いていた人が建物のドアを開けて先に通してくれたりした場合（逆に自分が前を歩いていて、後続の人がいる場合にはドアを開けて先に通してあげるのが重要なエチケットです）に“Thank you.”を使いますし、買い物でレジ係などに“Thank you.”と言われ、それに対して“Thank you.”と返すのが一般的ですし、レストランなどでウェイトレスにコーヒーを注いでもらったり、タクシーを降りる時にドアを押さえてもらったりしたら、声に出して“Thank you.”と言って感謝の意を表します。"}, {"k": "ex", "rows": [["ありがとう。", "Thank you. / Thanks. / Thanks a lot.", ""], ["−どういたしまして。", "-Sure. / -No problem.", ""]]}, {"k": "h", "t": "9. Nice to meet you."}, {"k": "p", "t": "日本語の「はじめまして」に近い英語表現は、“Nice to meet you.”です。"}, {"k": "ex", "rows": [["はじめまして。", "Nice to meet you.", ""], ["−はじめまして。", "-Nice to meet you, too.", ""]]}, {"k": "note", "t": "＊握手は（特に男性同士の場合は）しっかり握手します。心を込めた握手の印象ですが、“謙虚に”ソフトに握ると“死んだ魚をつかんだ”感じに思われ悪い印象を与えます。"}, {"k": "h", "t": "10. Nice to see you."}, {"k": "p", "t": "“Nice to see you.”は、“初めて会う”というよりしばらくぶりに会った人に対して使う場合が多い表現です。"}, {"k": "ex", "rows": [["またお会いできてうれしいです。", "Nice to see you again.", ""], ["−私もです。", "-Me, too.", ""]]}]}, {"no": 2, "title": "年齢について", "items": [{"k": "p", "t": "日本語社会では、話し相手が年上かどうかを知ることは、より適切な丁寧さを選ぶ上で重要な場合があります。英語社会では、話し相手によって日本語ほど頻繁に丁寧さの度合いを変化させる必要はありません。"}, {"k": "p", "t": "基本、自分の年齢、相手の年齢は気にする必要がなくて、年齢差が倍くらいあっても友達のような対等な付き合いができやすい言語社会です（服装も、子供からおじいちゃんまでの普段の服装が、同じようにジーンズにＴシャツといった感じです）。"}, {"k": "p", "t": "兄弟姉妹同士の呼称は、年齢差は関係ないのでお互いファーストネームで呼び合います。"}, {"k": "p", "t": "日本語では、兄弟姉妹という言葉があるように長幼の別は重要ですが、英語ではa big sister, a little brotherといった長幼をハッキリさせる表現はありますが、一般にはbrotherかsisterで大丈夫です。"}, {"k": "p", "t": "同様に、英語社会では日本語の目下・目上を含む言葉、例えば先輩・後輩、上級生・下級生に対応する英語表現はあまり使いません。"}]}, {"no": 3, "title": "「頑張って」の英語表現", "items": [{"k": "sub", "t": "1) “リラックス系”の英語表現"}, {"k": "p", "t": "友人や会社が大変なとき、日本語では「頑張ってね！」「頑張ろう！」といった感じで励ます、励まし合うのが一般的ですが、英語では“Work hard!”といった励まし方はしません。"}, {"k": "p", "t": "むしろ逆に“Don’t work too hard.”と言ったり、“Take it easy!”“Don’t push yourself too much.”などのリラックス系の表現を使います。[余裕がある−>腰を落ち着けて理性的にコントロールできる−>難しい問題により適切に対処できる]と考えられているからです。"}, {"k": "p", "t": "日本語社会のメンタルそのままで、そしてそれを反映させた英語表現は非常にちぐはぐなものになり、ミスコミュニケーションを引き起こす危険があります。"}, {"k": "ex", "rows": [["「あくせくしないで」", "Take it easy!", ""], ["「大丈夫だよ」", "No problem.", ""], ["「心配しないで」", "Don’t worry.", ""], ["「何もかもうまくいくよ」", "Everything is going to be fine.", ""]]}, {"k": "p", "t": "訪問時も、英語では“リラックス系”の表現がよく使われます。英語圏は基本help yourselfの色合いの濃い言語社会です。"}, {"k": "ex", "rows": [["「ご自由にパイを食べてちょうだい」", "Please help yourself to some pie.", "（「パイ」は不可算名詞）"], ["「ご自由にクッキーを食べてちょうだい」", "Please help yourself to some cookies.", "（「クッキー」は可算名詞）"], ["「炭酸飲料は冷蔵庫にあるから、ご自由に飲んでちょうだい」", "Sodas are in the fridge. Help yourself.", ""]]}, {"k": "p", "t": "下の表現も“リラックス系”です。"}, {"k": "ex", "rows": [["「おくつろぎになって」", "Make yourself at home.", ""]]}, {"k": "sub", "t": "2) 同じ“励まし表現”でも、「学校頑張ってね」「仕事頑張ってね」「試験頑張ってね」の「頑張って」に一番近いのは“Good luck!”です。"}, {"k": "ex", "rows": [["「試験頑張ってね！」", "Good luck for your test!", ""]]}, {"k": "sub", "t": "3) “リラックス系”とは逆の“きばる系”のタイプの「頑張って！」もあります。例えば、試合で自チームが負けそうで「あきらめるな！」「粘り強くやれ！」「辛抱強くやれ！」と言いたい状況です。"}, {"k": "ex", "rows": [["「あきらめるな！」", "Don’t give up!", ""], ["「粘り強くやれ！」", "Hang on!", ""], ["「君たちならできるよ！」", "You can do it!", ""]]}]}, {"no": 4, "title": "I’m sorry.の多用に注意", "items": [{"k": "p", "t": "日本語の「すいません」は、I'm sorry.とExcuse me.を兼ねています。心より気の毒に思っている場合は、I'm sorry.を使い、それ以外で例えば人にちょっとぶつかったとき、話しの途中で席を離れるとき、咳やゲップをしたときなどの軽い「すいません」はExcuse me.でいい場合が多いのですが、これらの使い分けを一般化するのはなかなか難しいものがあります。"}, {"k": "p", "t": "日本語母語者は“すまない”感情を頻繁に経験するので、例えば「有難う」の代わりとしてさえも「すいません」がよく使われ、I’m sorry.を多用しがちですが、英語のI'm sorry.をむやみに使い過ぎると、“いつも謝っている人”だと思われて、バカにされるかもしれません。"}, {"k": "ex", "rows": [["「すいません。　−いえ」", "(I am) sorry. -That's O.K.", ""], ["「彼らは、何の用でここに来たのかしら？　−えっ？（今なんて言ったの？）」", "What brings them here? -Sorry? / Excuse me?", ""]]}]}, {"no": 5, "title": "Yes/Noはハッキリと", "items": [{"k": "p", "t": "英語圏での家庭で何か食べるものを勧められた場合、日本語母語者はすぐに受けるのはちょっとはしたないと思い、最初はやんわり断る可能性があります。日本語社会では、ホストもそう言った謙虚な言動を知っているので、「遠慮なさらずにどうぞ」と再度勧めたりします。英語圏ではyesはyesで、noはnoですので、最初断って再度勧めてくれるのを待っていると失望することになります。"}, {"k": "ex", "rows": [["「ちょうどパイを作ったんですが、食べませんか？　−いえ、結構です」", "We just made some pie. Would you like some? -No, thank you.", ""]]}]}, {"no": 6, "title": "ボディーランゲージ", "items": [{"k": "p", "t": "英語での“肩をすくめる”動作は、英語と日本語では意味が異なります。肩をすくめることは同じですが、手のひらを話し手に見せるようにします。英語ではI’m not sure. / I don't know. / Nothing can be done.などの意味を表します。"}, {"k": "p", "t": "「まあまあ」の意味のSo-so.も、よくジェスチャーを伴います。指を広げた手のひらを下に向けて胸の辺りに持って来て、船が左右に揺れるように２・３度程動かします。“So-so.”抜きで、ジェスチャーのみの場合もあります。"}, {"k": "p", "t": "“Yes.”“No.”の頭の縦横の動かし方は英語と日本語は同じですが、後者での会話では話し手への顧慮から「聞いています」というアピールのためにうなずくことも多いので、全体のうなずく回数は日本語での場合ははるかに多くなります。英会話ではうなずき過ぎに注意します。"}]}, {"no": 7, "title": "英語でリクエストする場合の注意", "items": [{"k": "p", "t": "日本語圏でリクエストをする時、「すみませんが…」といった謝罪文句がリクエストの前に付く傾向にありますが、英語文化ではそういった謝罪文句は付きません。相手にはまだ迷惑をかけてないですし、できないのなら相手が断りますので。"}, {"k": "p", "t": "英語でのインターアクションでは、リクエストされたら断るのも気軽にできるので、“言葉は濁す”といったやり方はミスコミュニケーションの原因にもなり避けた方が無難です。"}]}, {"no": 8, "title": "天気", "items": [{"k": "p", "t": "日本は海に囲まれていて天候が変わりやすいからだと思いますが、会話の始まり、手紙の書き出しなどで天気のことがよく話題にのぼるのが日本語でのコミュニケーションの特徴ですが、英語では日本語ほどは天気のことには触れられません。"}]}, {"no": 9, "title": "電話での会話", "items": [{"k": "p", "t": "友人同士との会話とそうでない場合での会話では、日本語ほどではありませんが、英語でもそれなりに丁寧さの度合いを調整します。"}, {"k": "ex", "rows": [["「（トムの父親が電話に出て）もしもし。−もしもし。ケンですが、トムをお願いします」", "Hello? -Hi. This is Ken. May I speak to Tom, please.", ""], ["「（トムが電話に出て）やあケン。なに？」", "Hi, Ken. What’s up?", ""], ["「ビルいます？」", "Is Bill there?", ""], ["「彼を（電話口に）お願いします」", "May/Could I speak/talk to him?", "（Can I ~?とするとよりカジュアル）"], ["「ボブお願いします」", "May I speak to Bob?", ""], ["「キングさんに繋いでください」", "Please connect me with Mr. King.", ""]]}, {"k": "note", "t": "＊1 Mr./Mrs./Ms.は日本語の「~さん」と異なり、フォーマルなケースでは自身に使うことは可能です。"}, {"k": "ex", "rows": [["「どなたでいらっしゃいますか？　−スミスです」", "May I ask who is speaking? -This is Mrs. Smith.", ""], ["「（電話で）どなたですか？」", "Who is calling, please?", ""], ["「ケンですが、ジェイソンお願いします。　−いまここにいませんが。/ −そんな名前の人いませんが。/ −間違ってかけていますよ。", "This is Ken. Would you put Jason on? -He is not here right now. / -There's no such person at this number. / -You have the wrong number.", "（have = (have) got）"], ["「（電話は）誰だったの？　−間違い電話だった」", "Who was calling? -It was a wrong number.", ""], ["「祖母はよく電話をかけ間違える」", "My grandmother often dials the wrong number.", ""]]}, {"k": "note", "t": "＊2 ダイアル式の電話はほとんど全くないにもかかわらず、dialが‘惰性的’に使われています。"}, {"k": "ex", "rows": [["「すいませんが、もっとゆっくり話してくださいませんか」", "Excuse me, could you speak more slowly?", ""], ["「すいません。（彼は）まだ家には帰ってないのですが」", "Sorry, he isn't home yet.", ""], ["「ジョンソンさんにメッセージお残しになりますか？」", "Would you like to leave a message for Mr. Johnson?", ""], ["「（電話を）切らないで待っていてください」", "Please hold.（主にビジネスで）Hold on. / Just a second.", "（主に家で）"], ["「（電話で）ペンと紙を取って来るまでちょっと待って」", "Hang on for a minute while I go and get a pen and paper.", ""]]}, {"k": "note", "t": "＊3 日本語の「取って」「来る」が英語では逆になって、go and getとなっていることに注意してください。"}, {"k": "ex", "rows": [["「電話ありがとう」", "Thank you for calling.", ""]]}]}, {"no": 10, "title": "ドアでのエチケット", "items": [{"k": "p", "t": "ドアを開けて入るとき、後に続く人がいれば、続く人の目の前でドアが閉まらないようにドアを押さえて先に入れてあげるのは大切なエチケットです。逆に、前の人がドアを開けて先に入れてくれたら“Thank you.”と礼を言います。"}, {"k": "ex", "rows": [["「（ドアのところで）ありがとうございます。　−どういたしまして」", "Thank you. -You're welcome.", "（Sure.やIt’s nothing.も可）"]]}, {"k": "p", "t": "ちなみに、日本でのドアのノックは、２度トントンとたたきますが、英語圏ではその倍前後が一般的で、２度だけのノックでは不自然に響きます。"}]}, {"no": 11, "title": "youと「あなた」", "items": [{"k": "p", "t": "日本語の文化では、コミュニケーションの相手を名前で呼ぶのが丁寧とされています。ですので「あなた」は“自分との距離がある人”のニュアンスがあり、グループ外の人に面と向かってこれを使うのは失礼になりやすのですが、英語のyouにはそんなニュアンスはありません。ですので、目の前にいる話し相手、電話やメールの相手や顧客などにもyouは使えます。"}, {"k": "p", "t": "「あなた」を避ける感じでyouを使うのを避けて、話し相手を名前で呼ぶと不自然になるケースが出てきます。"}]}, {"no": 12, "title": "１つの状態・動作に２つのものが必要な場合", "items": [{"k": "ex", "rows": [["「小学校以来知っている人たちとは友達です」", "I’m friends with guys I’ve known since elementary school.", ""]]}, {"k": "note", "t": "＊guysは「男性たち」の意味もありますが、男女の別なく、年齢の別なく使えます（「やあみんな！」Hi, guys!）。ちなみに、女性だけの場合はHi, girls!も可能で、この表現は年配の女性へも可能です（Hi, boys!は「やあ、男の子たち！」で、基本子供が対象です）。"}, {"k": "ex", "rows": [["「彼女はゲストと握手をした」", "She shook hands with her guest.", ""], ["「パリで飛行機を乗り換えることができますよ」", "You can change planes at Paris.", ""], ["「彼女は夫と席を交換した」", "She exchanged seats with her husband.", ""], ["「彼は隔週でシーツを交換している」", "He changes sheets every other week.", ""], ["「転職したことはありますか？」", "Have you ever changed jobs?", ""]]}]}, {"no": 13, "title": "「料金」「クラッシュ」", "items": [{"k": "sub", "t": "1) fee, fare, charge"}, {"k": "p", "t": "「料金」にはfee（授業料、入場料、医者や弁護士などの専門職に対して払う料金）の他に、fare（乗り物の運賃）, charge（ホテルなどのサービス料、手数料）などがあります。"}, {"k": "ex", "rows": [["「その学校の授業料は2015年に導入された」", "The school fee was introduced in 2015.", ""], ["「そのバス料金は２ドルほどです」", "The bus fare is around $2.", ""], ["「会社があなたのホテル料金を支払います」", "The company will cover the hotel charge for you.", ""]]}, {"k": "sub", "t": "2) crash, crush, clash"}, {"k": "p", "t": "crashは「衝突」で、衝突により破損する感じです。crushは「押しつぶす」「砕く」感じで、clashは「（硬いもの同士の）衝突」で、戦争などでの「衝突」も含みます。"}, {"k": "ex", "rows": [["「車が今朝レストランに突っ込んだ」", "A car crashed into a restaurant this morning.", ""], ["「彼は缶を手で握りつぶした」", "He crushed the can in his fist.", ""], ["「彼らはその土地の所属で衝突した」", "They clashed over the ownership of the territory.", ""]]}]}, {"no": 14, "title": "色に関して", "items": [{"k": "p", "t": "色の認識の仕方は世界共通だと思われるかもしれませんが、実は日本語と英語では色の捉え方にズレが少なからずあります。例えば、太陽の色は後者ではyellowで、orangeやredではありません。「青信号」もgreen lightです。"}, {"k": "ex", "rows": [["「彼は背の高い緑の目の黒い肌で白髪の男性です」", "He is a tall man with green eyes, dark skin, and grey hair.", ""], ["「彼女は白い肌で金髪です」", "She has light skin and blond hair.", ""]]}, {"k": "note", "t": "＊1 hairは不可算名詞ですのでhairsとはなりません。ちなみに、一般に日本人の目の色はbrawnかdark brownです。"}, {"k": "ex", "rows": [["「ドアにぶつかって目の下に青あざを作ってしまった」", "I got a black eye from running into a door.", ""], ["「顔色青いよ。あなた病気なの？」", "You look pale. Are you sick?", ""], ["「この植物の葉は薄い青で、濃い青色の花を咲かせる」", "This plant has light green leaves and dark blue flowers.", ""]]}, {"k": "note", "t": "＊2 dark「濃い」、light「薄い」（ちなみに、「濃いコーヒー」「薄いコーヒー」はstrong coffee、weak coffeeです））"}, {"k": "ex", "rows": [["「青信号」", "green light", ""], ["「青リンゴ」", "green apples（greenは「未熟さ」の意味もあり、「熟してないリンゴ」も可能）", ""], ["「黒い雲」", "dark clouds（「雲」は一般には複数扱い）", ""]]}, {"k": "p", "t": "日本語社会の“青”に対するイメージと英語社会のblueに対するそれとは少なからずズレがあります。blueはネガティブな意味合いで使われることがあります。"}, {"k": "ex", "rows": [["「僕は今日は少し憂鬱な感じだ」", "I’m a bit blue today.", ""], ["「（なんの前触れもなく）彼が私に突然電話して来た」", "He called me out of the blue.", ""]]}]}, {"no": 15, "title": "感情を表す感嘆表現", "items": [{"k": "p", "t": "感嘆表現が、無意識に日本語のそれになっている学習者が非常に多いのでここで意識的に学習・習得します。"}, {"k": "ex", "rows": [["「うわ〜、君やったね！」", "Wow, you did it!", "（Wow「うわ〜！」で、喜びや驚き）"], ["「あら、もう帰って来ているのね！」", "Oh, you are back already!", "（Ohは「ほう！」「あら！」で、驚きや感動）"], ["「（腕を強くつかまれて）痛い！離して！」", "Ouch! Let me go!", "（“痛さ”だけでなく“熱さ”にも使われる）"], ["「まずい。またやってしまった！」", "Oops, I did it again!", "（Oopsは驚きやうろたえ）"], ["「ええと、君も来ていいよ」", "Well, you can come too.", "（Wellは「ええと」のような話のつなぎ、「さてと」「やれやれ」など」）"], ["「やれやれ、やっと到着か」", "Well, here we are at last.", ""], ["「おい！僕にそんな風に話さないで」", "Hey! Don’t talk to me like that.", "（Heyは呼びかけや、人に会った時の「やあ」）"], ["「うっ、君は僕のコンピュータを手荒に扱ってるね！」", "Ow! You’re rough with my computer!", "（Owは「うっ！」で、痛みや驚き）"], ["「あら、とてもうるさいわね」", "Oh, boy! It’s so noisy.", "（Oh, boyは驚き、失望、愉快）"], ["「あのう、（あなたは）私のペンを使ってますが」", "Ah, you are using my pen.", "（Ahは「あのう」「ああ！」）"], ["「あら、あなたは速くて強いのね」", "(Oh) my, you’re fast and strong.", ""]]}, {"k": "p", "t": "ついでに、WhatとHowを使った感嘆表現をカバーします。"}, {"k": "sub", "t": "[What (a)＋形容詞＋名詞＋SV！]"}, {"k": "ex", "rows": [["「なんとういうきれいな写真でしょう！」", "What a beautiful picture it is!", ""], ["「なんというかわいいイアリングでしょう！」", "What cute earings they are!", ""]]}, {"k": "sub", "t": "[How＋形容詞/副詞＋SV!]"}, {"k": "ex", "rows": [["「これ、なんておいしいの！」", "How tasty it is!", ""], ["「彼女、なんて早口なの！」", "How fast she talks!", ""]]}]}, {"no": 16, "title": "紛らわしい動詞の変化形", "items": [{"k": "p", "t": "rise-rose-risen（自動詞で「あがる」）"}, {"k": "ex", "rows": [["「太陽は東に昇り、西に沈む」", "The sun rises in the east and sets in the west.", ""]]}, {"k": "note", "t": "＊このinは「〜の方へ」の意味です。"}, {"k": "p", "t": "raise-raised-raised（他動詞で「あげる」）"}, {"k": "ex", "rows": [["「質問があれば手を挙げなさい」", "Raise your hand if you have any questions?", ""]]}, {"k": "p", "t": "lie-lay-lain（自動詞で「横たわる」）"}, {"k": "ex", "rows": [["「彼は両腕を頭の下にして仰向けに横になっていた」", "He lay on his back with his hands behind his head.", ""]]}, {"k": "note", "t": "＊「嘘をつく」のlieの変化はlie-lied-liedです。"}, {"k": "p", "t": "lay-laid-laid（他動詞で「横たえる」）"}, {"k": "ex", "rows": [["「赤ちゃんをうつ伏せに寝かさないで」", "Do not lay the baby on the stomach.", ""]]}]}, {"no": 17, "title": "個人と集団", "items": [{"k": "p", "t": "英語社会は比較的個人主義で、それと比べた場合、日本語社会はどちらかというと集団志向と言えます。それは、当然表現にも反映されます。"}, {"k": "sub", "t": "英語パターン："}, {"k": "ex", "rows": [["「私は工学を専攻しています」", "I major in engineering.", "（個人が何をしているか）"], ["「夫はエンジニアです」", "My husband is an engineer.", "（個人が何をしているか）"]]}, {"k": "sub", "t": "日本語パターン："}, {"k": "p", "t": "「私は應慶大学に通っています」（どの集団に属しているか）"}, {"k": "p", "t": "「夫はニソーに勤めています」（どの集団に属しているか）"}]}, {"no": 18, "title": "文字通りの解釈が誤解を生むケース", "items": [{"k": "p", "t": "“Probably.”は辞書には「高い確率で」「十中八九」と訳がありますが、それは、状況次第です。“Could you come and help me this afternoon?”と頼んで“Probably.”と言われたら可能性は「ゼロ」です。"}, {"k": "p", "t": "“Hi.”の後に、“How are you?”がよく続きますが、これは付け足し的なもので、実際には相手の体調を訊いていない場合が多いので、“Hi.”と返すだけでもよく、必ずしも律儀に答える必要がないです。"}, {"k": "p", "t": "“Let’s go out and eat sometime.”「いつか外で食事しようよ」といった表現も実質のないあいさつ程度のもので、それを文字どおりに解釈して、“When should we go out?”「いつ出かけようか？」と聞くと、あいさつ程度で聞いてきた相手はドギマギするかもしれません。"}]}, {"no": 19, "title": "“日本人的スマイル”の注意点", "items": [{"k": "p", "t": "英会話で“日本人的スマイル”の不自然さは他の英語話者からよく指摘されています。"}, {"k": "p", "t": "例えば“愛想笑い”で、まじめな会話の内容でも、話し相手に対して無意識に友好性をアピールするために笑みを浮かべ続けたり、笑ったりしながら会話をするケースが見られます。"}, {"k": "p", "t": "手で口を覆って笑ったり、“付き合い笑い”や“照れ隠し笑い”なども、状況次第ではかなり違和感のある、話し相手に悪く誤解されるものとなり得ます。"}, {"k": "p", "t": "日本語では、感情をあらわにすることが避けられる傾向にあり、こういった“まぎらわす”タイプの笑いが一般に受け入れられやすくなっていますが、英会話では話し相手が「なんで笑みを浮かべたり、笑ったりしているんだろう？」といぶかるケースがたくさん出て来ます。"}]}, {"no": 20, "title": "体の部位の日英のズレ", "items": [{"k": "p", "t": "日本語の体の部分の単語と英語の単語は必ずしも重なるわけではありません。例えば、lips（上下二つあるので複数形）は「唇」の周りも含むので“upper lip”にひげが生えていたり汗が出ていたりしていてもおかしくないですが、日本語の「唇」の場合は赤い部分のみで、その表面にはひげが生えたり汗がにじんだりすることはありません。"}, {"k": "p", "t": "また、日本語の「手を腰に当てている」状態は、“with his hands on his hips”で、「腰」は英語ではhips（これも左右二つあるので複数形）になっていて、ウエストの下の横に突き出た部分のことです。ちなみに日本語の「ヒップ」は英語では“buttocks”（これも複数あるので複数形）で、“waist”は腰のくびれた部分です。"}]}, {"no": 21, "title": "“あいまいさ”の扱い", "items": [{"k": "p", "t": "日本語では「～時頃に会いましょう」とか、「あれ６つほどください」といったふうにあいまいにすることで丁寧な響きを添えることが可能です。英語では、あいまいさを避ける傾向にあります。"}, {"k": "ex", "rows": [["「いつものところで２時に会いましょう」", "Let's meet at the usual spot at 2:00.", ""], ["「あれを６つください」", "Can I have six of those?", ""]]}, {"k": "p", "t": "例えば、地域内の犯罪に関して質問にされたとします。英語はどちらかというとストレートに表現されます。ですので、あいまいさに重きを置く日本語での会話での論理とはかなり異なり、日本語の論理で英語で説明しようとすると、以下に見るようにかなりチグハグな説明しなりやすくなります。"}, {"k": "sub", "t": "英語的ロジック：We don't have much crime in our community.（結論的で直接的）"}, {"k": "sub", "t": "日本語的ロジック：Our community is pretty close-knit, so we help each other.（説明的・婉曲表現的）（close-knit「結びつきが強い」）"}, {"k": "p", "t": "下の例も、英日の謙虚さやあいまいさの度合いの開きの大きい例です。"}, {"k": "p", "t": "英：This is very good. -I'm glad you like it.\n日：「お料理お上手ですねェ」 「いえいえ、Aさん程では。まあ、何もございませんがどうぞ」"}, {"k": "p", "t": "日本語の「何もございませんが」は、単に謙虚に言っているだけで、実際にはかなりのご馳走が出てくることすらあります。"}]}, {"no": 22, "title": "英語の婉曲表現の作り方", "items": [{"k": "p", "t": "英語で“遠まわし表現”を使って丁寧に言いたい場合で、否定形を使う以外の方法もあります。"}, {"k": "sub", "t": "1) 仮定法過去を使ってより丁寧に"}, {"k": "p", "t": "仮定法過去は「事実と逆」か「可能性がかなり低い」ケースで、その可能性"}, {"k": "p", "t": "を低く表現することによって謙虚な響きになり、より丁寧に響きます。"}, {"k": "ex", "rows": [["「これを手伝ってくれれば８０ドルあげるよ」", "I will give you eighty dollars if you help me with this.", "（dollarsの口語表現はbucks）"], ["「彼にそれを言わないでもらえたらありがたいのですが」", "I’d appreciate it if you didn’t tell him about it.", "（’d = would）"]]}, {"k": "sub", "t": "2) 疑問文を使ってより丁寧に"}, {"k": "ex", "rows": [["「帰ったら僕のオフィスに来て」", "Come to my office when you get back.", ""], ["「ちょっと私のオフィスに来てもらえませんか？」", "Could you come to my office for a minute?", ""]]}, {"k": "sub", "t": "3) より長い表現でより丁寧に"}, {"k": "p", "t": "“I think ~.”“I wonder if ~.”“I’m afraid ~.”などをつけてセンテンスを"}, {"k": "p", "t": "長くします。"}, {"k": "ex", "rows": [["「健康な食事を心がけるべきだと思います」", "I think you should eat healthy food.", ""], ["「家まで車に乗せていただけますか」", "I wonder if you could drive me home.", ""], ["「間違っておられるようです」", "I’m afraid you’re mistaken.", ""]]}]}];
+
+const EMBED = window.parent !== window;
+if (EMBED) document.documentElement.classList.add('embed');
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+(function(){const t=store.get('kmv-theme'); if(t) document.documentElement.dataset.theme=t;
+ $('theme').onclick=()=>{const c=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  const n=c==='dark'?'light':'dark'; document.documentElement.dataset.theme=n; store.set('kmv-theme',n);};})();
+// speech（自然な音声を優先。選んだ声は単語帳などと共有）
+let slow=false, voice=null, enVoices=[];
+const NOVELTY=/\b(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Ralph|Kathy|Grandma|Grandpa|Eddy|Flo|Reed|Rocko|Sandy|Shelley)\b/;
+function vRank(v){ const n=v.name, us=/^en[-_]US/i.test(v.lang)?0:0.5;
+  if(NOVELTY.test(n)) return 9; if(/Natural|Online/i.test(n)) return us; if(/^Google/i.test(n)) return (/US English/i.test(n)?1:1.2)+us;
+  if(/Premium|Enhanced|Siri/i.test(n)) return 2+us; if(/Samantha|Ava|Allison|Aria|Jenny|Alex|Daniel|Karen|Moira/i.test(n)) return 3+us; return 5+us; }
+function pickVoice(){ enVoices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vRank(a)-vRank(b)||a.name.localeCompare(b.name));
+  const chosen=store.get('goi-voice'); voice=(chosen&&enVoices.find(v=>v.voiceURI===chosen))||enVoices[0]||null; fillVoices(); }
+function fillVoices(){ const chosen=store.get('goi-voice')||'';
+  const html='<option value="">（自動）'+esc(voice?voice.name:'')+'</option>'+enVoices.map(v=>`<option value="${esc(v.voiceURI)}">${vRank(v)<3?'★ ':''}${esc(v.name+' ('+v.lang+')')}</option>`).join('');
+  document.querySelectorAll('select.vpick').forEach(sel=>{ sel.innerHTML=html; sel.value=enVoices.some(v=>v.voiceURI===chosen)?chosen:'';
+    sel.onchange=()=>{store.set('goi-voice',sel.value); pickVoice(); stop(); speak('Hello. This is my voice.');}; }); }
+if('speechSynthesis' in window){pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; setTimeout(pickVoice,500); setTimeout(pickVoice,1500);}
+const sayText = s => String(s).replace(/<[^>]+>/g,'').replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/[（(][^）)]*[぀-ヿ一-鿿][^）)]*[）)]/g,' ').replace(/[（）]/g,' ').replace(/＊\d*/g,'').replace(/\s+/g,' ').trim();
+function speak(text,el,done){
+  if(!('speechSynthesis' in window)){alert('このブラウザは読み上げに対応していません');return;}
+  document.querySelectorAll('.playing').forEach(c=>c.classList.remove('playing'));
+  const u=new SpeechSynthesisUtterance(sayText(text)); u.lang='en-US'; if(voice) u.voice=voice; u.rate=slow?0.7:0.95;
+  el&&el.classList.add('playing'); u.onend=u.onerror=()=>{el&&el.classList.remove('playing'); done&&done();}; speechSynthesis.speak(u); }
+function stop(){ if('speechSynthesis' in window) speechSynthesis.cancel(); document.querySelectorAll('.playing').forEach(c=>c.classList.remove('playing')); }
+$('rate').onclick=e=>{slow=!slow; e.currentTarget.setAttribute('aria-pressed',slow);};
+function toTop(){ if (EMBED) parent.postMessage({ sub: true, t: "top" }, "*"); else window.scrollTo(0,0); }
+
+
+let hideEn = store.get('ibk-hide') === '1';
+const ZN = n => String(n);
+function syncHide(){ const b=$('hideen'); b.setAttribute('aria-pressed',hideEn); b.textContent=hideEn?'英語を表示':'英語を隠す'; document.body.classList.toggle('hideen',hideEn); }
+$('hideen').onclick=()=>{ hideEn=!hideEn; store.set('ibk-hide',hideEn?'1':'0'); document.querySelectorAll('.xr.open').forEach(r=>r.classList.remove('open')); syncHide(); };
+syncHide();
+function renderIndex(){
+  $('main').innerHTML = `<p class="lead" style="margin-top:12px">英語と日本語のコミュニケーションの違い（カルチャーノート ${NOTES.length} 項目）。読みたい項目を選んでください。</p>
+    <div class="idx">${NOTES.map(n=>`<button class="ix" type="button" data-n="${n.no}"><span class="no">${n.no}</span><span class="tt">${esc(n.title)}</span></button>`).join('')}</div>`;
+  $('main').querySelectorAll('.ix').forEach(b=>b.onclick=()=>{location.hash='#n'+b.dataset.n;});
+}
+function exHTML(rows){
+  return `<div class="exs">${rows.map(([j,e,n])=>`<div class="xr" data-say="${esc(e)}">
+    <div class="xj">${esc(j).replace(/\n/g,'<br>')}</div>
+    <div class="xe" lang="en">${esc(e)}</div><div class="q">？？？（タップで英語）</div>
+    ${n?`<div class="xn">${esc(n)}</div>`:''}
+    <button class="btn sp" type="button" aria-label="読み上げ">🔊</button></div>`).join('')}</div>`;
+}
+function renderNote(n){
+  const k=NOTES.indexOf(n), prev=NOTES[k-1], next=NOTES[k+1];
+  const body=n.items.map(it=> it.k==='p' ? `<p>${esc(it.t).replace(/\n/g,'<br>')}</p>` : it.k==='h' ? `<h3>${esc(it.t)}</h3>` : it.k==='sub' ? `<h4>${esc(it.t)}</h4>` : it.k==='note' ? `<p class="fn">${esc(it.t)}</p>` : exHTML(it.rows)).join('');
+  $('main').innerHTML = `<button class="back" type="button" id="back">← 一覧へ</button>
+    <div class="dno">カルチャーノート ${n.no}</div><h2 class="dt">${esc(n.title)}</h2>
+    <div class="body">${body}</div>
+    <div class="wnav">${prev?`<button class="btn" type="button" data-n="${prev.no}">◀ ${prev.no}. ${esc(prev.title)}</button>`:'<span></span>'}${next?`<button class="btn" type="button" data-n="${next.no}">${next.no}. ${esc(next.title)} ▶</button>`:'<span></span>'}</div>`;
+  $('back').onclick=()=>{location.hash='';};
+  $('main').querySelectorAll('.wnav .btn').forEach(b=>b.onclick=()=>{location.hash='#n'+b.dataset.n;});
+  $('main').querySelectorAll('.xr').forEach(r=>{
+    r.querySelector('.sp').onclick=()=>{stop(); speak(r.dataset.say,r);};
+    r.querySelector('.q').onclick=()=>r.classList.add('open');
+  });
+  toTop();
+}
+function route(){
+  stop();
+  const m=location.hash.match(/^#n(\d+)$/), n=m&&NOTES.find(x=>x.no===Number(m[1]));
+  store.set('ibk-pos', n?location.hash:'');
+  if(n) renderNote(n); else { renderIndex(); }
+}
+if (!location.hash) { const p=store.get('ibk-pos'); if (p) history.replaceState(null,'',p); }
+
+
+if (EMBED) {
+  const post = () => parent.postMessage({ sub: true, t: "h", h: Math.ceil(document.documentElement.getBoundingClientRect().height) }, "*");
+  new ResizeObserver(post).observe(document.body); window.addEventListener("load", post);
+  window.addEventListener("message", e => { const d = e.data || {};
+    if (d.t === "theme") document.documentElement.dataset.theme = d.dark ? "dark" : "light";
+    if (d.t === "stop") { try { stop(); } catch (er) {} } });
+}
+window.addEventListener('hashchange',route);
+route();
+if (EMBED) parent.postMessage({ sub: true, t: "ready" }, "*");
+
+</script>
+</body>
+</html>

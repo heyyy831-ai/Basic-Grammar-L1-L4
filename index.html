@@ -33,7 +33,7 @@
 
   /* nav */
   .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
-  .nav-in{max-width:860px;margin:0 auto;padding:8px 18px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none}
+  .nav-in{max-width:1040px;margin:0 auto;padding:8px 18px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none}
   .nav-in::-webkit-scrollbar{display:none}
   .nav a{flex:none;text-decoration:none;color:var(--ink-2);font-size:13px;font-weight:700;padding:6px 12px;border-radius:99px;white-space:nowrap}
   .nav a:hover{color:var(--ink);background:var(--soft)}
@@ -419,7 +419,7 @@
       <p class="mast-en">Kodai Yonehara</p>
       <p class="mast-et">Basic Grammar for Mastering English Conversation ＋ English Grammar for Speaking</p>
       <h1 class="mast-h"><span>英会話のための</span>基本英文法<em class="plus">＋</em><wbr><em class="sec2"><small>スピーキングのための</small>英文法</em></h1>
-      <p class="mast-sub">瞬間英作・文法理解度チェック・入れ替えドリル・単語帳</p>
+      <p class="mast-sub">瞬間英作・文法理解度チェック・入れ替えドリル・単語帳・異文化コミュ・英語の発音</p>
     </div>
     <div class="covers">
       <img class="cover" src="cover1.jpg" width="576" height="820" alt="『英会話のための基本英文法完全マスター』（米原幸大 著・IBCパブリッシング）の表紙">
@@ -433,6 +433,8 @@
     <button class="mt" type="button" role="tab" data-m="check" aria-selected="false"><span class="num">2</span>文法理解度チェック</button>
     <button class="mt" type="button" role="tab" data-m="drill" aria-selected="false"><span class="num">3</span>入れ替えドリル</button>
     <button class="mt" type="button" role="tab" data-m="tango" aria-selected="false"><span class="num">4</span>単語帳</button>
+    <button class="mt" type="button" role="tab" data-m="ibunka" aria-selected="false"><span class="num">5</span>異文化コミュ</button>
+    <button class="mt" type="button" role="tab" data-m="hatsuon" aria-selected="false"><span class="num">6</span>英語の発音</button>
     <button class="theme" id="themeBtn" type="button" aria-pressed="false">ダーク</button>
   </div>
 </nav>
@@ -532,6 +534,8 @@
     </div>
   </div>
   <div class="mode sub" id="m-tango"><iframe class="subapp" data-src="tango.html" title="単語帳"></iframe></div>
+  <div class="mode sub" id="m-ibunka"><iframe class="subapp" data-src="ibunka.html" title="異文化コミュ"></iframe></div>
+  <div class="mode sub" id="m-hatsuon"><iframe class="subapp" data-src="hatsuon.html" title="英語の発音"></iframe></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -633,7 +637,7 @@ $("chapbar").addEventListener("click", e => {
 });
 $("partbar").addEventListener("click", e => { const b = e.target.closest(".ptab"); if (b) selectLesson(Number(b.dataset.i)); });
 
-const MODE_NAME = { check: "文法理解度チェック", drill: "入れ替えドリル", speak: "瞬間英作", tango: "単語帳" };
+const MODE_NAME = { check: "文法理解度チェック", drill: "入れ替えドリル", speak: "瞬間英作", tango: "単語帳", ibunka: "異文化コミュ", hatsuon: "英語の発音" };
 function drawHead(){
   const L = LESSONS[LI];
   $("head").innerHTML =
@@ -663,11 +667,11 @@ function setMode(m){
   window.scrollTo({ top: 0 });
 }
 
-/* ===== 単語帳（tango.html を iframe で表示）===== */
+/* ===== 単語帳・異文化コミュ・英語の発音（別ページを iframe で表示）===== */
 function extMode(){
-  const ext = MODE === "tango";
+  const ext = MODE === "tango" || MODE === "ibunka" || MODE === "hatsuon";
   document.querySelector(".wrap").classList.toggle("ext", ext);
-  if (ext) { const f = document.querySelector("#m-tango iframe"); if (!f.getAttribute("src")) f.src = f.dataset.src; }
+  if (ext) { const f = document.querySelector("#m-" + MODE + " iframe"); if (!f.getAttribute("src")) f.src = f.dataset.src; }
 }
 function subPost(msg){ document.querySelectorAll("iframe.subapp").forEach(f => { try { f.contentWindow && f.contentWindow.postMessage(msg, "*"); } catch (e) {} }); }
 function subTheme(){ subPost({ t: "theme", dark: document.documentElement.getAttribute("data-theme") === "dark" }); }
