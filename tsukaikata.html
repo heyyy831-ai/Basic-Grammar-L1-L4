@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>本アプリの使い方</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F4F1EA; --paper:#FFFFFF; --soft:#F8F5EE; --ink:#1E2A3A; --ink-2:#4A5568; --ink-3:#8A93A3;
+  --rule:#E2DCCF; --navy:#2B3F5C; --navy-2:#8FA3BF; --orange:#C8693E; --orange-soft:#F7E6DC; --blue-soft:#EEF2F8;
+  --hl:#FFF0B8; --hl-line:#E9C46A; --on-navy:#FFFFFF;
+  --en:"Crimson Pro","Georgia","Times New Roman",serif;
+  --jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#13171E; --paper:#1B212B; --soft:#202733; --ink:#E9EDF3; --ink-2:#B8C1CF; --ink-3:#7F8A9C;
+    --rule:#2F3846; --navy:#9CB8E0; --navy-2:#41536D; --orange:#E89A72; --orange-soft:#3A2A22; --blue-soft:#1F2938;
+    --hl:#4A3F17; --hl-line:#C9A443; --on-navy:#13171E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#13171E; --paper:#1B212B; --soft:#202733; --ink:#E9EDF3; --ink-2:#B8C1CF; --ink-3:#7F8A9C;
+  --rule:#2F3846; --navy:#9CB8E0; --navy-2:#41536D; --orange:#E89A72; --orange-soft:#3A2A22; --blue-soft:#1F2938;
+  --hl:#4A3F17; --hl-line:#C9A443; --on-navy:#13171E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--jp);font-size:15.5px;line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 80px}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+b,strong{font-weight:700}
+p{margin:.5em 0}
+
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:20px 0 6px}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw a{border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);font-size:13px;font-weight:700;padding:5px 14px;border-radius:99px;text-decoration:none;white-space:nowrap}
+.sw a[aria-current="page"]{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}
+.theme{margin-left:auto;border:1px solid var(--rule);background:var(--paper);color:var(--ink-2);border-radius:99px;padding:4px 12px;font-size:12.5px}
+.embed .theme{display:none}
+.embed .top{display:none}
+
+article{display:none}
+article.on{display:block}
+
+.hero{background:var(--navy);color:var(--on-navy);border-radius:14px;padding:24px 24px 20px;margin:12px 0 26px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:color-mix(in srgb,var(--on-navy) 8%,transparent)}
+.hero .k{font-size:12.5px;font-weight:700;letter-spacing:.25em;color:var(--hl-line);margin:0 0 8px}
+.hero h1{font-size:clamp(21px,5vw,29px);line-height:1.45;margin:0 0 10px;letter-spacing:.02em}
+.hero .s{font-size:13px;margin:0;opacity:.85}
+
+h2{display:flex;align-items:baseline;gap:12px;font-size:clamp(18px,4.4vw,21px);line-height:1.45;margin:34px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--navy);color:var(--navy)}
+h2 .r{font-family:var(--en);color:var(--orange);font-size:1.25em;font-weight:700}
+h3{font-size:17px;margin:28px 0 10px;padding-left:10px;border-left:4px solid var(--orange);line-height:1.4;color:var(--navy)}
+h4{font-size:15px;margin:22px 0 6px;color:var(--navy)}
+.lbl{font-size:13px;color:var(--ink-3);margin:12px 0 4px}
+.lbl.b{color:var(--orange);font-weight:700;font-size:14px}
+
+.box{background:var(--blue-soft);border-radius:10px;padding:12px 16px;margin:10px 0}
+.warn{background:var(--orange-soft);border:1px dashed var(--orange);border-radius:10px;padding:10px 16px;margin:12px 0;font-size:14.5px}
+.warn b:first-child{color:var(--orange)}
+.mk{background:linear-gradient(transparent 62%,var(--hl) 62%)}
+.note{font-size:13px;color:var(--ink-3);margin:6px 0}
+
+.split{display:flex;border-radius:6px;overflow:hidden;font-size:13px;font-weight:700;margin:4px 0 8px}
+.split>div{padding:7px 10px;text-align:center;color:#fff;line-height:1.4}
+.split .a{background:#2B3F5C}
+.split .c{background:#8FA3BF}
+.split span{margin-left:.8em}
+
+.pill{display:inline-block;background:var(--navy);color:var(--on-navy);font-size:11.5px;font-weight:700;border-radius:99px;padding:1px 10px;margin-right:8px;vertical-align:1px}
+
+.steps{list-style:none;margin:6px 0;padding:0;display:grid;gap:8px}
+.steps li{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:10px 14px}
+.steps .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--on-navy);font-size:13px;font-weight:700;display:grid;place-items:center;margin-top:3px}
+
+ol.plain{margin:6px 0;padding-left:1.6em}
+ol.plain li{margin:4px 0}
+
+.dlg{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin:10px 0}
+.dlg .cue{background:var(--blue-soft);border-radius:8px;padding:8px 12px;margin-bottom:8px;font-weight:700}
+.dlg .cue small{display:block;font-weight:400;color:var(--ink-3);font-size:12.5px}
+.ln{display:flex;gap:10px;align-items:center;margin:5px 0}
+.ln .who{flex:none;min-width:30px;height:24px;border-radius:12px;padding:0 6px;font-size:12px;font-weight:700;display:grid;place-items:center;background:var(--navy);color:var(--on-navy)}
+.ln.s .who{background:var(--orange);color:#fff}
+.ln .t{flex:1;min-width:0;border-radius:8px;padding:5px 12px;background:var(--soft);font-family:var(--en);font-size:17px;line-height:1.45}
+.ln.s .t{background:var(--orange-soft)}
+.ln .t small{font-family:var(--jp);font-size:12px;color:var(--ink-3);margin-left:.6em}
+.dlg .key{font-size:12.5px;color:var(--ink-3);margin:8px 0 0}
+
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.roles>div{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;line-height:1.5}
+.roles .no{font-family:var(--en);font-size:24px;color:var(--orange);font-weight:700;display:block;line-height:1}
+.roles b{display:block;margin:4px 0 2px}
+.roles small{color:var(--ink-2);font-size:12.5px}
+@media (max-width:520px){.roles{grid-template-columns:1fr}}
+
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:14.5px;background:var(--paper)}
+th,td{border:1px solid var(--rule);padding:7px 12px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#2B3F5C;color:#fff;font-weight:700}
+tbody tr:nth-child(even) td{background:var(--soft)}
+td small{display:block;color:var(--ink-3);font-size:12.5px}
+.grades{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.grades td.g{font-family:var(--en);font-size:19px;font-weight:700;color:var(--navy);text-align:center;width:52px}
+@media (max-width:560px){.grades{grid-template-columns:1fr}}
+.en{font-family:var(--en);font-size:1.08em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <nav class="sw" aria-label="使い方の種類">
+      <a href="#school" data-a="school">学校・塾での使い方</a>
+      <a href="#home" data-a="home">家庭での使い方</a>
+    </nav>
+    <button class="theme" id="themeBtn" type="button" aria-pressed="false">ダーク</button>
+  </div>
+
+<!-- ===================== 学校・塾 ===================== -->
+<article data-k="school">
+  <div class="hero">
+    <p class="k">ジョーデン・メソッド援用法</p>
+    <h1>本書を使っての<br>学校・塾でのカリキュラム</h1>
+    <p class="s">『英会話のための基本英文法完全マスター』＋アプリ 活用ガイド</p>
+  </div>
+
+  <h2><span class="r">I</span>ジョーデン・メソッド援用法の英語教育観</h2>
+  <div class="box">
+    <p>母語としての日本語習得と同様、外国語としての英語も<b class="mk">プライマリーは音声言語、セカンダリーは文字言語</b>。</p>
+    <p>グラマーはその音声言語（とりわけスピーキング）とペアで扱う。その上にリーディングを扱えば、英語を英語の語順で理解できる<b>直読・直解の速い読み（本来の <span class="en">reading</span>）</b>が可能となっていく。</p>
+  </div>
+
+  <h2><span class="r">II</span>ジョーデン・メソッド援用法でのレッスン</h2>
+  <p class="lbl">全体の学習時間の配分</p>
+  <div class="split"><div class="a" style="flex:2">グラマー理解ベースのスピーキング<span>2/3</span></div><div class="c" style="flex:1">他の英語学習活動<span>1/3</span></div></div>
+
+  <h3>1. 予習</h3>
+  <p><span class="pill">時間</span>一日平均 <b>20分</b> から（年齢、生徒の理解力でかなり個人差がある）</p>
+  <p class="note">※ 隣の部屋や LL 教室を予習室として使えれば、生徒の予習はしやすくなるケースも。</p>
+  <p class="lbl b">予習内容</p>
+  <ol class="steps">
+    <li><span class="n">1</span><div>本書のグラマーのポイントを理解する（アプリの「<b>文法理解度チェック</b>」のクイズ）。</div></li>
+    <li><span class="n">2</span><div>アプリを使って、<b>日本語で示された表現が英語で言えるか</b>声に出させてチェック。</div></li>
+    <li><span class="n">3</span><div>言えない英語表現だけを音読などをして、日本語だけ見てスッと英語が出てくるまでしっかり暗記。</div></li>
+    <li><span class="n">4</span><div>まとまった数の英語のセンテンスがスムーズに言えるようになったら、アプリの<b>瞬間英作、入れ替えドリル</b>をする。</div></li>
+  </ol>
+
+  <h3>2. 実際のレッスンの手順</h3>
+  <p class="lbl">レッスンの時間配分</p>
+  <div class="split"><div class="a" style="flex:2">コミュニケーション・セッション（読みがある場合も）<span>2/3</span></div><div class="c" style="flex:1">グラマー・セッション<span>1/3</span></div></div>
+
+  <h4>(1) コミュニケーション・セッション</h4>
+  <ol class="plain">
+    <li>クラスの言語活動では、生徒が使えるのは<b>英語のみで日本語は一切使わない</b>ルールにする。先生も基本は英語で、応用的に「この表現を英語で言ってもらいたい」という場合のみ日本語の使用は可。</li>
+    <li>白板にカバーすべき範囲の<b>日本語だけ</b>を示す。<span class="en">“Number one, please.”</span> と日本語センテンスの箇所を指定して、生徒に英語でパッと言ってもらう。</li>
+    <li>実例：</li>
+  </ol>
+  <div class="dlg">
+    <div class="cue">#1 「彼は私に英語を教えてくれました」<small>（この #1 から #〇〇 の日本語が、前の黒板のところに映し or 貼り出されている）</small></div>
+    <div class="ln"><span class="who">T</span><span class="t">Number one, please.</span></div>
+    <div class="ln s"><span class="who">S1</span><span class="t">He taught English to me.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Or?</span></div>
+    <div class="ln s"><span class="who">S2</span><span class="t">He taught me English.</span></div>
+    <p class="key">T＝先生　S＝生徒</p>
+  </div>
+  <p>ここまでは本書『英会話のための基本英文法完全マスター』に書いてあるので、ここからは、それまでに導入された語彙・文法項目も入れながら、<b>アドリブ的、日常会話的に</b>生徒たちに聞いていく。</p>
+  <p class="note">※ 導入されていない語彙や文法項目は原則使わない（例外は英語から日本語になっている単語）。</p>
+  <p>ちなみに、先生の役割は３つ。先生が、今どの役割なのか生徒たちに<b>クリアーにわかるように</b>する。</p>
+  <div class="roles">
+    <div><span class="no">1</span><b>クラスルーム・マネージャー</b></div>
+    <div><span class="no">2</span><b>カンバセーション・パートナー</b></div>
+    <div><span class="no">3</span><b>モデル</b><small>正しくない、不自然な英語はモデルを見せ、フィードバック</small></div>
+  </div>
+  <div class="dlg">
+    <div class="ln"><span class="who">T</span><span class="t">Did you take English classes at your elementary school? <small>（カンバセーション・パートナーとして）</small></span></div>
+    <div class="ln s"><span class="who">S3</span><span class="t">Yes, I did.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Ask the same question to Ken. <small>（クラスルーム・マネージャーとして）</small></span></div>
+    <div class="ln s"><span class="who">S4</span><span class="t">OK. Did you take English classes at your elementary school?</span></div>
+    <div class="ln s"><span class="who">S5</span><span class="t">Yes.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Was your teacher Japanese?</span></div>
+    <div class="ln s"><span class="who">S5</span><span class="t">I had two teachers, a Japanese teacher and an American teacher.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Oh, really? When did you start learning English, Yui?</span></div>
+    <div class="ln s"><span class="who">S6</span><span class="t">About five years ago.</span></div>
+  </div>
+
+  <h4>(2) リーディングの扱い</h4>
+  <p>学校・塾での英語のテキストをリーディング、リスニング用に使うことも可能。リーディングの扱い方は、予習としてパッセージを読ませてくる。その内容について英語で聞き、生徒は英語で答えていく。アドリブ的、日常会話的に生徒たちに質問をしてもよい。</p>
+  <div class="box">このリーディングのセッションが、<b>スピーキングとリスニングの復習</b>となり、<b>ライティングの予習</b>となる。それぞれのスキルをバラバラに扱うのは非効率。</div>
+  <p>塾がリーディング、リスニングで英検を扱っている場合は、以下が目安となる。『英会話のための基本英文法完全マスター』の文法項目と語彙は：</p>
+  <table>
+    <thead><tr><th>本書・アプリのレベル</th><th>英検（リーディング・リスニング）</th></tr></thead>
+    <tbody>
+      <tr><td>中学１年レベル</td><td>５級 に大体対応</td></tr>
+      <tr><td>中学２年レベル</td><td>４級 に大体対応</td></tr>
+      <tr><td>中学３年レベル</td><td>３級 に大体対応</td></tr>
+      <tr><td>総復習と発展</td><td>準２級 に大体対応</td></tr>
+    </tbody>
+  </table>
+
+  <h4>(3) スピーチとライティングの扱い</h4>
+  <p>AIでしかるべきプロンプトで<b>アドリブスピーチ</b>を行う。これがライティングの練習にもなる。</p>
+
+  <h4>(4) グラマー・セッション（日本語で）</h4>
+  <p>生徒のグラマーの理解の弱い部分をカバーする。</p>
+  <p>理解が確保できたら、メカニカルに、語彙表現や、上で触れた文法項目である「第４文型」の英語のセンテンスをパッと言ってもらうように、日本語（例えば「彼は私にその写真を見せた」「父が私に時計を買ってくれた」など）を口頭で言って、生徒にはその英語を言ってもらう。</p>
+  <div class="box">グラマーはあくまでも<b>オーラルで言えるようにするための手段</b>に過ぎない。</div>
+  <p>このセッションでは、クイズも行うことがある。アプリの「<b>文法理解度チェッククイズ</b>」は、時間をセーブするため２問くらいを使う。クイズはあくまでも本書をよりよく読ませ、理解させるための手段とする。</p>
+  <p>このセッションでは、グラマーのみならず、リスニングや読み書きのクイズを行なっても良い。</p>
+
+  <h3>3. その他</h3>
+  <h4>(1) クラスのレイアウト</h4>
+  <p>大きなテーブルを囲むか、先生を中心に<b>馬蹄形</b>に並ぶ（全員が全員を見られるし、立ったり座ったり、移動が簡単。40人学級の場合は２人１組の20人とする）。</p>
+  <p class="note">※ ただし、グラマーのセッションは馬蹄形にこだわる必要はない。40人学級も可能。</p>
+  <h4>(2) 生徒の当て方</h4>
+  <p><b>アトランダムに当てる。</b>いつ当たるか分からないようにすることにより、生徒たちが常にクラス活動に注意を払い、先生の質問の答えを頭の中で考えるようにさせるため。</p>
+  <h4>(3)「間違い」の扱い方</h4>
+  <p>間違い、不自然なものはモデルを見せ（先生 or 他の生徒により）<b>必ずフィードバック</b>。この作業は一貫しないと、何が正しく自然で、何がそうでないか生徒には分からなくなる。分からないものは、インプットは起こらないし、正しくなく不自然な英語が生徒にインプットされると、後々 <span class="en">unlearn・learn</span> の２重手間を生徒に強いることになる。</p>
+  <h4>(4) 評価</h4>
+  <p>クラスが終わってすぐ評価記録を付ける。翌週月曜日に、個々の生徒自身のどこが弱くて強いか分かるシステムへ。</p>
+  <div class="grades" data-grades></div>
+</article>
+
+<!-- ===================== 家庭 ===================== -->
+<article data-k="home">
+  <div class="hero">
+    <p class="k">ジョーデン・メソッド援用法</p>
+    <h1>保護者や家庭教師による<br>本書・本アプリを使っての英語カリキュラム</h1>
+    <p class="s">『英会話のための基本英文法完全マスター』＋アプリ 活用ガイド</p>
+  </div>
+
+  <h2><span class="r">I</span>ジョーデン・メソッド援用法の英語教育観</h2>
+  <div class="box">
+    <p>母語としての日本語習得と同様、外国語としての英語も<b class="mk">プライマリーは音声言語、セカンダリーは文字言語</b>。</p>
+    <p>文法はその音声言語（とりわけスピーキング）とペアで扱う。その上にリーディングを扱えば、英語を英語の語順で理解できる<b>直読・直解の速い読み（本来の <span class="en">reading</span>）</b>が可能となっていく。</p>
+  </div>
+  <div class="warn"><b>注意：</b>文法をリーディングとペアで学習を進めるのは、昔の外国語学習法の名残に過ぎない。このケースでは、日本語を介しての読解・解読パターンになりやすく、読むのが遅いまま。</div>
+
+  <h2><span class="r">II</span>ジョーデン・メソッド援用法でのレッスン</h2>
+  <p class="lbl">全体の学習時間の配分</p>
+  <div class="split"><div class="a" style="flex:1">グラマー理解ベースのスピーキング<span>1/2</span></div><div class="c" style="flex:1">他の英語学習活動<span>1/2</span></div></div>
+
+  <h3>1. 予習</h3>
+  <p><span class="pill">時間</span>一日平均 <b>20分</b> から（年齢、お子さん/生徒の理解力でかなり個人差がある）</p>
+  <p class="lbl b">予習内容</p>
+  <ol class="steps">
+    <li><span class="n">1</span><div>本書のグラマーのポイントを理解する。アプリで「<b>文法理解度チェック</b>」のクイズ。</div></li>
+    <li><span class="n">2</span><div>本書の日本語―英語の、<b>英語の部分を隠して言えるか</b>声に出してチェック。</div></li>
+    <li><span class="n">3</span><div>言えない英語表現だけを音読などをして、日本語だけ見てスッと英語が出てくるまでしっかり暗記。</div></li>
+    <li><span class="n">4</span><div>まとまった数の英語のセンテンスがスムーズに言えるようになったら、アプリを使って、自然な英語発音・スピードになるまで<b>リピート、シャドーイング</b>（できるだけ使う状況を想像して、感情を込めて英語を言うこと）。</div></li>
+  </ol>
+
+  <h3>2. 実際のレッスンの手順</h3>
+  <p class="lbl">レッスンの時間配分</p>
+  <div class="split"><div class="a" style="flex:2">コミュニケーション・セッション<span>2/3</span></div><div class="c" style="flex:1">グラマー・セッション<span>1/3</span></div></div>
+
+  <h4>コミュニケーション・セッション</h4>
+  <ol class="plain">
+    <li>レッスンの言語活動では、お子さん/生徒が使えるのは<b>英語のみで日本語は一切使わない</b>ルールにする。保護者/家庭教師も基本は英語で、応用的に「この表現を英語で言ってもらいたい」という場合のみ日本語の使用は可。</li>
+    <li>アプリの「<b>瞬間英作</b>」を使って、<span class="en">“Number one, please.”</span> と日本語センテンスの箇所を指定して、お子さん/生徒に英語でパッと言ってもらう。</li>
+    <li>実例：</li>
+  </ol>
+  <div class="dlg">
+    <div class="cue">#1 「彼は私に英語を教えてくれました」とアプリに出る。</div>
+    <div class="ln"><span class="who">T</span><span class="t">Number one, please. <small>（クラスルーム・マネージャーとして）</small></span></div>
+    <div class="ln s"><span class="who">S</span><span class="t">He taught English to me.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Or?</span></div>
+    <div class="ln s"><span class="who">S</span><span class="t">He taught me English.</span></div>
+    <p class="key">T＝保護者/家庭教師　S＝お子さん/生徒</p>
+  </div>
+  <p>ここまでは本書『英会話のための基本英文法完全マスター』に書いてあるので、ここからは、それまでに導入された語彙・文法項目も入れながら、<b>アドリブ的、日常会話的に</b>お子さん/生徒に聞いていく。</p>
+  <p class="note">※ 導入されていない語彙や文法項目は原則使わない（例外は英語から日本語になっている単語）。</p>
+  <p>ちなみに、教える先生としての役割は３つ。教える先生が、今どの役割なのかお子さん/生徒に<b>クリアーにわかるように</b>する。</p>
+  <div class="roles">
+    <div><span class="no">1</span><b>クラスルーム・マネージャー</b></div>
+    <div><span class="no">2</span><b>カンバセーション・パートナー</b></div>
+    <div><span class="no">3</span><b>モデル</b><small>正しくない、不自然な英語はモデルを見せ、フィードバック</small></div>
+  </div>
+  <div class="dlg">
+    <div class="ln"><span class="who">T</span><span class="t">Did you take English classes at your elementary school? <small>（カンバセーション・パートナーとして）</small></span></div>
+    <div class="ln s"><span class="who">S</span><span class="t">Yes, I did.</span></div>
+    <div class="ln"><span class="who">T</span><span class="t">Was your teacher Japanese?</span></div>
+    <div class="ln s"><span class="who">S</span><span class="t">I had two teachers, a Japanese teacher and an American teacher.</span></div>
+  </div>
+
+  <h3>3. リーディングの扱い</h3>
+  <p>学校で使っている英語のテキストをリーディング、リスニング用に使うことも可能。リーディングの扱い方は、予習としてパッセージを読ませる。その内容について英語で聞き、お子さん/生徒は英語で答えていく。アドリブ的、日常会話的にお子さん/生徒に質問をしてもよい。</p>
+  <div class="box">このリーディングのセッションが、<b>スピーキングとリスニングの復習</b>となり、<b>ライティングの予習</b>となる。</div>
+  <p>リーディング、リスニングで英検を扱っている場合は、以下が目安。『英会話のための基本英文法完全マスター』の文法項目と語彙は：</p>
+  <table>
+    <thead><tr><th>本書・アプリのレベル</th><th>英検（リーディング・リスニング）</th></tr></thead>
+    <tbody>
+      <tr><td>中学１年レベル</td><td>５級 に大体対応</td></tr>
+      <tr><td>中学２年レベル</td><td>４級 に大体対応</td></tr>
+      <tr><td>中学３年レベル</td><td>３級 に大体対応</td></tr>
+      <tr><td>総復習と発展 （アプリのみにある）</td><td>準２級 に大体対応</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4. スピーチとライティングの扱い</h3>
+  <p>スピーチをすることでライティングを兼ねる（<b>オーラルでスピーチできることはライティングでも書ける</b>）。</p>
+  <p>AI、例えばChatGPTを使い、しかるべきプロンプトでオーラルテスト、添削、解説、モデルアンサーをもらう（復習アイテム）。</p>
+
+  <h3>5. グラマー・セッション（日本語で）</h3>
+  <p>お子さん/生徒のグラマーの理解の弱い部分をカバー。</p>
+  <p>本書の説明を読んで文法の理解が進んだら、アプリの「<b>文法理解度チェッククイズ</b>」をおこなう。メカニカルに、語彙表現や、上で触れた文法項目である「第４文型」の英語のセンテンスをパッと言ってもらうように、日本語（例えば「彼は私にその写真を見せた」「父が私に時計を買ってくれた」など）を口頭で言って、お子さん/生徒にはその英語を言ってもらう。</p>
+
+  <h3>6. 入れ替えドリル <small style="font-weight:400;color:var(--ink-3);font-size:13px">（本書にもアプリにもあるが、アプリを使う）</small></h3>
+  <p>グラマーはあくまでも<b>オーラルで言えるようにするための手段</b>。それが口頭にて自由に使えるようにするために入れ替えドリルを行う。</p>
+
+  <h3>7. その他</h3>
+  <h4>(1)「間違い」の扱い方</h4>
+  <p>間違い、不自然なものは<b>モデルを見せ必ずフィードバック</b>。この作業は一貫しないと、何が正しく自然で、何がそうでないかお子さん/生徒には分からなくなる。分からないものは、インプットは起こらないし、正しくなく不自然な英語がお子さん/生徒にインプットされると、後々 <span class="en">unlearn・learn</span> の２重手間を強いることになる。</p>
+  <h4>(2) 評価</h4>
+  <p>レッスンが終わってすぐ評価記録を付ける。翌週月曜日に、個々のお子さん/生徒自身のどこが弱くて強いか分かるシステムへ。</p>
+  <div class="grades" data-grades></div>
+</article>
+</div>
+
+<template id="gradesTpl">
+  <table>
+    <thead><tr><th>評価の項目の例</th></tr></thead>
+    <tbody>
+      <tr><td>1）レッスンの準備</td></tr>
+      <tr><td>2）その他の宿題</td></tr>
+      <tr><td>3）クラスパフォーマンス<small>発音・イントネーション、スピード、文法、表現力、コミュニケーションの自然さ 等</small></td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th>評価</th><th>0〜4 スケール（＋や−も使う）</th></tr></thead>
+    <tbody>
+      <tr><td class="g">A</td><td>3.5/4 〜（87.5% 〜）</td></tr>
+      <tr><td class="g">B</td><td>3/4 〜（75% 〜）</td></tr>
+      <tr><td class="g">C</td><td>2.5/4 〜（62.5% 〜）</td></tr>
+      <tr><td class="g">D</td><td>2/4 〜（50% 〜）</td></tr>
+      <tr><td class="g">F</td><td>50% 未満</td></tr>
+    </tbody>
+  </table>
+</template>
+
+<script>
+const EMBED = window.parent !== window;
+if (EMBED) document.documentElement.classList.add("embed");
+document.querySelectorAll("[data-grades]").forEach(d => d.appendChild(document.getElementById("gradesTpl").content.cloneNode(true)));
+
+function route(){
+  const k = location.hash === "#home" ? "home" : "school";
+  document.querySelectorAll("article").forEach(a => a.classList.toggle("on", a.dataset.k === k));
+  document.querySelectorAll(".sw a").forEach(a => { if (a.dataset.a === k) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  document.title = k === "home" ? "家庭での本アプリの使い方" : "学校・塾での本アプリの使い方";
+}
+window.addEventListener("hashchange", () => { route(); if (EMBED) parent.postMessage({ sub: true, t: "top" }, "*"); else window.scrollTo(0, 0); });
+route();
+
+const themeBtn = document.getElementById("themeBtn");
+function isDark(){ const t = document.documentElement.dataset.theme; return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function syncTheme(){ themeBtn.textContent = isDark() ? "ライト" : "ダーク"; themeBtn.setAttribute("aria-pressed", String(isDark())); }
+themeBtn.addEventListener("click", () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; syncTheme(); });
+syncTheme();
+
+if (EMBED) {
+  const post = () => parent.postMessage({ sub: true, t: "h", h: Math.ceil(document.documentElement.getBoundingClientRect().height) }, "*");
+  new ResizeObserver(post).observe(document.body); window.addEventListener("load", post);
+  window.addEventListener("message", e => { const d = e.data || {};
+    if (d.t === "theme") { document.documentElement.dataset.theme = d.dark ? "dark" : "light"; syncTheme(); } });
+  parent.postMessage({ sub: true, t: "ready" }, "*");
+}
+</script>
+</body>
+</html>
